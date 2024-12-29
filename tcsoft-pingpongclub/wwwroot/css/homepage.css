@@ -1,0 +1,134 @@
+.TCSoftHomePage{
+    font-size: 12px;
+    margin-left: 10%;
+    width: 80%;
+}
+
+.ImageHomePage{
+    width: 100%;
+  }
+  .TCSoftHomePage{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .tintucGiaidau{
+    padding-left: 10%;
+    margin-top: 5%;
+  }
+
+  
+.tintucGiaidau .container {
+    margin: 0 auto;
+}
+
+.tintucGiaidau .container h1 {
+ 
+    margin-bottom: 5%;
+    
+}
+
+.tintucGiaidau .MainTourOnHomePage {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    height: 200px;
+    margin-right: 15%;
+}
+
+.tintucGiaidau .MainTourOnHomePage img {
+    width: 100px; /* Đặt kích thước hình ảnh */
+    height: auto;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.tintucGiaidau .content {
+    display: flex;
+    flex-direction: column;
+    padding-right: 7%;
+}
+
+.tintucGiaidau .MainTourOnHomePage h2 {
+    margin: 0 0 10px;
+}
+
+.tintucGiaidau .MainTourOnHomePage p {
+    margin: 0;
+    color: #666;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    margin-top: 10%;
+}
+
+.footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo-img {
+    width: 50px; /* Kích thước logo */
+    margin-right: 15px;
+}
+
+.social-icons a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #333;
+}
+
+.footer-links {
+    flex: 1;
+    margin: 10px;
+}
+
+.footer-links h5 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.footer-links ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin: 5px 0;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
