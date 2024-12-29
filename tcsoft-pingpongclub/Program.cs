@@ -3,11 +3,18 @@ using tcsoft_pingpongclub.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cấu hình DbContext
 builder.Services.AddDbContext<ThuctapKtktcn2024Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb")));
 
-// Add services to the container.
+// Thêm dịch vụ vào container
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian hết hạn session
+    options.Cookie.HttpOnly = true; // Tăng cường bảo mật
+    options.Cookie.IsEssential = true; // Đảm bảo cookie hoạt động
+});
 
 var app = builder.Build();
 
@@ -15,7 +22,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -23,6 +29,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Kích hoạt middleware Session
+app.UseSession(); // Thêm dòng này để kích hoạt Session
 
 app.UseAuthorization();
 
