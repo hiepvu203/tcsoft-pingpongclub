@@ -39,4 +39,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "permissionRole",
+    pattern: "{controller=PermissionRoles}/{action=Index}/{id?}");
 app.Run();

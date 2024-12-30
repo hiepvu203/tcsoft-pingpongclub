@@ -1,0 +1,42 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Role>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NameRole)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameRole)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdRole">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdRole">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdRole">Delete</a>|
+                <a asp-controller="PermissionRoles" asp-action="Index" asp-route-idRole="@item.IdRole">Permission</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

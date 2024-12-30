@@ -1,0 +1,48 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Permission>
+
+@{
+    ViewData["Title"] = "Danh sách quyền";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/table-style.css">
+</head>
+<body>
+    <h1>@ViewData["Title"]</h1>
+
+    <p>
+        <a asp-action="Create" class="btn-create">Thêm mới quyền</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.NamePermission)</th>
+                <th>@Html.DisplayNameFor(model => model.Url)</th>
+                <th>@Html.DisplayNameFor(model => model.Status)</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.NamePermission)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Url)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.IdPermission" class="btn-edit">Sửa</a> |
+                        <a asp-action="Details" asp-route-id="@item.IdPermission" class="btn-details">Chi tiết</a> |
+                        <a asp-action="Delete" asp-route-id="@item.IdPermission" class="btn-delete">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
