@@ -131,4 +131,5 @@ button {
 /* Class to hide the pop-up */
 .hidden {
     display: none;
+    background-color: black;
 }
