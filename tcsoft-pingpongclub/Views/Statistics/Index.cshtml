@@ -3,13 +3,27 @@
 @{
     ViewData["Title"] = "Statistics";
 }
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Financial</a>
+</p>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Sponsors</a>
+</p>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
+</p>
+
+<p>
+    <a asp-action="Create">Thêm mới</a>
+</p>
 
 <h1>Statistics</h1>
 
 <form method="get" asp-action="Index">
     <div class="form-group">
         <label for="selectedItem">Select Item to Analyze</label>
-        <select id="selectedItem" name="selectedItem" class="form-control" asp-items="Model.Items" onchange="this.form.submit()">
+        <select id="selectedItem" name="selectedItem" class="form-control" asp-items="Model.Items"
+            onchange="this.form.submit()">
             <option value="">-- Select --</option>
         </select>
     </div>

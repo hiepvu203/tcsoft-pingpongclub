@@ -9,6 +9,15 @@
 <p>
     <a asp-action="Create">Thêm mới</a>
 </p>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Financial</a>
+</p>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Sponsors</a>
+</p>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -24,41 +33,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdAccountant)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DaysOverdue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdFundNavigation.IdFund)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdPartyNavigation.IdMember)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdReasonNavigation.IdReason)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdAccountant)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsDone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysOverdue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdFundNavigation.IdFund)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdPartyNavigation.IdMember)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdReasonNavigation.IdReason)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

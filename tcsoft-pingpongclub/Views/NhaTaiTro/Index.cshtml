@@ -5,6 +5,15 @@
 }
 
 <h2>@ViewData["Title"]</h2>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Financial</a>
+</p>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Sponsors</a>
+</p>
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
+</p>
 
 <p>
     <a asp-action="Create">Thêm mới</a>
@@ -39,9 +48,11 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("Details", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-info">Chi tiết</a>
+                        <a href="@Url.Action("Details", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-info">Chi
+                            tiết</a>
                         <a href="@Url.Action("Edit", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-warning">Sửa</a>
-                        <a href="@Url.Action("Delete", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa không?')">Xóa</a>
+                        <a href="@Url.Action("Delete", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-danger"
+                            onclick="return confirm('Bạn có chắc muốn xóa không?')">Xóa</a>
                     </td>
                 </tr>
                 count++;
