@@ -20,14 +20,12 @@ namespace tcsoft_pingpongclub.Filter
             // Lấy thông tin role từ session
             var idRole = httpContext.Session.GetInt32("IdRole");
 
-            // Nếu không có IdRole trong session, chuyển hướng đến trang login
             if (idRole == null)
             {
                 context.Result = new RedirectToActionResult("Index", "Login", null);
                 return;
             }
 
-            // Lấy tên controller và action hiện tại từ route data
             var controllerName = context.RouteData.Values["controller"].ToString();
             var actionName = context.RouteData.Values["action"].ToString();
 
@@ -36,7 +34,6 @@ namespace tcsoft_pingpongclub.Filter
 
             if (!hasPermission)
             {
-                // Trả về HTTP 403 nếu không có quyền
                 context.Result = new ForbidResult();
                 return;
             }
