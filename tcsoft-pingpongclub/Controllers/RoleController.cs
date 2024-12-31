@@ -24,10 +24,8 @@ namespace tcsoft_pingpongclub.Controllers
         // GET: Role
         public async Task<IActionResult> Index()
         {
-            // Lấy IdRole từ Session
             int? idRole = HttpContext.Session.GetInt32("IdRole");
 
-            // Kiểm tra nếu IdRole không tồn tại
             if (idRole == null)
             {
                 return RedirectToAction("Index", "Login");
