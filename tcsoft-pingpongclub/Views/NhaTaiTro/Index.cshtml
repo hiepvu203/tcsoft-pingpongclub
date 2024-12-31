@@ -1,0 +1,57 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.NhaTaiTro>
+
+@{
+    ViewData["Title"] = "Danh sách nhà tài trợ";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create">Thêm mới</a>
+</p>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Số thứ tự</th>
+            <th>Tên nhà tài trợ</th>
+            <th>Logo</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int count = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@item.NameSponer</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.UrlLogo))
+                        {
+                            <img src="@Url.Content("~/images/" + item.UrlLogo)" alt="Logo" style="width: 100px; height: auto;" />
+                        }
+                        else
+                        {
+                            <span>Không có logo</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Details", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-info">Chi tiết</a>
+                        <a href="@Url.Action("Edit", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-warning">Sửa</a>
+                        <a href="@Url.Action("Delete", "NhaTaiTro", new { id = item.IdSponor })" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa không?')">Xóa</a>
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">Không có dữ liệu.</td>
+            </tr>
+        }
+    </tbody>
+</table>
