@@ -1,0 +1,119 @@
+﻿@model tcsoft_pingpongclub.ViewModels.StatisticsViewModel
+
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<h1>Statistics</h1>
+
+<form method="get" asp-action="Index">
+    <div class="form-group">
+        <label for="selectedItem">Select Item to Analyze</label>
+        <select id="selectedItem" name="selectedItem" class="form-control" asp-items="Model.Items" onchange="this.form.submit()">
+            <option value="">-- Select --</option>
+        </select>
+    </div>
+</form>
+
+@if (Model.SelectedItem == "Tournaments" && Model.TournamentStats != null)
+{
+    <h2>Tournament Statistics</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Match Count</th>
+                <th>Player Count</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TournamentStats)
+            {
+                <tr>
+                    <td>@item.IdTournament</td>
+                    <td>@item.TournamentName</td>
+                    <td>@item.MatchCount</td>
+                    <td>@item.PlayerCount</td>
+                    <td>@item.TimeStart</td>
+                    <td>@item.TimeEnd</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model.SelectedItem == "Matches" && Model.MatchStats != null)
+{
+    <h2>Match Statistics</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Tournament</th>
+                <th>Player One</th>
+                <th>Player Two</th>
+                <th>Winner</th>
+                <th>Start Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MatchStats)
+            {
+                <tr>
+                    <td>@item.IdMatch</td>
+                    <td>@item.TournamentName</td>
+                    <td>@item.PlayerOne</td>
+                    <td>@item.PlayerTwo</td>
+                    <td>@item.Winner</td>
+                    <td>@item.TimeStart</td>
+                    <td>@item.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model.SelectedItem == "IncomeAndExpense" && Model.IncomeStats != null && Model.ExpenseStats != null)
+{
+    <h2>Income and Expense Statistics</h2>
+
+    <h3>Income</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fund Name</th>
+                <th>Total Income</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.IncomeStats)
+            {
+                <tr>
+                    <td>@item.FundName</td>
+                    <td>@item.TotalIncome</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Expense</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fund Name</th>
+                <th>Total Expense</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ExpenseStats)
+            {
+                <tr>
+                    <td>@item.FundName</td>
+                    <td>@item.TotalExpense</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

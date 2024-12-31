@@ -7,14 +7,14 @@
 .navbar {
     background-color: white;
     position: fixed;
-    /* Dính vào đầu trang */
     top: 0;
     width: 100%;
     z-index: 1000;
     color: black;
     display: flex;
     text-align: center;
-    /* Để đảm bảo menu nằm trên các phần khác */
+    /* border-bottom: 0.1px solid black; */
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2); /* Thêm hiệu ứng đổ bóng */
 }
 
 .navbar ul {

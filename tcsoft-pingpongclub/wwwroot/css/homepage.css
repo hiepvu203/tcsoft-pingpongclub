@@ -90,7 +90,7 @@ body {
 }
 
 .footer-logo-img {
-    width: 50px; /* Kích thước logo */
+    width: 80%; /* Kích thước logo */
     margin-right: 15px;
 }
 
@@ -131,4 +131,8 @@ body {
 
 .footer-link:hover {
     text-decoration: underline;
+}
+
+.tintucGiaidau h1{
+    margin-bottom: 3%;
 }

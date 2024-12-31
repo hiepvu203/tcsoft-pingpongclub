@@ -2,13 +2,13 @@
     <ul>
         <li class="img-logo-header"><img src="~/image/logo.png"></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
-        <li><a asp-controller="User" asp-action="Index">Xếp hạng</a></li>
-        <li><a asp-controller="User" asp-action="Index">Quỹ Câu Lạc Bộ</a></li>
-        <li><a asp-controller="User" asp-action="Index">Báo cáo</a></li>
-        <li><a asp-controller="User" asp-action="Index">Liên hệ</a></li>
-        <li><a asp-controller="Admin" asp-action="Index">Chúng tôi</a></li>
-        <li id="SignInButtonHomePage"><a asp-controller="Reports" asp-action="Index" >Đăng nhập</a></li>
-        <li id="RegisterButtonHomePage"><a asp-controller="Reports" asp-action="Index" >Đăng ký</a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Quản lý tài khoản</a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Quản lý giải đấu</i></a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Quản lý trận đấu</i></a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Quản lý xếp hạng</i></a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Trang Chủ Khách</i></a></li>
+        <li><a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Quản lý quỹ</i></a></li>
+        <li id="SignInButtonHomePage"><a asp-controller="Login" asp-action="Index">Đăng nhập</a></li>
         @if (User.IsInRole("Admin"))
         {
             <li><a asp-controller="Admin" asp-action="Dashboard">Bảng Điều Khiển</a></li>
