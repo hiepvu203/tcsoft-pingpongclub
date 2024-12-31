@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using tcsoft_pingpongclub.Filter;
 using tcsoft_pingpongclub.Models;
 
 namespace tcsoft_pingpongclub.Controllers
 {
+    [ServiceFilter(typeof(AuthorizationFilter))]
     public class PermissionRolesController : Controller
     {
         private readonly ThuctapKtktcn2024Context _context;
@@ -19,15 +21,15 @@ namespace tcsoft_pingpongclub.Controllers
         }
 
         // GET: PermissionRoles
-        public async Task<IActionResult> Index(int? idRole)
+        public async Task<IActionResult> Index(int ? id)
         {
-            if (idRole==null)
+            if (id==null)
             {
-                return BadRequest("IdRole is required.");
+                RedirectToAction("Index","Role");
             }
 
             var permissionRoles = await _context.PermissionRoles
-        .Where(pr => pr.IdRole == idRole)
+        .Where(pr => pr.IdRole == id)
         .Include(pr => pr.IdPermissionNavigation)
         .Include(pr => pr.IdRoleNavigation)      
         .ToListAsync();  
