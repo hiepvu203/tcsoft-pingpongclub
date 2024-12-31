@@ -1,28 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
+using tcsoft_pingpongclub.Service;
 
 namespace tcsoft_pingpongclub.Controllers
 {
     public class RoleController : Controller
     {
         private readonly ThuctapKtktcn2024Context _context;
-
+        private readonly AuthorizationService _authorizationService;
         public RoleController(ThuctapKtktcn2024Context context)
         {
             _context = context;
+            _authorizationService=new AuthorizationService(context);
         }
 
         // GET: Role
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Roles.ToListAsync());
+            // Lấy IdRole từ Session
+            int? idRole = HttpContext.Session.GetInt32("IdRole");
+
+            // Kiểm tra nếu IdRole không tồn tại
+            if (idRole == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            // Kiểm tra quyền truy cập
+            bool hasPermission =  _authorizationService.hasPer(idRole.Value,"role");
+            if (hasPermission)
+            {
+                var roles = await _context.Roles.ToListAsync();
+                return View(roles);
+            }
+
+            // Trả về lỗi 403 nếu không có quyền
+            return Forbid();
         }
+
 
         // GET: Role/Details/5
         public async Task<IActionResult> Details(int? id)

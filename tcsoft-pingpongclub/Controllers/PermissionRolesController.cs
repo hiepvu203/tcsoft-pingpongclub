@@ -27,10 +27,10 @@ namespace tcsoft_pingpongclub.Controllers
             }
 
             var permissionRoles = await _context.PermissionRoles
-        .Where(pr => pr.IdRole == idRole)    // Lọc theo IdRole
-        .Include(pr => pr.IdPermissionNavigation)  // Nạp thông tin về Permission
-        .Include(pr => pr.IdRoleNavigation)       // Nạp thông tin về Role
-        .ToListAsync();  // Thực hiện truy vấn bất đồng bộ
+        .Where(pr => pr.IdRole == idRole)
+        .Include(pr => pr.IdPermissionNavigation)
+        .Include(pr => pr.IdRoleNavigation)      
+        .ToListAsync();  
 
             return View(permissionRoles);
 
