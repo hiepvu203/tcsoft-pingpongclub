@@ -12,10 +12,11 @@
     <link rel="stylesheet" href="/css/table-style.css">
 </head>
 <body>
-<h1>Index</h1>
+    <h1>Quản lý quyền truy cập</h1>
+    <h1>@ViewBag.role.NameRole</h1>
 
 <p>
-        <a asp-action="Create" class="btn-create">Create New</a>
+        <a asp-action="Create" asp-route-id="@ViewBag.role.IdRole" class="btn-create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -51,7 +52,7 @@
                 @Html.DisplayFor(modelItem => item.IdPermissionNavigation.Url)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdPerRo" class="btn-edit">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.IdPerRo" asp-route-idRole="@ViewBag.role.IdRole"  class="btn-edit">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.IdPerRo" class="btn-edits">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.IdPerRo" class="btn-delete">Delete</a>
             </td>

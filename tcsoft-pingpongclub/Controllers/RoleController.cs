@@ -34,9 +34,9 @@ namespace tcsoft_pingpongclub.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
-            // Kiểm tra quyền truy cập
                 var roles = await _context.Roles.ToListAsync();
                 return View(roles);
+
         }
 
 

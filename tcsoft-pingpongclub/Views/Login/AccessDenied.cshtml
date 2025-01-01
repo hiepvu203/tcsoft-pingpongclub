@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <div class="alert alert-danger">
+        <strong>Oops!</strong> Bạn không có quyền truy cập vào trang web này.
+    </div>
+
+    <p>
+        Nếu bạn nghĩ rằng đây là một lỗi, vui lòng liên hệ với quản trị viên của hệ thống.
+    </p>
+    
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Quay lại Trang Chủ</a>
+</div>
+
+<!-- CSS tùy chỉnh (có thể thêm vào hoặc sử dụng từ file CSS chính của bạn) -->
+<style>
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: 1px solid #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>

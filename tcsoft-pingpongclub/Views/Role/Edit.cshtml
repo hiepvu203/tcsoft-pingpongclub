@@ -3,10 +3,11 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<head>
+    <link rel="stylesheet" href="/css/form-style.css">
+</head>
 
-<h1>Edit</h1>
-
-<h4>Role</h4>
+<h1>Chỉnh sửa loại tài khoản</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,14 +16,19 @@
             <input type="hidden" asp-for="IdRole" />
             <div class="form-group">
                 <label asp-for="NameRole" class="control-label"></label>
-                <input asp-for="NameRole" class="form-control" />
+                <p>@Model.NameRole</p>  <!-- Chỉ hiển thị tên Role mà không cho phép chỉnh sửa -->
                 <span asp-validation-for="NameRole" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" class="form-control">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
