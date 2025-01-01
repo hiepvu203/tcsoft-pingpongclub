@@ -1,0 +1,56 @@
+﻿.child, .child1 {
+    display: none;
+}
+.card {
+    border-radius: 8px; /* Làm tròn góc thẻ */
+    background-color: #f9f9f9; /* Màu nền sáng */
+    padding: 10px;
+}
+
+.card-title {
+    font-size: 1.5rem; /* Tăng kích cỡ chữ của tiêu đề */
+}
+
+.card-text {
+    font-size: 1.2rem; /* Tăng kích cỡ chữ của nội dung */
+}
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.parent {
+    transition: background-color 0.3s ease;
+}
+
+    .parent:hover {
+        background-color: #f8f9fa;
+    }
+
+.child td {
+    background-color: #f4f6f7;
+}
+
+.child1 td {
+    background-color: #e9ecef;
+}
+
+.badge {
+    font-size: 1rem;
+}
+
+    .badge.bg-success {
+        background-color: #28a745;
+    }
+
+    .badge.bg-primary {
+        background-color: #007bff;
+    }
+
+    .badge.bg-danger {
+        background-color: #dc3545;
+    }
+
+    .badge.bg-secondary {
+        background-color: #6c757d;
+    }

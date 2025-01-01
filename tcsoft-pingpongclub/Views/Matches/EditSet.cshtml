@@ -1,0 +1,75 @@
+﻿@model tcsoft_pingpongclub.Models.Match
+
+@{
+    ViewData["Title"] = "Chỉnh sửa các set đấu";
+    List<string> SetPoints = ((IEnumerable<string>)ViewBag.SetPoints).ToList();
+  
+    var i = 1;
+}   
+<h1 class="text-center">Điều chỉnh thời gian</h1>
+<hr />
+<div class="container text-center py-4 bg-white text-dark">
+    <form asp-action="EditSet" class="mt-4">
+        <h4>@ViewBag.nameTour</h4>
+        <div class="row align-items-center">
+            <!-- Team 1 -->
+            <div class="col-md-4">
+                <img src="/image/avata1.jpg" alt="Thái Lan" class="img-fluid" style="width: 100px;border-radius:100px;">
+                <h5 class="mt-2">@ViewBag.playerName1</h5>
+            </div>
+
+
+            <div class="col-md-4">
+                <h2>Thời gian thi đấu</h2>
+                <h5 class="mt-2">@ViewBag.MatchTime</h5>
+            </div>
+            <div class="col-md-4">
+                <img src="/image/avata1.jpg" alt="Philippines" class="img-fluid" style="width: 100px; border-radius:100px;">
+                <h5 class="mt-2">@ViewBag.playerName2</h5>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            @{
+                int index = 1;
+            }
+            @foreach (var item in SetPoints)
+            {
+                var points = item.Split(" - ");
+                <div class="col-md-4"> 
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h1 class="card-title text-primary fw-bold">Set @i</h1>
+
+                            <div class="d-flex justify-content-center align-items-center mt-2">
+                                <input type="number" name="point@(index)"
+                                       class="form-control text-center me-2"
+                                       style="max-width: 100px;" />
+                                <span class="mx-2">-</span>
+                                <input type="number" name="point@(index + 1)"
+                                       class="form-control text-center ms-2"
+                                       style="max-width: 100px;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                i++;
+                index+=2;
+            }
+        </div>
+        <input type="hidden" asp-for="IdMatch">
+        <button type="submit" class="btn btn-primary mt-5">Lưu</button>
+    </form>
+</div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

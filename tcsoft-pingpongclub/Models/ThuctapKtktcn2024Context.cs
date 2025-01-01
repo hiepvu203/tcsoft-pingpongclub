@@ -374,6 +374,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
 
             entity.Property(e => e.IdSet).HasColumnName("idSet");
             entity.Property(e => e.IdMatch).HasColumnName("idMatch");
+            entity.Property(e => e.IdWinner).HasColumnName("idWinner");
             entity.Property(e => e.Ratio)
                 .HasMaxLength(10)
                 .IsUnicode(false)
