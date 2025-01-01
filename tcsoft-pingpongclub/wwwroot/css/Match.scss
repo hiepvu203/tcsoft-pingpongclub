@@ -1,0 +1,28 @@
+﻿/* Ẩn tất cả phần tử với class .child */
+.child {
+    display: none;
+}
+
+/* Khi checkbox được đánh dấu, hiển thị phần tử .child */
+.toggle-child:checked + label + .child {
+    display: table-row;
+}
+
+/* Tùy chỉnh kiểu dáng của phần tử parent */
+.parent {
+    cursor: pointer;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Bạn có thể thêm hiệu ứng hover để cải thiện trải nghiệm người dùng */
+.parent:hover {
+    background-color: #e9ecef;
+}
+
+/* Đảm bảo các phần tử child không hiển thị khi checkbox không được chọn */
+.child {
+    display: none;
+}

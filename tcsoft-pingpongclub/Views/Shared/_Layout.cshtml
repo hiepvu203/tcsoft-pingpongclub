@@ -7,6 +7,8 @@
     <title>@ViewData["Title"] - tcsoft_pingpongclub</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Match1.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/tcsoft_pingpongclub.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/homepage.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
@@ -14,72 +16,72 @@
 
 <body>
     <header>
-        <header>
-            @await Html.PartialAsync("Header")
-        </header>
+        @await Html.PartialAsync("Header")
     </header>
     <div class="">
-        <main class="BodyItem">
-            @RenderBody()
-        </main>
-    </div>
+            <div style="width:100%">
+                <main role="main" class="">
+                    @RenderBody()
+                </main>
+            </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="~/image/logo.png" alt="Logo" class="footer-logo-img">
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+            <footer class="footer">
+                <div class="container">
+                    <div class="footer-content">
+                        <div class="footer-logo">
+                            <img src="~/image/logo.png" alt="Logo" class="footer-logo-img">
+                            <div class="social-icons">
+                                <a href="#"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                        <div class="footer-links">
+                            <h5>Use cases</h5>
+                            <ul>
+                                <li>UI design</li>
+                                <li>UX design</li>
+                                <li>Wireframing</li>
+                                <li>Diagramming</li>
+                                <li>Brainstorming</li>
+                                <li>Online whiteboard</li>
+                                <li>Team collaboration</li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <h5>Explore</h5>
+                            <ul>
+                                <li>Design</li>
+                                <li>Prototyping</li>
+                                <li>Development features</li>
+                                <li>Design systems</li>
+                                <li>Design process</li>
+                                <li>FigJam</li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li>Blog</li>
+                                <li>Best practices</li>
+                                <li>Colors</li>
+                                <li>Color wheel</li>
+                                <li>Support</li>
+                                <li>Developers</li>
+                                <li>Resource library</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        &copy; 2024 - tcsoft_pingpongclub - <a href="#" class="footer-link">Privacy</a>
                     </div>
                 </div>
-                <div class="footer-links">
-                    <h5>Use cases</h5>
-                    <ul>
-                        <li>UI design</li>
-                        <li>UX design</li>
-                        <li>Wireframing</li>
-                        <li>Diagramming</li>
-                        <li>Brainstorming</li>
-                        <li>Online whiteboard</li>
-                        <li>Team collaboration</li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h5>Explore</h5>
-                    <ul>
-                        <li>Design</li>
-                        <li>Prototyping</li>
-                        <li>Development features</li>
-                        <li>Design systems</li>
-                        <li>Design process</li>
-                        <li>FigJam</li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h5>Resources</h5>
-                    <ul>
-                        <li>Blog</li>
-                        <li>Best practices</li>
-                        <li>Colors</li>
-                        <li>Color wheel</li>
-                        <li>Support</li>
-                        <li>Developers</li>
-                        <li>Resource library</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; 2024 - tcsoft_pingpongclub - <a href="#" class="footer-link">Privacy</a>
-            </div>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+            </footer>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            <script src="~/js/Match.js" asp-append-version="true"></script>
+            @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

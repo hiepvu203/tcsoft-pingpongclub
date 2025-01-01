@@ -8,6 +8,7 @@ public partial class Set
     public int IdSet { get; set; }
 
     public int IdMatch { get; set; }
+    public int IdWinner { get; set; }
 
     public string? Ratio { get; set; }
 
