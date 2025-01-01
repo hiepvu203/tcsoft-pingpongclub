@@ -1,0 +1,85 @@
+﻿/* CSS cho trang Details */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 2.5em;
+    color: #333;
+}
+
+h4 {
+    color: #495057;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+    table th, table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #e2e2e2;
+    }
+
+    table th {
+        background-color: #007bff;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    table td {
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Cột đầu tiên nhỏ lại */
+    table th:first-child, table td:first-child {
+        width: 25%; /* Điều chỉnh độ rộng cột đầu tiên */
+        font-size: 0.9em; /* Giảm kích thước chữ trong cột đầu tiên */
+    }
+
+    /* Cột thông tin sẽ to hơn */
+    table th:nth-child(2), table td:nth-child(2) {
+        width: 75%; /* Điều chỉnh độ rộng cột thứ hai */
+        font-size: 1.1em; /* Tăng kích thước chữ trong cột thứ hai */
+    }
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+    a:hover {
+        background-color: #e2e6ea;
+        color: #0056b3;
+    }
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #dee2e6;
+    margin: 20px 0;
+}
+
+.table-container {
+    max-width: 900px;
+    margin: 0 auto;
+}

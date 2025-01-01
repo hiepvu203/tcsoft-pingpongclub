@@ -30,5 +30,9 @@ namespace tcsoft_pingpongclub.Controllers
             ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng!";
             return View();
         }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

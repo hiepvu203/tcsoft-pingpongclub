@@ -3,28 +3,28 @@
 @{
     ViewData["Title"] = "Details";
 }
+<head>
+    <link rel="stylesheet" href="/css/form-detail-style.css">
+</head>
 
 <h1>Details</h1>
 
-<div>
-    <h4>Role</h4>
+<div class="table-container">
+    <h4>Role Information</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NameRole)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NameRole)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
+    <table>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.NameRole)</th>
+            <td>@Html.DisplayFor(model => model.NameRole)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <td>@Html.DisplayFor(model => model.Status)</td>
+        </tr>
+    </table>
 </div>
-<div>
+
+<div style="text-align:center; margin-top: 20px;">
     <a asp-action="Edit" asp-route-id="@Model?.IdRole">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

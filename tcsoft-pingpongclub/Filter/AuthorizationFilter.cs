@@ -25,20 +25,14 @@ namespace tcsoft_pingpongclub.Filter
                 context.Result = new RedirectToActionResult("Index", "Login", null);
                 return;
             }
-
             var controllerName = context.RouteData.Values["controller"].ToString();
             var actionName = context.RouteData.Values["action"].ToString();
-
-            // Kiểm tra quyền truy cập của role đối với controller và action hiện tại
             var hasPermission = _authorizationService.hasPer(idRole.Value, controllerName);
-
             if (!hasPermission)
             {
-                context.Result = new ForbidResult();
+                context.Result = new RedirectToActionResult("AccessDenied", "login", null);
                 return;
             }
-
-            // Tiếp tục thực thi action nếu có quyền
             base.OnActionExecuting(context);
         }
     }
