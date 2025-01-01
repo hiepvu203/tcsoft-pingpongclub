@@ -20,6 +20,7 @@ public class AccountController : Controller
 	{
 		var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 		ViewBag.IsLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+		ViewBag.IsLoginRole = HttpContext.Session.GetInt32("IdRole") != null;
 		// Xóa dữ liệu session
 		HttpContext.Session.Remove("IdMember");
 		HttpContext.Session.Remove("IdRole");

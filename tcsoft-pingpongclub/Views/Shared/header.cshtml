@@ -1,5 +1,6 @@
 @{
     var isLoggedIn = ViewBag.IsLoggedIn;
+    var IsLoginRole = ViewBag.IsLoginRole;
 }
 
 <nav class="navbar">
@@ -11,19 +12,23 @@
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Quản lý trận đấu</i></a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Quản lý xếp hạng</i></a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Trang Chủ Khách</i></a></li>
-        <li><a asp-area="" asp-controller="Home" asp-action="Index">Quản lý thu chi</i></a></li>
+        <li><a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Quản lý thu chi</i></a></li>
         <li id="SignInButtonHomePage"><a asp-controller="Login" asp-action="Index">Đăng nhập</a></li>
         @if (isLoggedIn != null)
         {
-                <form asp-action="Logout" asp-controller="Account" method="post" style="display:inline;">
-                     <li id="RegisterButtonHomePage"><a asp-controller="" asp-action=""><button type="submit" class="RegisterButtonHomePage"
-                     style="
-                    background:rgb(65, 65, 65);;
-                    color: white;
-                    font-family: ui-sans-serif;
-                    "
-                     >Đăng Xuất</button></a></li>
-                </form>
+            <form asp-action="Logout" asp-controller="Account" method="post"
+                style="display:@(isLoggedIn != null ? "inline" : "none");">
+                <li id="RegisterButtonHomePage">
+                    <a asp-controller="" asp-action="">
+                        <button type="submit" id="RegisterButtonHomePage" style="
+            background:rgb(65, 65, 65);
+            color: white;
+            font-family: ui-sans-serif;">
+                            Đăng Xuất
+                        </button>
+                    </a>
+                </li>
+            </form>
         }
     </ul>
 </nav>
