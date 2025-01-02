@@ -13,6 +13,7 @@ namespace tcsoft_pingpongclub.Controllers
 			_logger = logger;
 		}
 
+<<<<<<< HEAD
 		public IActionResult Index()
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
@@ -20,6 +21,13 @@ namespace tcsoft_pingpongclub.Controllers
 			ViewBag.IsLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			return View();
 		}
+=======
+        public IActionResult Index()
+        {
+            HttpContext.Session.SetInt32("IdMember", 1);
+            return View();
+        }
+>>>>>>> origin/DangHungCuong
 
 		public IActionResult Privacy()
 		{

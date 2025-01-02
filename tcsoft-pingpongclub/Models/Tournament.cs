@@ -22,6 +22,8 @@ public partial class Tournament
     public int? RankStart { get; set; }
 
     public int? RankEnd { get; set; }
+    public string? Infor { get; set; }
+
 
     public bool? Status { get; set; }
 

@@ -1,0 +1,116 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Match>
+<div class="container mt-5">
+	<!-- Align the button to the left -->
+	<div class="text-left">
+		<a asp-controller="RegTour" asp-action="Index" asp-route-id="@ViewBag.TournamentId" class="btn btn-primary">
+			<i class="fas fa-arrow-left"></i> Quay Lại
+		</a>
+	</div>
+</div>
+
+<div class="container mt-3">
+	<!-- Center the heading -->
+	<h2 class="mb-4 text-center">Lịch Thi Đấu Của Bạn - @ViewBag.TournamentName</h2>
+
+	@if (ViewBag.Message != null)
+	{
+		<div class="alert alert-warning" role="alert">
+			@ViewBag.Message
+		</div>
+	}
+	else
+	{
+		@if (!Model.Any())
+		{
+			<div class="alert alert-info" role="alert">
+				Bạn chưa có trận đấu nào trong giải đấu này. Vui lòng kiểm tra lại sau.
+			</div>
+		}
+		else
+		{
+			<table class="table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th>ID</th>
+						<th>Giải Đấu</th>
+						<th>Đối Thủ</th>
+						<th>Thời Gian</th>
+						<th>Trạng Thái</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var match in Model)
+					{
+						// Lấy ID thành viên từ ViewBag
+						var idPlayer = (int)ViewBag.IdPlayer;
+
+						// Xác định đối thủ
+						var opponent = match.IdMemberOne == idPlayer
+						? match.IdMemberTwoNavigation?.IdMemberNavigation?.MemberName
+						: match.IdMemberOneNavigation?.IdMemberNavigation?.MemberName;
+
+						<tr>
+							<td>@match.IdMatch</td>
+							<td>@match.IdTournamentNavigation?.TournamentName</td>
+							<td>@(string.IsNullOrEmpty(opponent) ? "N/A" : opponent)</td>
+							<td>@match.TimeStart?.ToString("dd/MM/yyyy HH:mm")</td>
+							<td>@(match.Status == true ? "Hoàn Thành" : "Chưa Bắt Đầu")</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
+	}
+</div>
+
+<style>
+	body {
+		background-color: pink;
+	}
+
+	.container {
+		background-color: #ffffff;
+		padding: 5px;
+		border-radius: 8px;
+		border: 1px solid green;
+	}
+
+	.btn-primary {
+		background-color: #007bff;
+		border-color: #007bff;
+		color: #fff;
+		padding: 8px 16px;
+		border-radius: 4px;
+		display: inline-block;
+	}
+
+		.btn-primary:hover {
+			background-color: #0056b3;
+			border-color: #0068b7;
+		}
+
+		.btn-primary i {
+			margin-right: 5px;
+		}
+
+	.table th {
+		background-color: #343a40;
+		color: white;
+	}
+
+	.table td {
+		vertical-align: middle;
+	}
+
+	.alert-warning {
+		background-color: #fff3cd;
+		color: #856404;
+		border-color: #ffeeba;
+	}
+
+	.alert-info {
+		background-color: #d1ecf1;
+		color: #0c5460;
+		border-color: #bee5eb;
+	}
+</style>
