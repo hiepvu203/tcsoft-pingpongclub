@@ -1,0 +1,43 @@
+﻿@model tcsoft_pingpongclub.Models.Member
+
+<h1>Edit Profile</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label asp-for="MemberName"></label>
+        <input asp-for="MemberName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Emaill"></label>
+        <input asp-for="Emaill" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <textarea asp-for="Address" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="IdLevel"></label>
+        <select asp-for="IdLevel" asp-items="ViewBag.IdLevel" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="IdRole"></label>
+        <select asp-for="IdRole" asp-items="ViewBag.IdRole" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="LinkAvatar">Profile Picture</label>
+        <select asp-for="LinkAvatar" class="form-control">
+            @foreach (var file in ViewBag.ImageFiles)
+            {
+                var selected = file == Model.LinkAvatar ? "selected" : "";
+                <option value="@file" selected="@selected">@file</option>
+            }
+        </select>
+        <span asp-validation-for="LinkAvatar" class="text-danger"></span>
+    </div>
+
+     <button type="submit" class="btn btn-success">Save Changes</button>
+</form>

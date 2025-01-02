@@ -15,6 +15,7 @@ namespace tcsoft_pingpongclub.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.SetInt32("IdMember", 1);
             return View();
         }
 

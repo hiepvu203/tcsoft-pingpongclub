@@ -1,0 +1,112 @@
+﻿@model tcsoft_pingpongclub.Models.Member
+
+<div class="container mt-5">
+	<h2 class="mb-4">Thông Tin User</h2>
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<div class="row align-items-center">
+				<!-- Avatar Section -->
+				<div class="col-md-3 text-center">
+					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content($"~/image/{Model.LinkAvatar}") : "/path/to/placeholder-image.png")"
+						 class="rounded-circle img-fluid" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
+				</div>
+				<!-- Information Section -->
+				<div class="col-md-9">
+					<h4 class="mb-3">Personal Information</h4>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">ID:</div>
+						<div class="col-sm-8">@Model.IdMember</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Full Name:</div>
+						<div class="col-sm-8">@Model.MemberName</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Email:</div>
+						<div class="col-sm-8">@Model.Emaill</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Phone:</div>
+						<div class="col-sm-8">@Model.Phone</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Address:</div>
+						<div class="col-sm-8">@Model.Address</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Gender:</div>
+						<div class="col-sm-8">
+							@(Model.Gender == true ? "Male" : "Female")
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Role:</div>
+						<div class="col-sm-8">
+							@(Model.IdRoleNavigation != null ? Model.IdRoleNavigation.IdRole : "N/A")
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Level:</div>
+						<div class="col-sm-8">
+							@(Model.IdLevelNavigation != null ? Model.IdLevelNavigation.IdLevel : "N/A")
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Status:</div>
+						<div class="col-sm-8">
+							@(Model.Status == true ? "Ready" : "Delay")
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	@*  <div class="mt-5 text-center">
+		<a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
+	</div> *@
+</div>
+
+<style>
+	body {
+		background-color:deepskyblue;
+	}
+
+	.container {
+		background-color: cornflowerblue;
+		padding: 5px;
+		border-radius: 30px;
+		box-shadow: 0 2px 7px rgba(30, 0, 46, 0.1);
+		border: 3px solid red;
+	}
+
+	h2 {
+		color: #333;
+		font-size: 24px;
+		font-weight: bold;
+		margin-bottom: 20px;
+	}
+	.card {
+		border-radius: 10px;
+	}
+
+	.font-weight-bold {
+		font-weight: bold;
+	}
+
+	.btn-primary {
+		background-color: #007bff;
+		border-color: #007bff;
+		padding: 10px 20px;
+	}
+
+		.btn-primary:hover {
+			background-color: #0056b3;
+			border-color: #004085;
+		}
+
+	img {
+		border-radius: 50%;
+		object-fit: cover;
+	}
+</style>

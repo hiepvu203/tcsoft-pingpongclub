@@ -1,0 +1,54 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Player>
+
+<div class="text-center mb-4">
+    <h1 style="color:cornflowerblue">Danh Sách Người Chơi Đã Đăng Ký</h1>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Tên Người Chơi</th>
+            <th>Điểm</th>
+            <th>Trạng Thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.IdMemberNavigation?.MemberName</td> <!-- Hiển thị tên người chơi -->
+                <td>@player.Score</td>
+                <td>@(player.Status == true ? "Đang hoạt động" : "Đã hủy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .table {
+        width: 80%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            padding: 10px;
+        }
+
+    .thead-dark {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f2f2f2;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8d7da;
+    }
+</style>
