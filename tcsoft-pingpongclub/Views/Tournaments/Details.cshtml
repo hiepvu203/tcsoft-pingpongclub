@@ -1,0 +1,87 @@
+﻿@model tcsoft_pingpongclub.Models.Tournament
+
+@{
+    ViewData["Title"] = "Chi tiết giải đấu";
+}
+
+<h1>Chi tiết giải đấu</h1>
+
+<div>
+    <h4>Thông tin giải đấu</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Tên giải đấu
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TournamentName)
+        </dd>
+        <dt class="col-sm-2">
+            Loại hình
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Type.HasValue ? (Model.Type.Value ? "Đấu Cúp" : "Đấu Vòng") : "Không xác định")
+        </dd>
+        <dt class="col-sm-2">
+            Thời gian bắt đầu
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeStart)
+        </dd>
+        <dt class="col-sm-2">
+            Thời gian kết thúc
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeEnd)
+        </dd>
+        <dt class="col-sm-2">
+            Hình ảnh
+        </dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.UrlImage))
+            {
+                <img src="@Model.UrlImage" alt="Hình ảnh giải đấu" class="img-fluid" style="max-width: 200px; height: auto;" />
+            }
+            else
+            {
+                <span>Không có hình ảnh</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Số lượng
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        <dt class="col-sm-2">
+            Trạng thái
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Status.HasValue ? (Model.Status.Value ? "Đang diễn ra" : "Ẩn") : "Không xác định")
+        </dd>
+        <dt class="col-sm-2">
+            Hạng Thấp Nhất
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RankStartNavigation.LevelName)
+        </dd>
+        <dt class="col-sm-2">
+            Hạng Cao Nhất
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RankEndNavigation.LevelName)
+        </dd>
+        <dt class="col-sm-2">
+            Thông tin giải đấu
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Infor)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.IdTournament" class="btn btn-primary">Sửa</a>   
+    <a asp-action="Index" asp-route-IdTournament="@Model?.IdTournament" asp-controller="Groupstages" class="btn btn-info">Danh Sách Bảng Đấu</a>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+</div>

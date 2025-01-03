@@ -1,0 +1,22 @@
+﻿/* Đặt chiều cao cố định cho hàng */
+.fixed-row {
+    max-height: 130px;
+    overflow: hidden;
+}
+
+/* Thiết lập cho hình ảnh */
+.fixed-row img {
+    height: 130px;
+    width: 200px;
+    object-fit: cover;
+}
+
+/* Giới hạn nội dung và tạo thanh cuộn */
+.scrollable-cell {
+    max-height: 130px;
+    overflow-y: auto;
+}
+table > tbody > tr {
+    height: 130px;
+    overflow: hidden;
+}

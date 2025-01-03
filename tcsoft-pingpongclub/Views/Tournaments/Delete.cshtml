@@ -1,0 +1,82 @@
+﻿@model tcsoft_pingpongclub.Models.Tournament
+
+@{
+    ViewData["Title"] = "Delete Tournament";
+}
+
+<h1>Xóa giải đấu</h1>
+
+<h3>Bạn có chắc chắn muốn xóa giải đấu này không?</h3>
+<div>
+    <h4>Thông tin giải đấu</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TournamentName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TournamentName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Type.HasValue ? (Model.Type.Value ? "Đấu Cúp" : "Đấu Vòng") : "Không xác định")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeStart)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeStart)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeEnd)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeEnd)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UrlImage)
+        </dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.UrlImage))
+            {
+                <img src="@Model.UrlImage" alt="Hình ảnh giải đấu" class="img-fluid" style="max-width: 200px; height: auto;" />
+            }
+            else
+            {
+                <span>Không có hình ảnh</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Status.HasValue ? (Model.Status.Value ? "Đang diễn ra" : "Ẩn") : "Không xác định")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RankEndNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RankEndNavigation.IdLevel)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RankStartNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RankStartNavigation.IdLevel)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdTournament" />
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+    </form>
+</div>

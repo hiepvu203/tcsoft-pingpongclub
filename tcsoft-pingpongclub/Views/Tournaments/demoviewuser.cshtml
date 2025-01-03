@@ -1,0 +1,118 @@
+﻿<div class="container my-5">
+    <h1 class="text-center mb-4">Giải Đấu</h1>
+
+    <!-- Filter and Search Bar -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <label for="rankFilter" class="form-label">Hạng Giải</label>
+            <select id="rankFilter" class="form-select" style="width: 200px;" onchange="filterByRank()">
+                <option value="">Tất cả</option>
+                @foreach (var rank in ViewBag.Rank as SelectList)
+                {
+                    <option value="@rank.Value">@rank.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-8 d-flex justify-content-end align-items-end">
+            <div class="input-group" style="width: 350px;">
+                <input type="text" class="form-control" placeholder="Tên Giải" id="searchTournament" oninput="searchTournamentByName()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournament Cards -->
+    <div class="row g-4" id="tournamentCards">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 tournament-card"
+                 data-rank-start="@item.RankStartNavigation.LevelName"
+                 data-rank-end="@item.RankEndNavigation.LevelName"
+                 data-name="@item.TournamentName"
+                 data-rank-start-value="@item.RankStart"
+                 data-rank-end-value="@item.RankEnd">
+                <div class="card h-100">
+                    <a href="/Tournaments/Information/@item.IdTournament">
+                        <img src="@item.UrlImage" class="card-img-top" alt="Image" style="height: 200px; object-fit: cover;">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.TournamentName</h5>
+                        <p class="card-text">
+                            <strong>Loại hình:</strong> @if (item.Type == true)
+                            {
+                                @:Đấu Cúp
+                            }
+                            else
+                            {
+                                @:Đấu Vòng
+                            }<br>
+                            <strong>Thời gian dự kiến:</strong> @item.TimeStart<br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            <!-- Previous Page -->
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)">&laquo; Previous</a>
+                </li>
+            }
+
+            <!-- Page Numbers -->
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @((i == ViewBag.CurrentPage) ? "active" : "")">
+                    <a class="page-link" href="?page=@i">@i</a>
+                </li>
+            }
+
+            <!-- Next Page -->
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)">Next &raquo;</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<script>
+    function filterByRank() {
+        const selectedRank = parseInt(document.getElementById('rankFilter').value); // Đảm bảo giá trị rank được chuyển thành số nguyên
+        const cards = document.querySelectorAll('.tournament-card');
+
+        cards.forEach(card => {
+            const rankStart = parseInt(card.getAttribute('data-rank-start-value')); // Lấy giá trị số nguyên
+            const rankEnd = parseInt(card.getAttribute('data-rank-end-value')); // Lấy giá trị số nguyên
+
+            // Kiểm tra xem rank đã chọn có nằm trong phạm vi rankStart và rankEnd không
+            if (isNaN(selectedRank) || (selectedRank <= rankStart && selectedRank >= rankEnd)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function searchTournamentByName() {
+        const searchValue = document.getElementById('searchTournament').value.toLowerCase();
+        const cards = document.querySelectorAll('.tournament-card');
+
+        cards.forEach(card => {
+            const cardName = card.getAttribute('data-name').toLowerCase();
+            if (cardName.includes(searchValue)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>

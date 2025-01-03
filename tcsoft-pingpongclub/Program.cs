@@ -6,6 +6,9 @@ using LibSassHost; // Thêm thư viện LibSassHost vào
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cấu hình DbContext
+builder.Services.AddDbContext<ThuctapKtktcn2024Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb")));
 
 builder.Services.AddControllersWithViews();
 
@@ -32,6 +35,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+// Thêm middleware session
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

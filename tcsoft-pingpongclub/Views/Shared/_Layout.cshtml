@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Match1.css" asp-append-version="true" />
-
     <link rel="stylesheet" href="~/tcsoft_pingpongclub.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/homepage.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/tournament.css" asp-append-version="true" />
 </head>
 
 <body>
@@ -24,7 +24,11 @@
                     @RenderBody()
                 </main>
             </div>
-
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
             <footer class="footer">
                 <div class="container">
                     <div class="footer-content">
