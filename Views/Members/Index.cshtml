@@ -1,0 +1,96 @@
+﻿@model List<Member>
+@{
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<div class="row">
+    <div class="col">
+        <a class="btn btn-primary" asp-controller="Members" asp-action="Create">New Member</a>
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên thành viên</th>
+            <th>Địa chỉ</th>
+            <th>Điện thoại</th>
+            <th>Email</th>
+            <th>Giới tính</th>
+            <th>Hạng</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/img/@member.LinkAvatar" alt="Ảnh đại diện" />
+                    <span class="name">@member.MemberName</span>
+                </td>
+                <td>@member.Address</td>
+                <td>@member.Phone</td>
+                <td>@member.Emaill</td>
+                <td>
+                    @{
+                        string gender = member.Gender == true ? "Nam" : "Nữ";
+                    }
+                    @gender
+                </td>
+                <td>@member.IdLevelNavigation.LevelName</td>
+                <td style="white-space:nowrap;">
+                    <a class="btn btn-primary btn-sm" asp-controller="Members" asp-action="Edit" asp-route-id="@member.IdMember">Edit</a>
+                    <a class="btn btn-danger btn-sm"
+                       asp-controller="Members"
+                       asp-action="Delete"
+                       asp-route-id="@member.IdMember"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa thành viên này không?');">
+                        Xóa
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="container">
+    @if (pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+            @if (pager.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Members" asp-action="Index" asp-route-pg="1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Members" asp-action="Index" asp-route-pg="@(pager.CurrentPage - 1)">Previous</a>
+                </li>
+            }
+
+            @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+            {
+                <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-controller="Members" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                </li>
+            }
+            @if (pager.CurrentPage < pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Members" asp-action="Index" asp-route-pg="@(pager.CurrentPage + 1)">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Members" asp-action="Index" asp-route-pg="@(pager.TotalPages)">Last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>

@@ -1,0 +1,213 @@
+﻿
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #343a40;
+    margin: 20px;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+    .btn-danger:hover {
+        background-color: #bd2130;
+        border-color: #a71d2a;
+    }
+
+
+.table {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+    .table th {
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .table td {
+        padding: 12px;
+        vertical-align: middle;
+        font-size: 14px;
+        text-align: center;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .table img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+
+    .table .name {
+        font-weight: bold;
+    }
+
+    .table tr:hover {
+        background-color: #f8f9fa;
+    }
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+    .pagination .page-item {
+        list-style-type: none;
+    }
+
+        .pagination .page-item .page-link {
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination .page-item .page-link:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+.table td:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    text-align: left;
+}
+
+.table td:last-child {
+    white-space: nowrap;
+}
+@media (max-width: 768px) {
+    .table img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .table td {
+        font-size: 12px;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+        .pagination .page-item .page-link {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+}
+
+form {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+    form h2 {
+        color: #343a40;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    form label {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    form .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+        form .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    form .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+
+    form .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        form .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    form .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+        form .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    form .row {
+        margin-bottom: 15px;
+    }

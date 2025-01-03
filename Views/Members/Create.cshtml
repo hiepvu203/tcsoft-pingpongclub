@@ -1,0 +1,91 @@
+﻿@model Member
+@{
+}
+<div class="row">
+    <div class="col-md-8 mx-auto rounded border p-3">
+        <h2 class="text-center mb-5">New Member</h2>
+        <form method="post" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Tên thành viên</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="MemberName">
+                    <span asp-validation-for="MemberName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Nhập địa chỉ</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="Address">
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Chọn ảnh</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="ImageFile">
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Nhập số điện thoại</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="Phone">
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Nhập email</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="Emaill">
+                    <span asp-validation-for="Emaill" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Chọn giới tính</label>
+                <div class="col-sm-8">
+                    <select class="form-control" asp-for="Gender">
+                        <option value="">-- Chọn giới tính --</option>
+                        <option value="True">Nam</option>
+                        <option value="False">Nữ</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Chọn mức rank</label>
+                <div class="col-sm-8">
+                    <select class="form-control" asp-for="IdLevel" asp-items="ViewBag.listRank"></select>
+                    <span asp-validation-for="IdLevel" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Nhập Username</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="Username">
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="offset-sm-4 col-sm-4 d-grid">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="col-sm-4 d-grid">
+                    <a class="btn btn-outline-primary" asp-controller="Members" asp-action="Index" role="button">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
