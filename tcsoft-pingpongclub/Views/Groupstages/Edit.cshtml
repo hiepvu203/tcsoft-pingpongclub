@@ -1,0 +1,66 @@
+﻿@model tcsoft_pingpongclub.Models.Groupstage
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa";
+}
+
+<h1 class="text-center mb-4">Chỉnh Sửa Bảng Đấu</h1>
+
+<div class="container">
+    <h4 class="mb-4">Thông Tin Bảng Đấu</h4>
+    <hr />
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post">
+                <input type="hidden" name="IdGroupstage" value="@Model.IdGroupstage" />
+                <input type="hidden" name="IdTournament" value="@ViewBag.IdTournament" />
+
+                <!-- Tên Bảng Đấu -->
+                <div class="form-group mb-3">
+                    <label for="NameGroup" class="form-label">Tên Bảng Đấu:</label>
+                    <input type="text" class="form-control" id="NameGroup" name="NameGroup" value="@Model.NameGroup" placeholder="Nhập tên bảng đấu" required />
+                </div>
+
+                <!-- Số Lượng -->
+                <div class="form-group mb-3">
+                    <label for="Amount" class="form-label">Số Lượng:</label>
+                    <input type="number" class="form-control" id="Amount" name="Amount" value="@Model.Amount" placeholder="Nhập số lượng" min="1" required />
+                </div>
+
+                <!-- Vòng Đấu -->
+                <div class="form-group mb-3">
+                    <label for="IOrder" class="form-label">Vòng Đấu:</label>
+                    <select asp-for="IOrder" class="form-select" asp-items="ViewBag.IOrderList" required>
+                        <option value="1" selected>Loại</option>
+                        <option value="2">Tứ kết</option>
+                        <option value="3">Bán kết</option>
+                        <option value="4">Chung kết</option>
+                    </select>
+                </div>
+
+                <!-- Trạng Thái -->
+                <div class="form-group mb-4">
+                    <label for="Status" class="form-label">Trạng Thái:</label>
+                    <select asp-for="Status" class="form-select" asp-items="ViewBag.StatusList" required>
+                        <option value="true">Hiện Thị</option>
+                        <option value="false">Ẩn</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+                <!-- Nút Hành Động -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary px-4">Cập Nhật</button>
+                    <a asp-action="Index" asp-route-IdTournament="@Model?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

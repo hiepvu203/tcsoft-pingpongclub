@@ -1,0 +1,105 @@
+﻿@model tcsoft_pingpongclub.Models.Tournament
+
+@{
+    ViewData["Title"] = "Edit Tournament";
+}
+
+<h1 class="text-center mb-4">Sửa giải đấu</h1>
+
+<h4>Thông tin giải đấu</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Hidden field for IdTournament -->
+            <input type="hidden" asp-for="IdTournament" />
+
+            <!-- Tên giải đấu -->
+            <div class="form-group mb-3">
+                <label asp-for="TournamentName" class="control-label">Tên giải đấu</label>
+                <input asp-for="TournamentName" class="form-control w-100" />
+                <span asp-validation-for="TournamentName" class="text-danger"></span>
+            </div>
+
+            <!-- Loại hình giải đấu -->
+            <div class="form-group mb-3">
+                <label asp-for="Type" class="control-label">Loại giải đấu</label>
+                <select asp-for="Type" class="form-control w-100" asp-items="ViewBag.TypeList"></select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <!-- Thời gian bắt đầu -->
+            <div class="form-group mb-3">
+                <label asp-for="TimeStart" class="control-label">Thời gian bắt đầu</label>
+                <input asp-for="TimeStart" type="datetime-local" class="form-control w-100" value="@Model.TimeStart?.ToString("yyyy-MM-ddTHH:mm")" />
+                <span asp-validation-for="TimeStart" class="text-danger"></span>
+            </div>
+
+            <!-- Thời gian kết thúc -->
+            <div class="form-group mb-3">
+                <label asp-for="TimeEnd" class="control-label">Thời gian kết thúc</label>
+                <input asp-for="TimeEnd" type="datetime-local" class="form-control w-100" value="@Model.TimeEnd?.ToString("yyyy-MM-ddTHH:mm")" />
+                <span asp-validation-for="TimeEnd" class="text-danger"></span>
+            </div>
+
+            <!-- Hình ảnh -->
+            <div class="form-group mb-3">
+                <label asp-for="ImageUpload" class="control-label">Hình ảnh</label>
+                @if (!string.IsNullOrEmpty(ViewBag.UrlImage))
+                {
+                    <div class="mb-3">
+                        <img src="@ViewBag.UrlImage" alt="Current Image" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+                    </div>
+                }
+                <input asp-for="ImageUpload" type="file" class="form-control w-100" />
+            </div>
+
+            <!-- Số lượng -->
+            <div class="form-group mb-3">
+                <label asp-for="Amount" class="control-label">Số lượng</label>
+                <input asp-for="Amount" class="form-control w-100" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <!-- Xếp hạng bắt đầu -->
+            <div class="form-group mb-3">
+                <label asp-for="RankStart" class="control-label">Xếp hạng bắt đầu</label>
+                <select asp-for="RankStart" class="form-control w-100" asp-items="ViewBag.RankStart"></select>
+                <span asp-validation-for="RankStart" class="text-danger"></span>
+            </div>
+
+            <!-- Xếp hạng kết thúc -->
+            <div class="form-group mb-3">
+                <label asp-for="RankEnd" class="control-label">Xếp hạng kết thúc</label>
+                <select asp-for="RankEnd" class="form-control w-100" asp-items="ViewBag.RankEnd"></select>
+                <span asp-validation-for="RankEnd" class="text-danger"></span>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="form-group mb-3">
+                <label asp-for="Status" class="control-label">Trạng thái</label>
+                <select asp-for="Status" class="form-control w-100" asp-items="ViewBag.StatusList"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- Thông tin giải đấu -->
+            <div class="form-group mb-3">
+                <label asp-for="Infor" class="control-label">Thông tin giải đấu</label>
+                <textarea asp-for="Infor" class="form-control w-100" rows="4"></textarea>
+                <span asp-validation-for="Infor" class="text-danger"></span>
+            </div>
+
+            <!-- Nút lưu và quay lại -->
+            <div class="form-group d-flex justify-content-between">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <a asp-action="Management" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @Html.Partial("_ValidationScriptsPartial")
+}

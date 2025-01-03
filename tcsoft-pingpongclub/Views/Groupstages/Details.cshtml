@@ -1,0 +1,71 @@
+﻿@model tcsoft_pingpongclub.Models.Groupstage
+
+@{
+    ViewData["Title"] = "Chi Tiết";
+    var IdTournament = (int)@ViewBag.IdTournament;
+}
+
+<h1 class="text-center mb-4">Chi Tiết Bảng Đấu</h1>
+
+<div class="container">
+    <h4 class="mb-3">Thông Tin Bảng Đấu</h4>
+    <hr />
+    <dl class="row">
+        <!-- Tên Bảng Đấu -->
+        <dt class="col-sm-4">Tên Bảng Đấu:</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(model => model.NameGroup)</dd>
+
+        <!-- Số Lượng -->
+        <dt class="col-sm-4">Số Lượng:</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(model => model.Amount)</dd>
+
+        <!-- Vòng Đấu -->
+        <dt class="col-sm-4">Vòng Đấu:</dt>
+        <dd class="col-sm-8">
+            @if (Model.IOrder == 1)
+            {
+                @:Loại
+            }
+            else if (Model.IOrder == 2)
+            {
+                @:Tứ kết
+            }
+            else if (Model.IOrder == 3)
+            {
+                @:Bán kết
+            }
+            else if (Model.IOrder == 4)
+            {
+                @:Chung kết
+            }
+        </dd>
+
+        <!-- Trạng Thái -->
+        <dt class="col-sm-4">Trạng Thái:</dt>
+        <dd class="col-sm-8">
+            @if (Model.Status == true)
+            {
+                @:Hiển Thị
+            }
+            else
+            {
+                @:Ẩn
+            }
+        </dd>
+
+        <!-- Giải Đấu -->
+        <dt class="col-sm-4">Tên Giải Đấu:</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(model => model.IdTournamentNavigation.TournamentName)</dd>
+    </dl>
+
+    <div class="mt-4 d-flex justify-content-center">
+        <a asp-action="Edit" asp-route-id="@Model?.IdGroupstage" class="btn btn-primary me-3 px-4">Chỉnh Sửa</a>
+        <a asp-action="Index" asp-route-IdTournament="@IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

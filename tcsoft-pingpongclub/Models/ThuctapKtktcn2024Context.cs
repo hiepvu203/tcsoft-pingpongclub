@@ -432,6 +432,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
 
             entity.Property(e => e.IdTournament).HasColumnName("idTournament");
             entity.Property(e => e.Amount).HasColumnName("amount");
+            entity.Property(e => e.Infor).HasColumnName("infor");
             entity.Property(e => e.RankEnd).HasColumnName("rankEnd");
             entity.Property(e => e.RankStart).HasColumnName("rankStart");
             entity.Property(e => e.Status).HasColumnName("status");
@@ -444,7 +445,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.TournamentName).HasColumnName("tournamentName");
             entity.Property(e => e.Type).HasColumnName("type");
             entity.Property(e => e.UrlImage)
-                .HasMaxLength(10)
+                .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("urlImage");
 

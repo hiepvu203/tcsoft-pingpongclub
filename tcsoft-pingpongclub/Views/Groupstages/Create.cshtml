@@ -1,0 +1,61 @@
+﻿@model tcsoft_pingpongclub.Models.Groupstage
+
+<h4 class="mb-4">Tạo Bảng Đấu</h4>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <input type="hidden" name="IdTournament" value="@ViewBag.IdTournament" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <!-- Tên Bảng -->
+            <div class="form-group mb-3">
+                <label asp-for="NameGroup" class="form-label">Tên Bảng</label>
+                <input asp-for="NameGroup" class="form-control" placeholder="Nhập tên bảng đấu" />
+                <span asp-validation-for="NameGroup" class="text-danger"></span>
+            </div>
+
+            <!-- Số Lượng -->
+            <div class="form-group mb-3">
+                <label asp-for="Amount" class="form-label">Số Lượng</label>
+                <input asp-for="Amount" type="number" class="form-control" placeholder="Nhập số lượng" min="1" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <!-- Vòng Đấu -->
+            <div class="form-group mb-3">
+                <label asp-for="IOrder" class="form-label">Vòng Đấu</label>
+                <select asp-for="IOrder" class="form-select">
+                    <option value="1">Loại</option>
+                    <option value="2">Tứ kết</option>
+                    <option value="3">Bán kết</option>
+                    <option value="4">Chung kết</option>
+                </select>
+                <span asp-validation-for="IOrder" class="text-danger"></span>
+            </div>
+
+            <!-- Trạng Thái -->
+            <div class="form-group mb-4">
+                <label asp-for="Status" class="form-label">Trạng Thái</label>
+                <select asp-for="Status" class="form-select">
+                    <option value="true">Hiện</option>
+                    <option value="false">Ẩn</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- Nút Hành Động -->
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary px-4">Tạo</button>
+                <a asp-action="Index" asp-route-IdTournament="@ViewBag?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
