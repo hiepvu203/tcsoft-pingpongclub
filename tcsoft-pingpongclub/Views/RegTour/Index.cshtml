@@ -54,7 +54,7 @@
     {
         <div class="tournament-item">
             <a asp-action="Details" asp-route-id="@item.IdTournament" asp-route-searchTerm="@ViewBag.SearchTerm">
-                <img src="~/anhGiaidau/@(item.UrlImage ?? "defaultImage.jpg")" alt="Tournament Image" class="img-thumbnail" />
+                <img src="@(item.UrlImage ?? "defaultImage.jpg")" alt="Tournament Image" class="img-thumbnail" />
                 <h4>@Html.DisplayFor(modelItem => item.TournamentName)</h4>
                 <hr class="title-line" />
                 <p class="tournament-description">@Html.DisplayFor(modelItem => item.Infor)</p>

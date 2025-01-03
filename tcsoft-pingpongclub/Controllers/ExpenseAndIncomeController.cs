@@ -22,7 +22,7 @@ namespace tcsoft_pingpongclub.Controllers
 		public async Task<IActionResult> Index()
 		{
 			String? url = HttpContext.Session.GetString("url");
-			if (url == "exspenserole")
+			if (url == "exspenserole" || url == "account")
 			{
 				var thuctapKtktcn2024Context = _context.ExpenseAndIncomes.Include(e => e.IdFundNavigation).Include(e => e.IdPartyNavigation).Include(e => e.IdReasonNavigation);
 				return View(await thuctapKtktcn2024Context.ToListAsync());
