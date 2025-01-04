@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
@@ -66,10 +67,10 @@ namespace tcsoft_pingpongclub.Controllers
                 return View();
             }
             Guid code = Guid.NewGuid();
-            HttpContext.Session.SetString("code", code.ToString());
-            HttpContext.Session.SetInt32("idTemp", member.IdMember);
+            HttpContext.Session.SetString("verificationCode_" + email, code.ToString());
             try
             {
+                
                 sendEmail(email, code.ToString());
                 ViewBag.Message = $"Mã xác minh đã được gửi đến {email}!";
             }
@@ -87,7 +88,7 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 string fromEmail = "t6983967@gmail.com";
                 string password = "proj rbvr ursf wmow";
-                string verifyUrl= Url.Action("VerifyCode", "Login",null, protocol: Request.Scheme);
+                string verifyUrl = Url.Action("VerifyCode", "Login", new { email = email }, protocol: Request.Scheme);
                 MailMessage mailMessage = new MailMessage
                 {
                     From = new MailAddress(fromEmail),
@@ -116,9 +117,16 @@ namespace tcsoft_pingpongclub.Controllers
         }
 
         [HttpPost]
-        public IActionResult VerifyCode(string enteredCode)
+        public IActionResult VerifyCode(string email, string enteredCode)
         {
-            string sessionCode = HttpContext.Session.GetString("code");
+            if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
+            {
+                ViewBag.Error = "Email không hợp lệ!";
+                return View();
+            }
+
+            string sessionCode = HttpContext.Session.GetString("verificationCode_" + email);
+
             if (string.IsNullOrEmpty(sessionCode))
             {
                 ViewBag.Error = "Mã xác minh đã hết hạn hoặc không tồn tại!";
@@ -127,49 +135,72 @@ namespace tcsoft_pingpongclub.Controllers
 
             if (enteredCode == sessionCode)
             {
-                return RedirectToAction("ResetPassword","Login");
+                var member = _context.Members.FirstOrDefault(m => m.Emaill == email);
+                if (member != null)
+                {
+                    HttpContext.Session.SetInt32("member_" + email, member.IdMember);
+                    return RedirectToAction("ResetPassword", "Login", new { email = email });
+                }
+                else
+                {
+                    ViewBag.Error = "Không tìm thấy thành viên với email này!";
+                    return View();
+                }
             }
             else
             {
                 ViewBag.Error = "Mã xác minh không chính xác!";
                 return View();
             }
-            return View();
         }
-        public IActionResult ResetPassword()
+
+        public IActionResult ResetPassword(string email)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                ViewBag.Error = "Email không hợp lệ!";
+                return View();
+            }
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(string newPassword)
+        public async Task<IActionResult> ResetPassword(string email, string newPassword)
         {
             if (string.IsNullOrEmpty(newPassword))
             {
                 ViewBag.Error = "Mật khẩu mới không được để trống!";
                 return View();
             }
-
-            int? id = HttpContext.Session.GetInt32("idTemp");
+            
+            int? id = HttpContext.Session.GetInt32("member_" + email);
             if (id == null)
             {
-                ViewBag.Error = "Không tìm thấy ID trong phiên làm việc.";
-                return View();
+                    ViewBag.Error = "Không tìm thấy ID trong phiên làm việc.";
+                return NotFound();
             }
-
             var member = await _context.Members.FirstOrDefaultAsync(m => m.IdMember == id);
             if (member == null)
             {
-                ViewBag.Error = "Thành viên không tồn tại.";
-                return View();
+                return NotFound();
             }
+
             var passwordHasher = new PasswordHasher<Member>();
-            member.Password = passwordHasher.HashPassword(member, newPassword);
+            member.Password = passwordHasher.HashPassword(member, newPassword).ToString();
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove("idTemp");
+
+            HttpContext.Session.Remove("member_" + email);
+            HttpContext.Session.Remove("verificationCode_" + email);
+
             ViewBag.Message = "Mật khẩu đã được đặt lại thành công!";
-            return View("Login"); 
+            return RedirectToAction("Index", "Login"); 
         }
+
+        private bool IsValidEmail(string email)
+        {
+            return new EmailAddressAttribute().IsValid(email);
+        }
+
 
     }
 }

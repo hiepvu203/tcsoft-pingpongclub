@@ -13,9 +13,8 @@
     <link rel="stylesheet" href="/css/form-style.css">
 </head>
 <body>
-    <h1>Create</h1>
+    <h1>Tạo loại tài khoản mới</h1>
 
-    <h4>Role</h4>
     <hr />
     <div class="row">
         <div class="col-md-4">
@@ -29,8 +28,8 @@
                 <div class="form-group">
                     <label asp-for="Status" class="control-label"></label>
                     <select asp-for="Status" class="form-control">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
                     </select>
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>

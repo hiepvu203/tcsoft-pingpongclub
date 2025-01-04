@@ -34,7 +34,16 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.NamePermission)</td>
                     <td>@Html.DisplayFor(modelItem => item.Url)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>
+                        @if (item.Status == true)
+                        {
+                            @:Active
+                        }
+                        else
+                        {
+                            @:Inactive
+                        }
+                    </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.IdPermission" class="btn-edit">Sửa</a> |
                         <a asp-action="Details" asp-route-id="@item.IdPermission" class="btn-details">Chi tiết</a> |

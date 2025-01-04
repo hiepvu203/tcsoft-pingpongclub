@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/form-detail-style.css">
 </head>
 
-<h1>Delete</h1>
+<h1>Xóa loại tìa khoản</h1>
 
 
 <div class="table-container">
@@ -20,7 +20,16 @@
         </tr>
         <tr>
             <th>@Html.DisplayNameFor(model => model.Status)</th>
-            <td>@Html.DisplayFor(model => model.Status)</td>
+            <td>
+                @if (Model.Status == true)
+                {
+                    @:Active
+                }
+                else
+                {
+                    @:Inactive
+                }
+            </td>
         </tr>
     </table>
 </div>

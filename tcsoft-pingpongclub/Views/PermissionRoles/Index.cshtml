@@ -21,36 +21,41 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdPermissionNavigation)
-            </th>
+            
+            
             <th>
                 @Html.DisplayNameFor(model => model.IdPermissionNavigation.NamePermission)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdPermissionNavigation.Url)
             </th>
-            <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+            <th>Thao tác</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdPermissionNavigation.IdPermission)
-            </td>
+            
+            
             <td>
                 @Html.DisplayFor(modelItem => item.IdPermissionNavigation.NamePermission)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdPermissionNavigation.Url)
             </td>
+                    <td>
+                        @if (item.Status == true)
+                        {
+                            @:Active
+                        }
+                        else
+                        {
+                            @:Inactive
+                        }
+                    </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdPerRo" asp-route-idRole="@ViewBag.role.IdRole"  class="btn-edit">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.IdPerRo" class="btn-edits">Details</a> |

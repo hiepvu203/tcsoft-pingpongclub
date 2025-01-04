@@ -13,10 +13,7 @@
     <h4>PermissionRole Information</h4>
     <hr />
     <table>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Status)</th>
-            <td>@Html.DisplayFor(model => model.Status)</td>
-        </tr>
+        
         <tr>
             <th>@Html.DisplayNameFor(model => model.IdPermissionNavigation)</th>
             <td>@Html.DisplayFor(model => model.IdPermissionNavigation.IdPermission)</td>
@@ -24,6 +21,19 @@
         <tr>
             <th>@Html.DisplayNameFor(model => model.IdRoleNavigation)</th>
             <td>@Html.DisplayFor(model => model.IdRoleNavigation.IdRole)</td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <td>
+                @if (Model.Status == true)
+                {
+                    @:Active
+                }
+                else
+                {
+                    @:Inactive
+                }
+            </td>
         </tr>
     </table>
 </div>
