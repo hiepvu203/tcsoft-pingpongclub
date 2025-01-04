@@ -67,6 +67,10 @@ namespace tcsoft_pingpongclub.Controllers
                 return View();
             }
             Guid code = Guid.NewGuid();
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("verificationCode_" + email)))
+            {
+                HttpContext.Session.Remove("verificationCode_" + email);
+            }
             HttpContext.Session.SetString("verificationCode_" + email, code.ToString());
             try
             {
