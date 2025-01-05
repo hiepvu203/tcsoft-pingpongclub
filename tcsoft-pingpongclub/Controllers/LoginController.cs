@@ -71,19 +71,22 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 HttpContext.Session.Remove("verificationCode_" + email);
             }
+           
             HttpContext.Session.SetString("verificationCode_" + email, code.ToString());
             try
             {
                 
                 sendEmail(email, code.ToString());
                 ViewBag.Message = $"Mã xác minh đã được gửi đến {email}!";
+            
             }
             catch (Exception ex)
             {
                 ViewBag.Error = $"Lỗi khi gửi email: {ex.Message}";
+                return View();
             }
+            return RedirectToAction("VerifyCode", "Login", new { Email = email });
 
-            return View();
         }
 
         private void sendEmail(string email, string code)
@@ -92,12 +95,11 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 string fromEmail = "t6983967@gmail.com";
                 string password = "proj rbvr ursf wmow";
-                string verifyUrl = Url.Action("VerifyCode", "Login", new { email = email }, protocol: Request.Scheme);
                 MailMessage mailMessage = new MailMessage
                 {
                     From = new MailAddress(fromEmail),
                     Subject = "Mã xác minh tài khoản",
-                    Body = $"Mã xác minh của bạn là: {code}. Bạn có thể xác minh tài khoản của mình bằng cách nhấn vào liên kết sau: {verifyUrl}.",
+                    Body = $"Mã xác minh của bạn là: {code}.",
                     IsBodyHtml = false
                 };
                 mailMessage.To.Add(email);
@@ -115,8 +117,9 @@ namespace tcsoft_pingpongclub.Controllers
                 throw new Exception($"Lỗi khi gửi email: {ex.Message}");
             }
         }
-        public IActionResult VerifyCode()
+        public IActionResult VerifyCode(string email)
         {
+            ViewBag.email = email;
             return View();
         }
 
