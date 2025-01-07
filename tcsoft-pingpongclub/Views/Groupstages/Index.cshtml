@@ -9,7 +9,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <!-- Kiểm tra nếu không có bảng đấu -->
-    @if (!Model.Any())
+    @if (ViewBag.Type == true && !Model.Any())
     {
         <div>
             <a asp-action="CreateTwoGroups" asp-route-id="@IdTournament" class="btn btn-secondary me-2">Tạo 2 bảng Loại</a>
@@ -22,7 +22,6 @@
             <a asp-action="Create" asp-route-id="@IdTournament" class="btn btn-primary">Tạo bảng đấu mới</a>
         </div>
     }
-
     <!-- Select nằm bên phải -->
     <div class="ms-auto">
         <select id="IdOrder" class="form-select" aria-label="Lựa chọn vòng đấu">
@@ -90,7 +89,7 @@ else
                     <td>
                         <div class="d-flex flex-column align-items-stretch">
                             <a asp-action="Edit" asp-route-id="@item.IdGroupstage" class="btn btn-warning btn-sm w-100 mb-1">Sửa</a>
-                            <a asp-action="Details" asp-route-IdTournament="@IdTournament" asp-route-id="@item.IdGroupstage" class="btn btn-info btn-sm w-100 mb-1">Chi tiết</a>
+                            <a asp-action="Details"asp-route-id="@item.IdGroupstage" class="btn btn-info btn-sm w-100 mb-1">Chi tiết</a>
                             <a asp-action="Delete" asp-route-id="@item.IdGroupstage" class="btn btn-danger btn-sm w-100">Xóa</a>
                         </div>
                     </td>

@@ -30,6 +30,7 @@ namespace tcsoft_pingpongclub.Controllers
                     IdTournament = t.IdTournament,
                     TournamentName = t.TournamentName,
                     UrlImage = t.UrlImage,
+                    Type = t.Type,
                     TimeStart = t.TimeStart,
                     TimeEnd = t.TimeEnd,
                     Infor=t.Infor,
@@ -37,7 +38,6 @@ namespace tcsoft_pingpongclub.Controllers
                     RankStartNavigation = t.RankStartNavigation,
                     RankEndNavigation = t.RankEndNavigation,
                     Status = t.Status,
-                    // Tính ActualAmount bằng cách đếm số Players liên quan
                     ActualAmount = (short)_context.Players.Count(p => p.IdTournament == t.IdTournament)
                 })
                 .OrderByDescending(t => t.IdTournament)
@@ -142,6 +142,8 @@ namespace tcsoft_pingpongclub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Tournament tournament)
         {
+           
+
             if (ModelState.IsValid && tournament.ImageUpload != null)
              {
                 // Lấy tên tệp và thêm định danh duy nhất nếu cần

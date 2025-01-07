@@ -24,4 +24,6 @@ public partial class Player
     public virtual ICollection<Match> MatchIdMemberTwoNavigations { get; set; } = new List<Match>();
 
     public virtual ICollection<Match> MatchIdMemberWinNavigations { get; set; } = new List<Match>();
+
+    public virtual ICollection<Award> Awards { get; set; } = new List<Award>();
 }

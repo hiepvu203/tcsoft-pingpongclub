@@ -18,23 +18,34 @@ namespace tcsoft_pingpongclub.Controllers
             _context = context;
         }
         // GET: Groupstages
-        public async Task<IActionResult> Index(int? IdTournament)
+        public async Task<IActionResult> Index(int? Id)
         {
-            if (IdTournament == null)
+            if (Id == null)
             {
                 return NotFound("IdTournament không được truyền vào.");
             }
+            var tournament = await _context.Tournaments
+           .Where(t => t.IdTournament == Id)
+           .FirstOrDefaultAsync();
+
+                if (tournament == null)
+                {
+                    return NotFound();
+                }
+
+                ViewBag.Type = tournament.Type;
+
             var groupStages = await _context.Groupstages
                 .Include(g => g.IdTournamentNavigation)
-                .Where(g => g.IdTournament == IdTournament)
+                .Where(g => g.IdTournament == Id)
                 .ToListAsync();
-            ViewBag.IdTournament = IdTournament;
+            ViewBag.IdTournament = Id;
             return View(groupStages);
         }
         // GET: Groupstages/Details/5
-        public async Task<IActionResult> Details(int? id,int? IdTournament)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || IdTournament==null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -45,8 +56,7 @@ namespace tcsoft_pingpongclub.Controllers
             if (groupstage == null)
             {
                 return NotFound();
-            }
-            ViewBag.IdTournament = IdTournament;
+            }    
             return View(groupstage);
         }
 
@@ -123,7 +133,7 @@ namespace tcsoft_pingpongclub.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", new { IdTournament = Id });
+            return RedirectToAction("Index", new { Id = Id });
         }
 
         public async Task<IActionResult> CreateFourGroups(int Id)
@@ -194,7 +204,7 @@ namespace tcsoft_pingpongclub.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", new { IdTournament = Id });
+            return RedirectToAction("Index", new { Id = Id });
         }
 
 
@@ -209,7 +219,7 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 _context.Groupstages.Add(groupstage);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", new { IdTournament = groupstage.IdTournament });
+                return RedirectToAction("Index", new { Id = groupstage.IdTournament });
             }
             ViewBag.IdTournament = groupstage.IdTournament;
             return View(groupstage);
@@ -257,7 +267,7 @@ namespace tcsoft_pingpongclub.Controllers
         {
             if (id != groupstage.IdGroupstage)
             {
-                return NotFound(); // Nếu id từ URL không khớp với IdGroupstage trong form thì báo lỗi
+                return NotFound();
             }
 
             if (ModelState.IsValid)
@@ -279,7 +289,7 @@ namespace tcsoft_pingpongclub.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index), new { IdTournament = groupstage.IdTournament });
+                return RedirectToAction(nameof(Index), new { Id = groupstage.IdTournament });
             }
             ViewBag.IOrderList = new List<SelectListItem>
             {
@@ -323,7 +333,7 @@ namespace tcsoft_pingpongclub.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { IdTournament = IdTournament });
+            return RedirectToAction(nameof(Index), new { Id = IdTournament });
         }
         public IActionResult DeleteAll(int Id)
         {
@@ -339,7 +349,7 @@ namespace tcsoft_pingpongclub.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction("Index", new { IdTournament = Id });
+            return RedirectToAction("Index", new { Id = Id });
         }
 
         private bool GroupstageExists(int id)

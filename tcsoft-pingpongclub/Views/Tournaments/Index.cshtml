@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<tcsoft_pingpongclub.Models.Tournament>
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Tournament>
 
 @{
     ViewData["Title"] = "Danh sách giải đấu";
@@ -9,6 +8,18 @@
 <p>
     <a asp-action="Create" class="btn btn-primary mb-3">Tạo mới</a>
 </p>
+
+<div class="mb-4 d-flex justify-content-between">
+    <!-- Input tìm kiếm -->
+    <input type="text" id="searchTournament" class="form-control me-2" style="width: 250px;" placeholder="Tìm kiếm theo tên giải đấu" onkeyup="searchTournamentByName()" />
+
+    <!-- Dropdown lọc theo loại hình -->
+    <select id="typeFilter" class="form-select" style="width: 200px;" onchange="filterByType()">
+        <option value="">Tất cả loại hình</option>
+        <option value="True">Đấu Cúp</option>
+        <option value="False">Đấu Vòng</option>
+    </select>
+</div>
 
 <table class="table table-striped table-bordered table-hover">
     <thead class="thead-dark">
@@ -28,91 +39,121 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @if (Model == null || !Model.Any())
         {
-            <tr class="fixed-row">
-                <td>
-                    <div class="d-flex justify-content-center align-items-center h-100">
-                        <img src="@item.UrlImage" class="img-fluid rounded" />
-                    </div>
-                </td>
-                <!-- Tên giải đấu -->
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.TournamentName)
-                    </div>
-                </td>
-                <!-- Loại hình -->
-                <td>
-                    @if (item.Type == true)
-                    {
-                        @:Đấu Cúp
-                    }
-                    else
-                    {
-                        @:Đấu Vòng
-                    }
-                </td>
-                <!-- Thời gian -->
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.TimeStart)
-                    </div>
-                </td>
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.TimeEnd)
-                    </div>
-                </td>
-                <!-- Số lượng -->
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </div>
-                </td>
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.ActualAmount)
-                    </div>
-                </td>
-                <!-- Hạng -->
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.RankStartNavigation.LevelName)
-                    </div>
-                </td>
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.RankEndNavigation.LevelName)
-                    </div>
-                </td>
-                <!-- Thông tin giải đấu -->
-                <td>
-                    <div class="scrollable-cell">
-                        @Html.DisplayFor(modelItem => item.Infor)
-                    </div>
-                </td>
-                <!-- Trạng thái -->
-                <td>
-                    @if (item.Status == true)
-                    {
-                        @:Đang Diễn Ra
-                    }
-                    else
-                    {
-                        @:Ẩn
-                    }
-                </td>
-                <!-- Hành động -->
-
-                <td>
-                    <div class="d-flex flex-column align-items-stretch">
-                        <a asp-action="Edit" asp-route-id="@item.IdTournament" class="btn btn-warning btn-sm w-100 mb-1">Sửa</a>
-                        <a asp-action="Details" asp-route-id="@item.IdTournament" class="btn btn-info btn-sm w-100 mb-1">Chi tiết</a>
-                        <a asp-action="Delete" asp-route-id="@item.IdTournament" class="btn btn-danger btn-sm w-100">Xóa</a>
-                    </div>
-                </td>
+            <tr>
+                <td colspan="12" class="text-center">Không có giải đấu nào được tìm thấy.</td>
             </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr class="tournament-card fixed-row"
+                    data-name="@item.TournamentName ?? " ""
+                    data-type="@(item.Type.HasValue ? item.Type.Value.ToString() : "")">
+                    <td>
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <img src="@(!string.IsNullOrEmpty(item.UrlImage) ? item.UrlImage : "/path/to/default-image.jpg")" class="img-fluid rounded" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.TournamentName)
+                        </div>
+                    </td>
+                    <td>
+                        @(item.Type.HasValue ? (item.Type.Value ? "Đấu Cúp" : "Đấu Vòng") : "Không xác định")
+
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.TimeStart)
+                        </div>
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.TimeEnd)
+                        </div>
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </div>
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.ActualAmount)
+                        </div>
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.RankStartNavigation.LevelName)
+                        </div>
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.RankEndNavigation.LevelName)
+                        </div>
+                    </td>
+                    <td>
+                        <div class="scrollable-cell">
+                            @Html.DisplayFor(modelItem => item.Infor)
+                        </div>
+                    </td>
+                    <td>
+                        @if (item.Status == true)
+                        {
+                            @:Đang Diễn Ra
+                        }
+                        else
+                        {
+                            @:Ẩn
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column align-items-stretch">
+                            <a asp-action="Edit" asp-route-id="@item.IdTournament" class="btn btn-warning btn-sm w-100 mb-1">Sửa</a>
+                            <a asp-action="Details" asp-route-id="@item.IdTournament" class="btn btn-info btn-sm w-100 mb-1">Chi tiết</a>
+                            <a asp-action="Delete" asp-route-id="@item.IdTournament" class="btn btn-danger btn-sm w-100">Xóa</a>
+                        </div>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // Tìm kiếm theo tên
+        function searchTournamentByName() {
+            const searchValue = document.getElementById('searchTournament').value.toLowerCase();
+            const cards = document.querySelectorAll('.tournament-card');
+
+            cards.forEach(card => {
+                const cardName = card.getAttribute('data-name')?.toLowerCase() || '';
+                if (cardName.includes(searchValue)) {
+                    card.style.display = ''; // Hiển thị
+                } else {
+                    card.style.display = 'none'; // Ẩn
+                }
+            });
+        }
+
+        // Lọc theo loại hình (Type)
+        function filterByType() {
+            const selectedType = document.getElementById('typeFilter').value;
+            const cards = document.querySelectorAll('.tournament-card');
+
+            cards.forEach(card => {
+                const cardType = card.getAttribute('data-type');
+                if (selectedType === '' || cardType === selectedType) {
+                    card.style.display = ''; // Hiển thị
+                } else {
+                    card.style.display = 'none'; // Ẩn
+                }
+            });
+        }
+    </script>
+}

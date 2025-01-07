@@ -34,14 +34,14 @@
             <!-- Thời gian bắt đầu -->
             <div class="form-group mb-3">
                 <label asp-for="TimeStart" class="control-label">Thời gian bắt đầu</label>
-                <input asp-for="TimeStart" type="datetime-local" class="form-control w-100" />
+                <input asp-for="TimeStart" type="datetime-local" class="form-control w-100" placeholder="YYYY-MM-DDTHH:mm" />
                 <span asp-validation-for="TimeStart" class="text-danger"></span>
             </div>
 
             <!-- Thời gian kết thúc -->
             <div class="form-group mb-3">
                 <label asp-for="TimeEnd" class="control-label">Thời gian kết thúc</label>
-                <input asp-for="TimeEnd" type="datetime-local" class="form-control w-100" />
+                <input asp-for="TimeEnd" type="datetime-local" class="form-control w-100" placeholder="YYYY-MM-DDTHH:mm" />
                 <span asp-validation-for="TimeEnd" class="text-danger"></span>
             </div>
 
@@ -96,4 +96,24 @@
 
 @section Scripts {
     @Html.Partial("_ValidationScriptsPartial")
+    <script>
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const timeStartInput = document.querySelector("input[name='TimeStart']");
+            const timeEndInput = document.querySelector("input[name='TimeEnd']");
+            const timeStartValue = timeStartInput.value;
+            const timeEndValue = timeEndInput.value;
+
+            // Kiểm tra TimeStart
+            if (!timeStartValue.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)) {
+                e.preventDefault();
+                alert("Thời gian bắt đầu không hợp lệ. Vui lòng nhập đúng định dạng.");
+            }
+
+            // Kiểm tra TimeEnd
+            if (!timeEndValue.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)) {
+                e.preventDefault();
+                alert("Thời gian kết thúc không hợp lệ. Vui lòng nhập đúng định dạng.");
+            }
+        });
+    </script>
 }

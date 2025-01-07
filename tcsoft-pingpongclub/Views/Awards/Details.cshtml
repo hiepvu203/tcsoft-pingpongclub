@@ -1,0 +1,79 @@
+﻿@model tcsoft_pingpongclub.Models.Award
+
+@{
+    ViewData["Title"] = "Chi Tiết Giải Thưởng";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div>
+    <h4>Thông Tin Chi Tiết</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            Thứ hạng
+        </dt>
+        <dd class="col-sm-9">
+            @if (Model.IOrder == 1)
+            {
+                <span>Giải Nhất</span>
+            }
+            else if (Model.IOrder == 2)
+            {
+                <span>Giải Nhì</span>
+            }
+            else
+            {
+                <span>Giải Ba</span>
+            }
+        </dd>
+        <dt class="col-sm-3">
+            Tiền thưởng
+        </dt>
+        <dd class="col-sm-9">
+            @String.Format("{0:#,0} VND", Model.Money)
+        </dd>
+        <dt class="col-sm-3">
+            Điểm
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Score)
+        </dd>
+        <dt class="col-sm-3">
+            Giải đấu
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.IdTournamentNavigation.TournamentName)
+        </dd>
+        <dt class="col-sm-3">
+            Người chơi
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.IdPlayerNavigation.IdMemberNavigation.MemberName)
+        </dd>
+        <dt class="col-sm-3">
+            Mã hóa đơn chi
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.IdNavigation.Id)
+        </dd>
+        <dt class="col-sm-3">
+            Trạng thái
+        </dt>
+        <dd class="col-sm-9">
+            @if (Model.Status == true)
+            {
+                <span>Hiện</span>
+            }
+            else
+            {
+                <span>Ẩn</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.IdAward" class="btn btn-warning">Sửa</a>
+    <a asp-action="Index" asp-route-id="@Model?.IdTournament" class="btn btn-secondary">Quay lại</a>
+</div>
