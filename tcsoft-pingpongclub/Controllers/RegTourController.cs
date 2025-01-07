@@ -33,6 +33,7 @@ namespace tcsoft_pingpongclub.Controllers
 				tournamentsQuery = tournamentsQuery.Where(t => t.TournamentName.ToLower().Contains(searchTerm.ToLower()));
 			}
 
+
             // Lọc theo cấp bậc (Rank)
             if (selectedLevel.HasValue)
             {
@@ -60,6 +61,7 @@ namespace tcsoft_pingpongclub.Controllers
 			// Truyền dữ liệu tới View
 			ViewBag.CurrentPage = page;
 			ViewBag.TotalPages = totalPages;
+
 
             return View(tournaments);
         }
@@ -127,10 +129,12 @@ namespace tcsoft_pingpongclub.Controllers
 			{
 				matches = new List<Match>();  // Gán giá trị rỗng nếu null
 			}
+
             // Truyền dữ liệu tới View
             ViewBag.TournamentName = player.IdTournamentNavigation?.TournamentName;
             ViewBag.IdPlayer = player.IdPlayer;
             ViewBag.TournamentId = idTournament;
+
 			return View(matches);  // Truyền danh sách trận đấu
 		}
 

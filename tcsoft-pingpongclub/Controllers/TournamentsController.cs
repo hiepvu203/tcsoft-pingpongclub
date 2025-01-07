@@ -88,7 +88,7 @@ namespace tcsoft_pingpongclub.Controllers
 			var relatedTournaments = _context.Tournaments
 				.Include(t => t.RankStartNavigation)
 				.Include(t => t.RankEndNavigation)
-				.Where(t => t.RankStart == tournament.RankStart && t.RankEnd == tournament.RankEnd && t.IdTournament != id)
+				.Where(t => t.RankStartNavigation == tournament.RankStartNavigation && t.RankEnd == tournament.RankEnd && t.IdTournament != id)
 				.Take(3)
 				.ToList();
 
@@ -176,7 +176,7 @@ namespace tcsoft_pingpongclub.Controllers
 			{
 				ModelState.AddModelError(nameof(tournament.ImageUpload), "Vui lòng chọn hình ảnh.");
 				ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
-				ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
+				ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStartNavigation);
 				ViewBag.TypeList = new SelectList(new[] { new { Value = true, Text = "Đấu Cúp" }, new { Value = false, Text = "Đấu Vòng" } }, "Value", "Text", tournament.Type);
 				ViewBag.StatusList = new SelectList(new[] { new { Value = true, Text = "Đang diễn ra" }, new { Value = false, Text = "Ẩn" } }, "Value", "Text", tournament.Status);             
 			}
@@ -197,7 +197,7 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 			ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
-			ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
+			ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStartNavigation);
 			ViewBag.TypeList = new SelectList(new[]
 			{
 				new { Value = true, Text = "Đấu Cúp" },
@@ -296,7 +296,7 @@ namespace tcsoft_pingpongclub.Controllers
 			}
 
 			ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
-			ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
+			ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStartNavigation);
 			ViewBag.TypeList = new SelectList(new[]
 			{
 				new { Value = true, Text = "Đấu Cúp" },

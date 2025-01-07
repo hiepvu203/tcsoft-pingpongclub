@@ -17,11 +17,8 @@ namespace tcsoft_pingpongclub.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-<<<<<<< HEAD
-                .HasAnnotation("ProductVersion", "9.0.0")
-=======
+
                 .HasAnnotation("ProductVersion", "8.0.11")
->>>>>>> origin/DangHungCuong
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -348,12 +345,10 @@ namespace tcsoft_pingpongclub.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("phone");
 
-<<<<<<< HEAD
-=======
+
                     b.Property<int?>("Score")
                         .HasColumnType("int");
 
->>>>>>> origin/DangHungCuong
                     b.Property<bool?>("Status")
                         .HasColumnType("bit")
                         .HasColumnName("status");
@@ -601,13 +596,11 @@ namespace tcsoft_pingpongclub.Migrations
                         .HasColumnType("int")
                         .HasColumnName("idMatch");
 
-<<<<<<< HEAD
                     b.Property<int>("IdWinner")
                         .HasColumnType("int")
                         .HasColumnName("idWinner");
 
-=======
->>>>>>> origin/DangHungCuong
+
                     b.Property<string>("Ratio")
                         .HasMaxLength(10)
                         .IsUnicode(false)
