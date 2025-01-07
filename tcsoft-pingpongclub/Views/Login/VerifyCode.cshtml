@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Verify Code";
+}
+<link href="~/css/verify-code.css" rel="stylesheet" />
+<h2>Đã gửi thành công mã xác nhận cho email @ViewBag.email</h2>
+<h2>Nhập mã xác minh</h2>
+
+<form method="post" class="tt-form">
+    <div class="form-group">
+        <label for="enteredCode">Mã xác minh:</label>
+        <input type="text" id="enteredCode" name="enteredCode" class="input-box" placeholder="Nhập mã xác minh" required />
+    </div>
+    <div>
+        <input type="submit" value="Xác nhận" class="submit-btn" />
+    </div>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p class="success">@ViewBag.Message</p>
+}
+@if (ViewBag.Error != null)
+{
+    <p class="error">@ViewBag.Error</p>
+}
+
+
