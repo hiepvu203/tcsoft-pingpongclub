@@ -11,7 +11,7 @@ public partial class Reason
 
     public bool? Type { get; set; }
 
-    public bool? Status { get; set; }
+    public bool? Status { get; set; } = false;
 
     public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
 }

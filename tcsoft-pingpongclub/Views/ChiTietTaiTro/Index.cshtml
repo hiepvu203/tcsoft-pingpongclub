@@ -1,10 +1,11 @@
-﻿@model IEnumerable<tcsoft_pingpongclub.Models.NhaTaiTro>
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Sponor>
 
 @{
-    ViewData["Title"] = "Danh sách nhà tài trợ";
+    ViewData["Title"] = "Index";
 }
 
 <link href="~/css/expenseandincome.css" rel="stylesheet" />
+
 <div class="container">
     <div class="main-feture">
         <div class="dropdown-container">
@@ -19,16 +20,22 @@
         </div>
 
         <div class="actions">
+            <a asp-action="Search" class="btn-primary">Tìm kiếm</a>
+            <a asp-action="Index" class="btn-primary">Làm mới</a>
             <a class="btn-primary" asp-action="Create">Thêm mới</a>
         </div>
     </div>
 
+    <!-- Table -->
     <table class="custom-table">
         <thead>
             <tr>
-                <th>Mã</th>
-                <th>Tên nhà tài trợ</th>
-                <th>Logo</th>
+                <th>Mã tài trợ</th>
+                <th>Mã thu chi</th>
+                <th>Giải đấu</th>
+                <th>Nhà tài trợ</th>
+                <th>Tiền tài trợ</th>
+                <th>Ghi chú</th>
                 <th>Hành động</th>
             </tr>
         </thead>
@@ -36,21 +43,15 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.IdSponor)</td>
-                    <td>@Html.DisplayFor(modelItem => item.NameSponer)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdSponorTour)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdIncome)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdTournamentNavigation.TournamentName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdSponorNavigation.NameSponer)</td>
+                    <td>@item.Money.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                    <td>@Html.DisplayFor(modelItem => item.Other)</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.UrlLogo))
-                        {
-                            <img src="@Url.Content("~/images/" + item.UrlLogo)" alt="Logo" class="img-fluid" style="max-width: 100px; height: auto;" />
-                        }
-                        else
-                        {
-                            <span>Không có logo</span>
-                        }
-                    </td>
-                    <td>
-                        <a class="btn-warning" asp-action="Edit" asp-route-id="@item.IdSponor">Sửa</a>
-                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.IdSponor">Xóa</a>
+                        <a class="btn-warning" asp-action="Edit" asp-route-id="@item.IdSponorTour">Sửa</a>
+                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.IdSponorTour">Xóa</a>
                     </td>
                 </tr>
             }

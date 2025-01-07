@@ -12,6 +12,8 @@ public partial class NhaTaiTro
 
     public string? UrlLogo { get; set; }
 
+    public bool? Status { get; set; } = false;
+
     [NotMapped] // This makes sure it doesn't get saved to the database
     public IFormFile? ImageFile { get; set; }
 

@@ -92,6 +92,10 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.IsDone).HasColumnName("isDone");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.CreatedDate).HasColumnName("createdDate");
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("amount");
 
             entity.HasOne(d => d.IdFundNavigation).WithMany(p => p.ExpenseAndIncomes)
                 .HasForeignKey(d => d.IdFund)
@@ -261,11 +265,11 @@ public partial class ThuctapKtktcn2024Context : DbContext
 
             entity.Property(e => e.IdSponor).HasColumnName("idSponor");
             entity.Property(e => e.NameSponer)
-                .HasColumnType("text")
                 .HasColumnName("nameSponer");
             entity.Property(e => e.UrlLogo)
                 .HasColumnType("text")
                 .HasColumnName("urlLogo");
+            entity.Property(e => e.Status).HasColumnName("status");
         });
 
         modelBuilder.Entity<Permission>(entity =>

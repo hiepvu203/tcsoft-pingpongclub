@@ -1,7 +1,10 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Cấu hình mã hóa UTF-8
+Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 builder.Services.AddDbContext<ThuctapKtktcn2024Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb")));

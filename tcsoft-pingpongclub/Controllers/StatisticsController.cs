@@ -18,9 +18,10 @@ namespace tcsoft_pingpongclub.Controllers
         // GET: Statistics/Index
         public async Task<IActionResult> Index(string selectedItem)
         {
+            //, "Matches"
             var viewModel = new StatisticsViewModel
             {
-                Items = new SelectList(new[] { "Tournaments", "Matches", "IncomeAndExpense" })
+                Items = new SelectList(new[] { "Tournaments", "IncomeAndExpense" })
             };
 
             if (!string.IsNullOrEmpty(selectedItem))
@@ -46,25 +47,25 @@ namespace tcsoft_pingpongclub.Controllers
                         }).ToList();
                         break;
 
-                    case "Matches":
-                        var matches = await _context.Matches
-                            .Include(m => m.IdTournamentNavigation)
-                            .Include(m => m.IdMemberOneNavigation)
-                            .Include(m => m.IdMemberTwoNavigation)
-                            .Include(m => m.IdMemberWinNavigation)
-                            .ToListAsync();
+                    //case "Matches":
+                    //    var matches = await _context.Matches
+                    //        .Include(m => m.IdTournamentNavigation)
+                    //        .Include(m => m.IdMemberOneNavigation)
+                    //        .Include(m => m.IdMemberTwoNavigation)
+                    //        .Include(m => m.IdMemberWinNavigation)
+                    //        .ToListAsync();
 
-                        viewModel.MatchStats = matches.Select(m => new MatchStats
-                        {
-                            IdMatch = m.IdMatch,
-                            TournamentName = m.IdTournamentNavigation?.TournamentName,
-                            PlayerOne = m.IdMemberOneNavigation?.IdMemberNavigation?.MemberName,
-                            PlayerTwo = m.IdMemberTwoNavigation?.IdMemberNavigation?.MemberName,
-                            Winner = m.IdMemberWinNavigation?.IdMemberNavigation?.MemberName,
-                            TimeStart = m.TimeStart,
-                            Status = m.Status
-                        }).ToList();
-                        break;
+                    //    viewModel.MatchStats = matches.Select(m => new MatchStats
+                    //    {
+                    //        IdMatch = m.IdMatch,
+                    //        TournamentName = m.IdTournamentNavigation?.TournamentName,
+                    //        PlayerOne = m.IdMemberOneNavigation?.IdMemberNavigation?.MemberName,
+                    //        PlayerTwo = m.IdMemberTwoNavigation?.IdMemberNavigation?.MemberName,
+                    //        Winner = m.IdMemberWinNavigation?.IdMemberNavigation?.MemberName,
+                    //        TimeStart = m.TimeStart,
+                    //        Status = m.Status
+                    //    }).ToList();
+                    //    break;
 
                     case "IncomeAndExpense":
                         var funds = await _context.Funds

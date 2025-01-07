@@ -9,7 +9,7 @@ public partial class Sponor
 
     public int? IdIncome { get; set; }
 
-    public decimal? Money { get; set; }
+    public decimal Money { get; set; }
 
     public int? IdTournament { get; set; }
 

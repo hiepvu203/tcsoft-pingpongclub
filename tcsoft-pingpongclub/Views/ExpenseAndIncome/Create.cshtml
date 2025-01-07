@@ -3,71 +3,84 @@
 @{
     ViewData["Title"] = "Create";
 }
+<link href="~/css/expenseandincomeformcreate.css" rel="stylesheet" />
+<div class="form-container">
+    <form asp-action="Create" class="form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h1>Create</h1>
+        <div class="form-group">
+            <label for="IdFund" class="form-label">Chọn quỹ</label>
+            <select asp-for="IdFund" class="form-select" asp-items="ViewBag.IdFund"></select>
+        </div>
 
-<h4>ExpenseAndIncome</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IdFund" class="control-label"></label>
-                <select asp-for="IdFund" class ="form-control" asp-items="ViewBag.IdFund"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdParty" class="control-label"></label>
-                <select asp-for="IdParty" class ="form-control" asp-items="ViewBag.IdParty"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdAccountant" class="control-label"></label>
-                <input asp-for="IdAccountant" class="form-control" />
-                <span asp-validation-for="IdAccountant" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsDone" class="control-label"></label>
-                <input asp-for="IsDone" class="form-control" />
-                <span asp-validation-for="IsDone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Loại</label>
-                <div>
-                    <input type="radio" asp-for="Type" value="false" id="TypeThu" />
-                    <label for="TypeThu">Thu</label>
-                </div>
-                <div>
-                    <input type="radio" asp-for="Type" value="true" id="TypeChi" />
-                    <label for="TypeChi">Chi</label>
-                </div>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
+        <div class="form-group">
+            <label for="IdAccountant" class="form-label">Kế toán</label>
+            <input asp-for="IdAccountant" class="form-input" />
+            <span asp-validation-for="IdAccountant" class="text-danger"></span>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="IdReason" class="control-label"></label>
-                <select asp-for="IdReason" class ="form-control" asp-items="ViewBag.IdReason"></select>
+        <div class="form-group">
+            <label class="form-label">Loại</label>
+            <div class="radio-group">
+                <input type="radio" asp-for="Type" value="false" id="TypeThu" class="form-radio" onchange="toggleMemberList() />
+                <label for="TypeThu" class="radio-label">Thu</label>
             </div>
-            <div class="form-group">
-                <label asp-for="DaysOverdue" class="control-label"></label>
-                <input asp-for="DaysOverdue" class="form-control" />
-                <span asp-validation-for="DaysOverdue" class="text-danger"></span>
+            <div class="radio-group">
+                <input type="radio" asp-for="Type" value="true" id="TypeChi" class="form-radio" onchange="toggleMemberList() />
+                <label for="TypeChi" class="radio-label">Chi</label>
             </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+
+        <!-- Checkbox cho thêm hàng loạt khi chọn loại thu -->
+        <div class="form-group" id="bulkAddGroup" style="display:none;">
+            <input type="checkbox" id="isBulkAdd" class="form-checkbox" onchange="toggleMemberList()" />
+            <label for="isBulkAdd" class="checkbox-label">Bạn có muốn thêm toàn bộ?</label>
+        </div>
+
+        <div class="form-group" id="membersList" style="display:none;">
+            <label for="IdParty" class="form-label">Chọn thành viên</label>
+            <select asp-for="IdParty" class="form-select" asp-items="ViewBag.IdParty"></select>
+            <input type="hidden" asp-for="IdParty" id="selectedMemberId" />
+        </div>
+
+        <div class="form-group">
+            <label for="IdReason" class="form-label">Lý do</label>
+            <select asp-for="IdReason" class="form-select" id="IdReason">
+                <option value="">Chọn lý do</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Amount" class="control-label">Số tiền</label>
+            <input asp-for="Amount" class="form-control" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="CreatedDate" class="form-label">Ngày tạo</label>
+            <input asp-for="CreatedDate" class="form-input" type="date" />
+            <span asp-validation-for="CreatedDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn-submit" />
+        </div>
+    </form>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="back-link">Back to List</a>
+    <a asp-action="Index2" class="back-link">Check</a>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/getreason.js"></script>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+
