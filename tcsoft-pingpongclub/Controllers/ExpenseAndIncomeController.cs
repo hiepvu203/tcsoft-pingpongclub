@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-
+using tcsoft_pingpongclub.Service;
+using tcsoft_pingpongclub.Filter;
 namespace tcsoft_pingpongclub.Controllers
 {
+	[ServiceFilter(typeof(AuthorizationFilter))]
 	public class ExpenseAndIncomeController : Controller
 	{
+		
 		private readonly ThuctapKtktcn2024Context _context;
 
 		public ExpenseAndIncomeController(ThuctapKtktcn2024Context context)
@@ -22,16 +25,11 @@ namespace tcsoft_pingpongclub.Controllers
 		public async Task<IActionResult> Index()
 		{
 			String? url = HttpContext.Session.GetString("url");
-			if (url == "exspenserole" || url == "account")
-			{
+		
 				var thuctapKtktcn2024Context = _context.ExpenseAndIncomes.Include(e => e.IdFundNavigation).Include(e => e.IdPartyNavigation).Include(e => e.IdReasonNavigation);
 				return View(await thuctapKtktcn2024Context.ToListAsync());
 
-			}
-			else
-			{
-				return RedirectToAction("Index", "Login");
-			}
+		
 
 		}
 

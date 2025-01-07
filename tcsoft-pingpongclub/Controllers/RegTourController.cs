@@ -4,8 +4,12 @@ using PagedList;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using X.PagedList;
 using Microsoft.EntityFrameworkCore;
+using tcsoft_pingpongclub.Service;
+using tcsoft_pingpongclub.Filter;
+
 namespace tcsoft_pingpongclub.Controllers
 {
+	[ServiceFilter(typeof(AuthorizationFilter))]
 	public class RegTourController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;

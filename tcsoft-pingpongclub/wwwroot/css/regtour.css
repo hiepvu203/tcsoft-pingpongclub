@@ -1,0 +1,119 @@
+.featured-tournament {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.header-container {
+    margin-top: 70px;
+    text-align: center;
+    /* Căn giữa nội dung theo chiều ngang */
+    display: flex;
+    justify-content: center;
+    /* Căn giữa nội dung theo chiều ngang */
+    align-items: center;
+    /* Căn giữa nội dung theo chiều dọc */
+    height: 150px;
+    /* Đặt chiều cao khung nếu cần */
+}
+
+
+.tournament-highlight {
+    display: flex;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+}
+
+.highlight-image {
+    width: 50%;
+    height: 200px;
+    /* Đặt chiều cao cố định cho khung ảnh */
+}
+
+.highlight-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    /* Đảm bảo ảnh hiển thị đầy đủ theo tỷ lệ */
+}
+
+.highlight-details {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Căn giữa nội dung theo trục ngang */
+    width: 50%;
+    text-align: center;
+    /* Căn giữa nội dung văn bản */
+    text-decoration: none;
+}
+
+
+.highlight-details h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+    /* Căn giữa nội dung */
+    align-self: center;
+    /* Căn giữa theo trục ngang trong container */
+}
+
+
+.highlight-details p {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.highlight-details .btn {
+    width: fit-content;
+}
+
+.other-tournaments {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.tournament-item {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 10, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tournament-img {
+    width: 100%;
+    /* Đặt ảnh chiếm toàn bộ khung chứa */
+    height: 150px;
+    /* Đặt chiều cao cố định cho khung ảnh */
+    margin-right: 15px;
+}
+
+.tournament-img img {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+.tournament-link{display: flex;
+text-decoration: none;
+color: black;}

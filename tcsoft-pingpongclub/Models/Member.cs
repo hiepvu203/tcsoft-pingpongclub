@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace tcsoft_pingpongclub.Models;
 
@@ -28,6 +29,9 @@ public partial class Member
     public string? Password { get; set; }
 
     public int? IdRole { get; set; }
+
+    [NotMapped]
+    public IFormFile? ImageFile { get; set; }
 
     public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
 
