@@ -101,6 +101,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.IdFund).HasColumnName("idFund");
             entity.Property(e => e.IdParty).HasColumnName("idParty");
             entity.Property(e => e.IdReason).HasColumnName("idReason");
+            entity.Property(e => e.IdTournament).HasColumnName("IdTournament");
             entity.Property(e => e.IsDone).HasColumnName("isDone");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Type).HasColumnName("type");
@@ -119,6 +120,9 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.HasOne(d => d.IdReasonNavigation).WithMany(p => p.ExpenseAndIncomes)
                 .HasForeignKey(d => d.IdReason)
                 .HasConstraintName("FK_ExpenseAndIncome_Reason");
+
+            entity.HasOne(d => d.IdTournamentNavigation).WithMany(p => p.ExpenseAndIncomes)
+            .HasForeignKey(d => d.IdTournament).HasConstraintName("FK_ExpenseAndIncome_Tounament");
         });
 
         modelBuilder.Entity<Fund>(entity =>

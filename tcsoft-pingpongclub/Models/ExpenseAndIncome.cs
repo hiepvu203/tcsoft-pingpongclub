@@ -25,6 +25,9 @@ public partial class ExpenseAndIncome
 
     public bool? Status { get; set; }
 
+    public int? IdTournament { get; set; }
+    public virtual Tournament? IdTournamentNavigation { get; set; }
+
     public virtual Fund? IdFundNavigation { get; set; }
 
     public virtual Member? IdPartyNavigation { get; set; }

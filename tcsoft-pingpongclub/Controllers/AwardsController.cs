@@ -68,6 +68,7 @@ namespace tcsoft_pingpongclub.Controllers
                 "IdMemberNavigation.MemberName");
             ViewBag.IdTournament = Id;
             ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id");
+
             return View(); 
         }
 
@@ -139,7 +140,9 @@ namespace tcsoft_pingpongclub.Controllers
              "IdPlayer",
              "IdMemberNavigation.MemberName");
             ViewBag.IdTournament = Id;
-            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id");
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+                .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament==Id)
+                .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id)}), "Id", "Display");
             return View();
         }
 
