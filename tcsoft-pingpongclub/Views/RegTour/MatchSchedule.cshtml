@@ -1,15 +1,13 @@
 ﻿@model IEnumerable<tcsoft_pingpongclub.Models.Match>
 <div class="container mt-5">
-	<!-- Align the button to the left -->
 	<div class="text-left">
-		<a asp-controller="RegTour" asp-action="Index" asp-route-id="@ViewBag.TournamentId" class="btn btn-primary">
+		<a href="@Url.Action("Index", "RegTour", new { id = ViewBag.IdTournament })" class="btn btn-primary">
 			<i class="fas fa-arrow-left"></i> Quay Lại
 		</a>
 	</div>
 </div>
 
 <div class="container mt-3">
-	<!-- Center the heading -->
 	<h2 class="mb-4 text-center">Lịch Thi Đấu Của Bạn - @ViewBag.TournamentName</h2>
 
 	@if (ViewBag.Message != null)
@@ -65,7 +63,7 @@
 
 <style>
 	body {
-		background-color: pink;
+		background-color: white;
 	}
 
 	.container {

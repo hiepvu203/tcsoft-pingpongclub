@@ -23,8 +23,6 @@ public partial class Tournament
 
     public int? RankEnd { get; set; }
     public string? Infor { get; set; }
-
-
     public bool? Status { get; set; }
 
     public virtual ICollection<Award> Awards { get; set; } = new List<Award>();

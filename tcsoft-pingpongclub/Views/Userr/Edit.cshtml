@@ -1,0 +1,109 @@
+﻿@model tcsoft_pingpongclub.Models.Member
+
+@{
+	ViewData["Title"] = "Chỉnh sửa thông tin cá nhân";
+}
+<style>
+	form {
+		max-width: 550px;
+		margin: 20px auto;
+		padding: 20px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		background-color: #f9f9f9;
+		margin-top: 30px;
+	}
+
+	.form-group {
+		margin-bottom: 15px;
+	}
+
+	label {
+		font-weight: bold;
+	}
+
+	input.form-control, select.form-control {
+		border-radius: 4px;
+		border: 1px solid #ccc;
+		padding: 10px;
+		width: 100%;
+	}
+
+	.btn {
+		margin-right: 10px;
+	}
+
+	.alert {
+		margin-top: 20px;
+	}
+
+</style>
+<h2>Chỉnh sửa thông tin cá nhân</h2>
+
+<form asp-action="Edit" asp-route-id="@Model.IdMember" method="post" enctype="multipart/form-data">
+	<input type="hidden" asp-for="IdMember" />
+	<div class="form-group">
+		<label asp-for="MemberName"></label>
+		<input asp-for="MemberName" class="form-control" />
+		<span asp-validation-for="MemberName" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Address"></label>
+		<input asp-for="Address" class="form-control" />
+		<span asp-validation-for="Address" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Phone"></label>
+		<input asp-for="Phone" class="form-control" />
+		<span asp-validation-for="Phone" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Emaill"></label>
+		<input asp-for="Emaill" class="form-control" />
+		<span asp-validation-for="Emaill" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Gender" class="form-label"></label>
+		<select asp-for="Gender" class="form-control">
+			<option value="true">Nam</option>
+			<option value="false">Nữ</option>
+		</select>
+		<span asp-validation-for="Gender" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label>Ảnh đại diện</label><br />
+		@if (!string.IsNullOrEmpty(Model.LinkAvatar))
+		{
+			<img src="@Model.LinkAvatar" alt="Ảnh đại diện" style="width: 100px; height: 100px;" />
+
+			<br />
+		}
+		<input type="file" name="LinkAvatarFile" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Password"></label>
+		<input asp-for="Password" type="password" class="form-control" hidden />
+		<span asp-validation-for="Password" class="text-danger"></span>
+		<li><a asp-action="ChangePassword" asp-controller="Userr">Đổi mật khẩu</a></li>
+
+	</div>
+	<div class="form-group">
+		<input type="submit" value="Lưu" class="btn btn-success" />
+		<a asp-action="Index" class="btn btn-secondary">Hủy</a>
+	</div>
+</form>
+@if (TempData["Success"] != null)
+{
+	<div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+	<div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

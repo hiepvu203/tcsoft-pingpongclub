@@ -28,6 +28,7 @@ public partial class Member
     public string? Password { get; set; }
 
     public int? IdRole { get; set; }
+    public int? Score { get; set; }
 
     public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
 

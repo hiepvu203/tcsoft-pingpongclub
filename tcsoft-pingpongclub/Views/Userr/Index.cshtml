@@ -1,0 +1,82 @@
+﻿@model tcsoft_pingpongclub.Models.Member
+
+<div class="container mt-5">
+	<h2 class="mb-4">Thông Tin User</h2>
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<div class="row align-items-center">
+				<!-- Avatar Section -->
+				<div class="col-md-3 text-center">
+					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content(Model.LinkAvatar) : Url.Content("~/path/to/placeholder-image.png"))"
+						 class="rounded-circle img-fluid" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
+				</div>
+				<!-- Information Section -->
+				<div class="col-md-9">
+					<h4 class="mb-3">Personal Information</h4>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Full Name:</div>
+						<div class="col-sm-8">@Model.MemberName</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Email:</div>
+						<div class="col-sm-8">@Model.Emaill</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Phone:</div>
+						<div class="col-sm-8">@Model.Phone</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Address:</div>
+						<div class="col-sm-8">@Model.Address</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Gender:</div>
+						<div class="col-sm-8">
+							@(Model.Gender == true ? "Male" : "Female")
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Role:</div>
+						<div class="col-sm-8">
+							@(Model.IdRoleNavigation != null ? Model.IdRoleNavigation.NameRole : "N/A")
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Level:</div>
+						<div class="col-sm-8">
+							@(Model.IdLevelNavigation != null ? Model.IdLevelNavigation.LevelName : "N/A")
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-sm-4 font-weight-bold">Score:</div>
+						<div class="col-sm-8">@Model.Score</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Hiển thị thông báo -->
+	@if (TempData["Success"] != null)
+	{
+		<div class="alert alert-success mt-3">
+			@TempData["Success"]
+		</div>
+	}
+
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger mt-3">
+			@TempData["Error"]
+		</div>
+	}
+	<div class="mt-5 text-center">
+		<a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
+	</div>
+	@* <!-- Nút Quay lại -->
+	<div class="mt-5 text-center">
+		<a asp-controller="Userr" asp-action="Details" asp-route-id="@Model.IdMember" class="btn btn-secondary">Quay lại</a>
+	</div> *@
+
+
+</div>
+
