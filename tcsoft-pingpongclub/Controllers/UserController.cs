@@ -10,11 +10,11 @@ using tcsoft_pingpongclub.Models;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-    public class UserrController : Controller
+    public class UserController : Controller
     {
         private readonly ThuctapKtktcn2024Context _context;
 
-        public UserrController(ThuctapKtktcn2024Context context)
+        public UserController(ThuctapKtktcn2024Context context)
         {
             _context = context;
         }

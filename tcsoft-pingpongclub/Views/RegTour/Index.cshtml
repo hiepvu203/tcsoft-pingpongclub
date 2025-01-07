@@ -3,6 +3,7 @@
 @{
 	ViewData["Title"] = "Danh sách giải đấu";
 }
+
 <div class="header-container">
 	<h2>GIẢI ĐẤU BÓNG BÀN</h2>
 </div>
@@ -25,7 +26,9 @@
 		<input type="text" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control" placeholder="Tìm kiếm theo tên giải đấu" />
 		<button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
 	</form>
+	<a href="/User" class="custom-link">Xem thông tin User</a>
 </div>
+
 
 <div class="featured-tournament">
 	<!-- Hiển thị giải đấu mới nhất -->
@@ -97,6 +100,21 @@
 </div>
 
 <style>
+	a.custom-link {
+		color: #007bff; 
+		text-decoration: none; 
+		font-weight: bold; 
+		padding: 8px 12px; 
+		border: 2px solid #007bff; 
+		border-radius: 4px;
+		transition: background-color 0.3s, color 0.3s; 
+	}
+
+		a.custom-link:hover {
+			background-color: #007bff; 
+			color: #fff; 
+		}
+
 	.featured-tournament {
 		display: flex;
 		flex-direction: column;
@@ -110,8 +128,7 @@
 		text-align: center;
 		display: flex;
 		justify-content: center;
-		align-items: center; 
-		
+		align-items: center;
 	}
 
 
@@ -134,7 +151,7 @@
 			width: 100%;
 			height: 100%;
 			border-radius: 10px;
-			object-fit: cover; 
+			object-fit: cover;
 		}
 
 	.highlight-details {
@@ -142,9 +159,9 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center; 
+		align-items: center;
 		width: 50%;
-		text-align: center; 
+		text-align: center;
 	}
 
 
@@ -153,7 +170,7 @@
 			color: #333;
 			margin-bottom: 10px;
 			text-align: center;
-			align-self: center; 
+			align-self: center;
 		}
 
 
@@ -193,13 +210,13 @@
 	}
 
 	.tournament-img {
-		width: 150px; 
-		height: 150px; 
+		width: 150px;
+		height: 150px;
 		margin-right: 15px;
-		display: flex; 
+		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: #f8f9fa; 
+		background-color: #f8f9fa;
 		border-radius: 5px;
 		overflow: hidden;
 	}
@@ -238,6 +255,7 @@
 		transform: translateY(-5px);
 		background-color: #e6f2ff;
 	}
+
 	.tournament-description {
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
@@ -250,7 +268,7 @@
 		margin-bottom: 10px;
 	}
 
-	
+
 	.tournament-link {
 		display: flex;
 		text-decoration: none;
