@@ -9,14 +9,20 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Match1.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/tcsoft_pingpongclub.styles.css" asp-append-version="true" />
+<<<<<<< HEAD
     <link rel="stylesheet" href="~/css/homepage.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/tournament.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/member.css" asp-append-version="true" />
      <link rel="stylesheet" href="~/css/regtour.css" asp-append-version="true" />
+=======
+    <link rel="stylesheet" href="~/cssUser/user.css" />
+    <link rel="stylesheet" href="~/cssUser/reg.css" />
+>>>>>>> origin/DangHungCuong
 </head>
 
 <body>
+<<<<<<< HEAD
     <header>
         @await Html.PartialAsync("Header")
     </header>
@@ -88,6 +94,17 @@
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/Match.js" asp-append-version="true"></script>
         @await RenderSectionAsync("Scripts", required: false)
+=======
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+>>>>>>> origin/DangHungCuong
 </body>
 
 </html>

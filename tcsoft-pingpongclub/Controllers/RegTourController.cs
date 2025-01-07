@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using tcsoft_pingpongclub.Models;
-using PagedList;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using X.PagedList;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Service;
 using tcsoft_pingpongclub.Filter;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace tcsoft_pingpongclub.Controllers
 {
@@ -20,11 +20,12 @@ namespace tcsoft_pingpongclub.Controllers
 			_context = context;
 		}
 
-		// GET: Tournaments
-		public async Task<IActionResult> Index(string searchTerm, int? selectedLevel, int page = 1)
-		{
-			int pageSize = 8; // Số giải đấu tối đa mỗi trang
-			var tournamentsQuery = _context.Tournaments.AsQueryable();
+
+        // GET: Tournaments
+        public async Task<IActionResult> Index(string searchTerm, int? selectedLevel, int page = 1)
+        {
+            int pageSize = 4; // Số giải đấu tối đa mỗi trang
+            var tournamentsQuery = _context.Tournaments.AsQueryable();
 
 			// Lọc theo từ khóa tìm kiếm không phân biệt chữ hoa chữ thường
 			if (!string.IsNullOrEmpty(searchTerm))
@@ -32,17 +33,15 @@ namespace tcsoft_pingpongclub.Controllers
 				tournamentsQuery = tournamentsQuery.Where(t => t.TournamentName.ToLower().Contains(searchTerm.ToLower()));
 			}
 
-
-			// Lọc theo cấp bậc (Rank)
-			if (selectedLevel.HasValue)
-			{
-				tournamentsQuery = tournamentsQuery.Where(t => t.RankStart == selectedLevel || t.RankEnd == selectedLevel);
-			}
-
-			// Lấy danh sách cấp bậc để hiển thị trong dropdown
-			ViewBag.Levels = await _context.Levels.ToListAsync();
-			ViewBag.SelectedLevel = selectedLevel; // Không cần chuyển đổi kiểu
-			ViewBag.SearchTerm = searchTerm;
+            // Lọc theo cấp bậc (Rank)
+            if (selectedLevel.HasValue)
+            {
+                tournamentsQuery = tournamentsQuery.Where(t => t.RankStart == selectedLevel || t.RankEnd == selectedLevel);
+            }
+            // Lấy danh sách cấp bậc để hiển thị trong dropdown
+            ViewBag.Levels = await _context.Levels.ToListAsync();
+            ViewBag.SelectedLevel = selectedLevel; // Truyền giá trị đã chọn tới View
+            ViewBag.SearchTerm = searchTerm;
 
 			var totalTournaments = await tournamentsQuery.CountAsync();
 
@@ -62,8 +61,34 @@ namespace tcsoft_pingpongclub.Controllers
 			ViewBag.CurrentPage = page;
 			ViewBag.TotalPages = totalPages;
 
-			return View(tournaments);
-		}
+            return View(tournaments);
+        }
+        // GET: Tournaments/RegisteredPlayers/{idTournament}
+        // người đã đăng kí
+        public async Task<IActionResult> RegisteredPlayers(int idTournament)
+        {
+            // Lấy danh sách người chơi đã đăng ký
+            var players = await _context.Players
+                .Include(p => p.IdMemberNavigation) // Bao gồm thông tin thành viên
+                .Where(p => p.IdTournament == idTournament)
+                .ToListAsync();
+
+            // Lấy thông tin giải đấu
+            var tournament = await _context.Tournaments
+                .FirstOrDefaultAsync(t => t.IdTournament == idTournament);
+
+            if (tournament == null)
+            {
+                TempData["Error"] = "Giải đấu không tồn tại!";
+                return RedirectToAction("Index");
+            }
+
+            // Truyền thông tin giải đấu tới View
+            ViewBag.TournamentName = tournament.TournamentName;
+            ViewBag.IdTournament = tournament.IdTournament; // Gán ID giải đấu vào ViewBag
+
+            return View(players);
+        }
 
 
 		// GET: Tournaments/MatchSchedule/{idTournament}
@@ -102,43 +127,30 @@ namespace tcsoft_pingpongclub.Controllers
 			{
 				matches = new List<Match>();  // Gán giá trị rỗng nếu null
 			}
-
-			// Truyền dữ liệu tới View
-			ViewBag.TournamentName = player.IdTournamentNavigation?.TournamentName;
-			ViewBag.IdPlayer = player.IdPlayer;
-
+            // Truyền dữ liệu tới View
+            ViewBag.TournamentName = player.IdTournamentNavigation?.TournamentName;
+            ViewBag.IdPlayer = player.IdPlayer;
+            ViewBag.TournamentId = idTournament;
 			return View(matches);  // Truyền danh sách trận đấu
 		}
 
 
-		[HttpPost]
-		public IActionResult ChangeStatus(int id, bool status)
-		{
-			var member = _context.Members.Find(id);
-			if (member != null)
-			{
-				member.Status = status;
-				_context.SaveChanges();
-			}
-			return RedirectToAction("Index");
-		}
-		// GET: Tournaments/RegisteredPlayers/{idTournament}
-		// người đã đăng kí
-		public async Task<IActionResult> RegisteredPlayers(int idTournament)
-		{
-			var players = await _context.Players
-		   .Include(p => p.IdMemberNavigation) // Bao gồm thông tin Member
-		   .Where(p => p.IdTournament == idTournament)
-		   .ToListAsync();
 
-			return View(players);
-
-		}
-
-		[HttpPost]
-		public IActionResult Register(int idTournament)
-		{
-			int idMember = HttpContext.Session.GetInt32("IdMember") ?? 0;
+        [HttpPost]
+        public IActionResult ChangeStatus(int id, bool status)
+        {
+            var member = _context.Members.Find(id);
+            if (member != null)
+            {
+                member.Status = status;
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult Register(int idTournament)
+        {
+            int idMember = HttpContext.Session.GetInt32("IdMember") ?? 0;
 
 
 			// Kiểm tra nếu Player đã tồn tại trong Tournament
@@ -214,34 +226,33 @@ namespace tcsoft_pingpongclub.Controllers
 							Status = false
 						};
 
-						_context.Matches.Add(match);
-					}
-				}
-			}
-			else // Đấu loại trực tiếp
-			{
-				// Tạo cặp đấu ngẫu nhiên (hoặc theo thứ tự)
-				for (int i = 0; i < players.Count; i += 2)
-				{
-					if (i + 1 < players.Count)
-					{
-						var match = new Match
-						{
-							IdTournament = idTournament,
-							IdMemberOne = players[i].IdPlayer,
-							IdMemberTwo = players[i + 1].IdPlayer,
-							TimeStart = DateTime.Now.AddDays(i), // Tùy chỉnh thời gian bắt đầu
-							Status = false
-						};
 
-						_context.Matches.Add(match);
-					}
-				}
-			}
+                        _context.Matches.Add(match);
+                    }
+                }
+            }
+            else // Đấu cup
+            {
+                // Tạo cặp đấu ngẫu nhiên (hoặc theo thứ tự)
+                for (int i = 0; i < players.Count; i += 2)
+                {
+                    if (i + 1 < players.Count)
+                    {
+                        var match = new Match
+                        {
+                            IdTournament = idTournament,
+                            IdMemberOne = players[i].IdPlayer,
+                            IdMemberTwo = players[i + 1].IdPlayer,
+                            TimeStart = DateTime.Now.AddDays(i), // Tùy chỉnh thời gian bắt đầu
+                            Status = false
+                        };
 
-			// Lưu thay đổi vào cơ sở dữ liệu
-			_context.SaveChanges();
-		}
+                        _context.Matches.Add(match);
+                    }
+                }
+            }
+            _context.SaveChanges();
+        }
 
 		[HttpPost]
 		// hủy đăng kí
@@ -255,20 +266,18 @@ namespace tcsoft_pingpongclub.Controllers
 				.OrderByDescending(p => p.IdMember) // Giả sử Id là khóa chính và tăng dần
 				.FirstOrDefault();
 
-			if (player != null)
-			{
-				_context.Players.Remove(player);
-				_context.SaveChanges();
-				TempData["Success"] = "Hủy đăng ký thành công!";
-			}
-			else
-			{
-				TempData["Error"] = "Không tìm thấy đăng ký để hủy.";
-			}
-
-			// Chuyển hướng về trang Details của Tournament
-			return RedirectToAction("Details", new { id = idTournament });
-		}
+            if (player != null)
+            {
+                _context.Players.Remove(player);
+                _context.SaveChanges();
+                TempData["Success"] = "Hủy đăng ký thành công!";
+            }
+            else
+            {
+                TempData["Error"] = "Không tìm thấy đăng ký để hủy.";
+            }
+            return RedirectToAction("Details", new { id = idTournament });
+        }
 
 
 		// GET: Tournaments/Details/5
@@ -279,24 +288,28 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 
-			var tournament = await _context.Tournaments
-				.Include(t => t.RankEndNavigation)
-				.Include(t => t.RankStartNavigation)
-				.FirstOrDefaultAsync(m => m.IdTournament == id);
-			if (tournament == null)
-			{
-				return NotFound();
-			}
-			// Truyền searchTerm cho View để giữ giá trị tìm kiếm
-		 
+            var tournament = await _context.Tournaments
+                .Include(t => t.RankEndNavigation)
+                .Include(t => t.RankStartNavigation)
+                .FirstOrDefaultAsync(m => m.IdTournament == id);
+            if (tournament == null)
+            {
+                return NotFound();
+            }
+            // Truyền searchTerm cho View để giữ giá trị tìm kiếm
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.IdTournament = id;
+            ViewBag.TournamentName = tournament.TournamentName;
+            return View(tournament);
+        }
+       
+       
 
-			ViewBag.SearchTerm = searchTerm;
-			return View(tournament);
-		}
+        private bool TournamentExists(int id)
+        {
+            return _context.Tournaments.Any(e => e.IdTournament == id);
+        }
+      
 
-		private bool TournamentExists(int id)
-		{
-			return _context.Tournaments.Any(e => e.IdTournament == id);
-		}
-	}
+    }
 }

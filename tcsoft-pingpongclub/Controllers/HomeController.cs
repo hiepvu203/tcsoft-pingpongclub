@@ -22,6 +22,7 @@ namespace tcsoft_pingpongclub.Controllers
 		}
       
 
+
 		public IActionResult Privacy()
 		{
 			return View();

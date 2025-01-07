@@ -7,7 +7,7 @@
 			<div class="row align-items-center">
 				<!-- Avatar Section -->
 				<div class="col-md-3 text-center">
-					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content(Model.LinkAvatar) : Url.Content("~/path/to/placeholder-image.png"))"
+					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content($"~/image/{Model.LinkAvatar}") : "/path/to/placeholder-image.png")"
 						 class="rounded-circle img-fluid" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
 				</div>
 				<!-- Information Section -->
@@ -70,12 +70,12 @@
 		</div>
 	}
 	<div class="mt-5 text-center">
-		<a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
+		<a asp-action="EditPersonalInfo" class="btn btn-primary">Edit Profile</a>
 	</div>
-	@* <!-- Nút Quay lại -->
+	<!-- Nút Quay lại -->
 	<div class="mt-5 text-center">
-		<a asp-controller="Userr" asp-action="Details" asp-route-id="@Model.IdMember" class="btn btn-secondary">Quay lại</a>
-	</div> *@
+		<a asp-controller="RegTour" asp-action="Details" asp-route-id="@Model.IdMember" class="btn btn-secondary">Quay lại</a>
+	</div>
 
 
 </div>

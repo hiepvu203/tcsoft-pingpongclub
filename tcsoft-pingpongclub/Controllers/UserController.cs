@@ -1,7 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,125 +17,203 @@ namespace tcsoft_pingpongclub.Controllers
 	{
 		private readonly ThuctapKtktcn2024Context _context;
 
-		public UserController(ThuctapKtktcn2024Context context)
-		{
-			_context = context;
-		}
 
-		// GET: User/Index
-		public async Task<IActionResult> Index()
-		{
-			int idMember = HttpContext.Session.GetInt32("IdMember") ?? 0;
+        public UserController(ThuctapKtktcn2024Context context)
+        {
+            _context = context;
+        }
+        // GET: Userr/Index
+        public async Task<IActionResult> Index()
+        {
 
-			if (idMember <= 0)
-			{
-				TempData["Error"] = "Người dùng không hợp lệ!";
-				return View(); // Trả về view với thông báo lỗi
-			}
+            // Lấy IdMember từ Session
+            int? idMember = HttpContext.Session.GetInt32("IdMember");
+            // Tìm kiếm thông tin người dùng từ bảng Members với IdMember = 2
+            var member = await _context.Members
+                .Include(m => m.IdLevelNavigation)
+                .Include(m => m.IdRoleNavigation)
+                .FirstOrDefaultAsync(m => m.IdMember == idMember);
 
-			var member = await _context.Members
-				.Include(m => m.IdLevelNavigation)
-				.Include(m => m.IdRoleNavigation)
-				.FirstOrDefaultAsync(m => m.IdMember == idMember);
+            if (member == null)
+            {
+                return RedirectToAction("Index"); // Nếu không tìm thấy người dùng, chuyển hướng đến trang đăng nhập
+            }
 
-			if (member == null)
-			{
-				TempData["Error"] = "Không tìm thấy người dùng!";
-				return View(); // Trả về view với thông báo lỗi
-			}
+            return View(member); // Trả về thông tin của người dùng cho view
+        }
 
-			return View(member);
-		}
+        // GET: Userr/Edit
+        public async Task<IActionResult> Edit()
+        {
+            int? idMember = HttpContext.Session.GetInt32("IdMember");
 
-		public IActionResult Information(int id)
-		{
-			// Lấy giải đấu hiện tại
-			var tournament = _context.Tournaments
-				.Include(t => t.RankStartNavigation)
-				.Include(t => t.RankEndNavigation)
-				.FirstOrDefault(t => t.IdTournament == id);
+            // Lấy thông tin người dùng từ bảng Members với IdMember = 3
+            var member = await _context.Members.FindAsync(idMember);
+            if (member == null)
+            {
+                TempData["Error"] = "Không tìm thấy người dùng!";
+                return RedirectToAction("Index");
+            }
 
-			if (tournament == null)
-			{
-				return NotFound(); // Nếu không tìm thấy, trả về 404
-			}
+            // Trả về thông tin người dùng cho view
+            ViewData["IdLevel"] = new SelectList(_context.Levels, "IdLevel", "LevelName", member.IdLevel);
+            ViewData["IdRole"] = new SelectList(_context.Roles, "IdRole", "RoleName", member.IdRole);
+            return View(member);
+        }
 
-			// Lấy danh sách các giải đấu khác trong cùng hạng
-			var relatedTournaments = _context.Tournaments
-				.Include(t => t.RankStartNavigation)
-				.Include(t => t.RankEndNavigation)
-				.Where(t => t.RankStart == tournament.RankStart && t.RankEnd == tournament.RankEnd && t.IdTournament != id)
-				.Take(3)
-				.ToList();
 
-			// Gửi dữ liệu sang view
-			ViewBag.RelatedTournaments = relatedTournaments;
+        // POST: Userr/Edit
+        [Route("Userr/Edit/{id}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("IdMember,MemberName,Address,Phone,Emaill,Gender,LinkAvatar, Password")] Member member, IFormFile LinkAvatarFile)
+        {
+            int? id = HttpContext.Session.GetInt32("IdMember");
+            if (id != member.IdMember)
+            {
+                return NotFound();
+            }
 
-			return View(tournament);
-		}
-		// GET: User/Edit
-		public async Task<IActionResult> Edit()
-		{
-			// Lấy IdMember từ session
-			int idMember = HttpContext.Session.GetInt32("IdMember") ?? 0;
+            if (!ModelState.IsValid)
+            {
+                // Ghi lại lỗi nếu ModelState không hợp lệ
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+                return View(member);
+            }
 
-			// Tìm thành viên trong cơ sở dữ liệu
-			var member = await _context.Members.FindAsync(idMember);
-			if (member == null)
-			{
-				TempData["Error"] = "User not found.";
-				return RedirectToAction(nameof(Index));
-			}
+            try
+            {
+                // Lấy dữ liệu cũ từ cơ sở dữ liệu
+                var existingMember = await _context.Members.FirstOrDefaultAsync(m => m.IdMember == id);
+                if (existingMember == null)
+                {
+                    return NotFound();
+                }
+                existingMember.MemberName = member.MemberName;
+                existingMember.Address = member.Address;
+                existingMember.Phone = member.Phone;
+                existingMember.Emaill = member.Emaill;
+                existingMember.Gender = member.Gender;
 
-			// Lấy danh sách hình ảnh cho lựa chọn avatar
-			var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image");
-			if (Directory.Exists(imagesPath))
-			{
-				var files = Directory.GetFiles(imagesPath).Select(Path.GetFileName).ToList();
-				ViewBag.ImageFiles = files;
-			}
-			else
-			{
-				ViewBag.ImageFiles = new List<string>(); // Đảm bảo ViewBag không null
-			}
 
-			// Điền danh sách dropdown cho vai trò và cấp độ
-			ViewData["IdLevel"] = new SelectList(_context.Levels, "IdLevel", "IdLevel", member.IdLevel);
-			ViewData["IdRole"] = new SelectList(_context.Roles, "IdRole", "IdRole", member.IdRole);
+                // Xử lý file ảnh nếu có
+                if (LinkAvatarFile != null && LinkAvatarFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image");
+                    Directory.CreateDirectory(uploadsFolder); // Tạo thư mục nếu chưa tồn tại
 
-			return View(member);
-		}
+                    // Xóa ảnh cũ nếu tồn tại
+                    if (!string.IsNullOrEmpty(existingMember.LinkAvatar))
+                    {
+                        var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingMember.LinkAvatar.TrimStart('/'));
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath); // Xóa ảnh cũ
+                        }
+                    }
 
-		// POST: User/Edit
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit([Bind("IdMember,MemberName,Address,Phone,Emaill,Gender,IdLevel,Status,LinkAvatar,Username,Password,IdRole")] Member member)
-		{
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					_context.Update(member);
-					await _context.SaveChangesAsync();
+                    // Tạo tên file ảnh mới duy nhất
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(LinkAvatarFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-					TempData["Success"] = "Profile updated successfully!";
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!MemberExists(member.IdMember))
-					{
-						return NotFound();
-					}
-					throw;
-				}
-				return RedirectToAction(nameof(Index));
-			}
+                    // Lưu ảnh mới
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await LinkAvatarFile.CopyToAsync(fileStream);
+                    }
 
-			// Re-populate dropdown lists and images in case of errors
-			ViewData["IdLevel"] = new SelectList(_context.Levels, "IdLevel", "IdLevel", member.IdLevel);
-			ViewData["IdRole"] = new SelectList(_context.Roles, "IdRole", "IdRole", member.IdRole);
-			return View(member);
-		}
+                    // Cập nhật đường dẫn ảnh mới
+                    existingMember.LinkAvatar = "/image/" + uniqueFileName;
+                }
+
+                _context.Update(existingMember);
+                await _context.SaveChangesAsync();
+
+
+                TempData["Success"] = "Cập nhật thông tin cá nhân thành công!";
+                return RedirectToAction(nameof(Index)); // Chuyển hướng về trang thông tin cá nhân
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Lỗi khi cập nhật: " + ex.Message);
+                return View(member);
+            }
+        }
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        // POST: RegTour/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+            int idMember = HttpContext.Session.GetInt32("IdMember") ?? 0;
+            var member = await _context.Members.FindAsync(idMember);
+
+            if (member == null)
+            {
+                TempData["Error"] = "Không tìm thấy người dùng!";
+                return RedirectToAction("Index");
+            }
+
+            var passwordHasher = new PasswordHasher<Member>();
+
+            // Kiểm tra mật khẩu hiện tại
+            bool isPasswordValid = false;
+
+            try
+            {
+                // Thử xác minh mật khẩu với PasswordHasher
+                var result = passwordHasher.VerifyHashedPassword(member, member.Password, currentPassword);
+                if (result == PasswordVerificationResult.Success)
+                {
+                    isPasswordValid = true;
+                }
+            }
+            catch (FormatException)
+            {
+                // Nếu lỗi, kiểm tra mật khẩu như là văn bản thuần
+                if (member.Password == currentPassword)
+                {
+                    isPasswordValid = true;
+                }
+            }
+
+            if (!isPasswordValid)
+            {
+                TempData["Error"] = "Mật khẩu hiện tại không đúng.";
+                return RedirectToAction("ChangePassword");
+            }
+
+            // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+            if (newPassword != confirmPassword)
+            {
+                TempData["Error"] = "Mật khẩu mới và xác nhận mật khẩu không khớp.";
+                return RedirectToAction("ChangePassword");
+            }
+
+            // Cập nhật mật khẩu (luôn mã hóa mới)
+            try
+            {
+                member.Password = passwordHasher.HashPassword(member, newPassword);
+                _context.Update(member);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Mật khẩu đã được thay đổi thành công.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Có lỗi xảy ra: {ex.Message}";
+                return RedirectToAction("ChangePassword");
+            }
+        }
+
+
 
 		private bool MemberExists(int id)
 		{

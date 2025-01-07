@@ -29,6 +29,7 @@ public partial class Member
     public string? Password { get; set; }
 
     public int? IdRole { get; set; }
+    public int? Score { get; set; }
 
     [NotMapped]
     public IFormFile? ImageFile { get; set; }

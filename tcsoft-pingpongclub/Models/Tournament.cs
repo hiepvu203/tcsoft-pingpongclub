@@ -33,6 +33,7 @@ namespace tcsoft_pingpongclub.Models
         [NotMapped]
         public short? ActualAmount { get; set; } 
 
+<<<<<<< HEAD
         [Required(ErrorMessage = "Thông tin của giải đấu là bắt buộc")]
         public string? Infor { get; set; } // Giữ lại thuộc tính này
 
@@ -42,6 +43,11 @@ namespace tcsoft_pingpongclub.Models
         [Required(ErrorMessage = "Xếp hạng kết thúc là bắt buộc")]
         [RankRange(nameof(RankStart), nameof(RankEnd))]
         public int? RankEnd { get; set; }
+=======
+    public int? RankEnd { get; set; }
+    public string? Infor { get; set; }
+    public bool? Status { get; set; }
+>>>>>>> origin/DangHungCuong
 
         [Required(ErrorMessage = "Trạng thái là bắt buộc")]
         public bool? Status { get; set; }
