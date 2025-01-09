@@ -21,24 +21,23 @@ namespace tcsoft_pingpongclub.Controllers
         // GET: ChiTietTaiTro
         public async Task<IActionResult> Index()
         {
-            var thuctapKtktcn2024Context = await _context.Sponors.Include(s => s.IdIncomeNavigation)
+            var thuctapKtktcn2024Context = await _context.Sponors
                                 .Include(s => s.IdSponorNavigation)
                                 .Include(s => s.IdTournamentNavigation)
                                 .Where(s => s.Status == false)
                                 .OrderByDescending(e => e.IdSponorTour)
-                                .ToListAsync(); ;
+                                .ToListAsync(); 
 
             var model = thuctapKtktcn2024Context.Select(e => new Sponor
             {
                 IdSponorTour = e.IdSponorTour,
-                IdIncome = e.IdIncome,
-                IdIncomeNavigation = e.IdIncomeNavigation,
                 IdSponor = e.IdSponor,
                 IdSponorNavigation = e.IdSponorNavigation,
                 IdTournament = e.IdTournament,
                 IdTournamentNavigation = e.IdTournamentNavigation,
                 Money = e.Money,
                 Other = e.Other,
+                CreatedDate = e.CreatedDate,
                 Status = e.Status
             }).ToList();
 
@@ -54,7 +53,6 @@ namespace tcsoft_pingpongclub.Controllers
             }
 
             var sponor = await _context.Sponors
-                .Include(s => s.IdIncomeNavigation)
                 .Include(s => s.IdSponorNavigation)
                 .Include(s => s.IdTournamentNavigation)
                 .FirstOrDefaultAsync(m => m.IdSponorTour == id);
@@ -67,9 +65,9 @@ namespace tcsoft_pingpongclub.Controllers
         }
         public void getData()
         {
-            ViewData["IdIncome"] = new SelectList(_context.ExpenseAndIncomes.Where(f => f.Type == true).Select(f => new { IdIncome = f.Id, Display = f.IdReasonNavigation.ReasonName + " - " + (f.CreatedDate.HasValue ? f.CreatedDate.Value.ToString("dd/MM/yyyy") : "Không xác định") }),"IdIncome","Display");
+            ViewData["Type"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Thu" }, new SelectListItem { Value = "true", Text = "Chi" } };
             ViewData["IdSponor"] = new SelectList(_context.NhaTaiTros.Select(f => new { IdSponor = f.IdSponor, Display = f.NameSponer }), "IdSponor", "Display");
-            ViewData["IdTournament"] = new SelectList(_context.Tournaments.Select(f => new { IdTournament = f.IdTournament, Display = f.TournamentName + " ~ Bắt đầu: " + (f.TimeStart.HasValue ? f.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Kết thúc: " + (f.TimeEnd.HasValue ? f.TimeEnd.Value.ToString("dd/MM/yyyy") : "Không xác định") }), "IdTournament", "Display");
+            ViewData["IdTournament"] = new SelectList(_context.Tournaments.Select(f => new { IdTournament = f.IdTournament, Display = f.TournamentName + ": " + (f.TimeStart.HasValue ? f.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - " + (f.TimeEnd.HasValue ? f.TimeEnd.Value.ToString("dd/MM/yyyy") : "Không xác định") }), "IdTournament", "Display");
         }
 
         // GET: ChiTietTaiTro/Create
@@ -82,12 +80,21 @@ namespace tcsoft_pingpongclub.Controllers
         // POST: ChiTietTaiTro/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdSponorTour,IdIncome,Money,IdTournament,Status,IdSponor,Other")] Sponor sponor)
+        public async Task<IActionResult> Create([Bind("IdSponorTour,Money,IdTournament,Status,IdSponor,Other,CreatedDate")] Sponor sponor)
         {
             if (ModelState.IsValid)
             {
+                var newRecord = new Sponor
+                {
+                    Money = sponor.Money,
+                    IdTournament = sponor.IdTournament,
+                    IdSponor = sponor.IdSponor,
+                    Other = sponor.Other,
+                    CreatedDate = sponor.CreatedDate,
+                    Status = false
+                };
 
-                _context.Add(sponor);
+                _context.Add(newRecord);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -108,16 +115,14 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdIncome"] = new SelectList(_context.ExpenseAndIncomes, "Id", "Id", sponor.IdIncome);
-            ViewData["IdSponor"] = new SelectList(_context.NhaTaiTros, "IdSponor", "IdSponor", sponor.IdSponor);
-            ViewData["IdTournament"] = new SelectList(_context.Tournaments, "IdTournament", "IdTournament", sponor.IdTournament);
+            getData();
             return View(sponor);
         }
 
         // POST: ChiTietTaiTro/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdSponorTour,IdIncome,Money,IdTournament,Status,IdSponor,Other")] Sponor sponor)
+        public async Task<IActionResult> Edit(int id, [Bind("IdSponorTour,Money,IdTournament,Status,IdSponor,Other,CreatedDate")] Sponor sponor)
         {
             if (id != sponor.IdSponorTour)
             {
@@ -128,7 +133,19 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 try
                 {
-                    _context.Update(sponor);
+                    var existingRecord = await _context.Sponors
+                        .Include(e => e.IdTournamentNavigation)
+                        .Include(e => e.IdSponorNavigation)
+                        .FirstOrDefaultAsync(e => e.IdSponorTour == sponor.IdSponorTour);
+
+                    existingRecord.Money = sponor.Money;
+                    existingRecord.IdTournament = sponor.IdTournament;
+                    existingRecord.IdSponor = sponor.IdSponor;
+                    existingRecord.Other = sponor.Other;
+                    existingRecord.CreatedDate = sponor.CreatedDate;
+                    sponor.Status = false;
+                    
+                    _context.Update(existingRecord);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -144,9 +161,7 @@ namespace tcsoft_pingpongclub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdIncome"] = new SelectList(_context.ExpenseAndIncomes, "Id", "Id", sponor.IdIncome);
-            ViewData["IdSponor"] = new SelectList(_context.NhaTaiTros, "IdSponor", "IdSponor", sponor.IdSponor);
-            ViewData["IdTournament"] = new SelectList(_context.Tournaments, "IdTournament", "IdTournament", sponor.IdTournament);
+            getData();
             return View(sponor);
         }
 
@@ -159,7 +174,6 @@ namespace tcsoft_pingpongclub.Controllers
             }
 
             var sponor = await _context.Sponors
-                .Include(s => s.IdIncomeNavigation)
                 .Include(s => s.IdSponorNavigation)
                 .Include(s => s.IdTournamentNavigation)
                 .FirstOrDefaultAsync(m => m.IdSponorTour == id);

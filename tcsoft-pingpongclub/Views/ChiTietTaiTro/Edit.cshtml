@@ -4,20 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Sponor</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdSponorTour" />
-            <div class="form-group">
-                <label asp-for="IdIncome" class="control-label"></label>
-                <select asp-for="IdIncome" class="form-control" asp-items="ViewBag.IdIncome"></select>
-                <span asp-validation-for="IdIncome" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="Money" class="control-label"></label>
                 <input asp-for="Money" class="form-control" />
@@ -29,14 +20,14 @@
                 <span asp-validation-for="IdTournament" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="IdSponor" class="control-label"></label>
                 <select asp-for="IdSponor" class="form-control" asp-items="ViewBag.IdSponor"></select>
                 <span asp-validation-for="IdSponor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="CreatedDate" class="form-label">Ngày tạo</label>
+                <input asp-for="CreatedDate" class="form-input" type="date" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Other" class="control-label"></label>

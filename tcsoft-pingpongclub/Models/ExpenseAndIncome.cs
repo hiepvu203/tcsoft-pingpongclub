@@ -15,6 +15,10 @@ public partial class ExpenseAndIncome
 
     public int? IdAccountant { get; set; }
 
+    public int? IdTournament { get; set; }
+
+    public int? IdSponorDetail { get; set; }
+
     public bool? IsDone { get; set; } = false;
 
     public bool? Type { get; set; }
@@ -34,7 +38,11 @@ public partial class ExpenseAndIncome
 
     public virtual Reason? IdReasonNavigation { get; set; }
 
-    public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
+    public virtual Tournament? IdTournamentNavigation { get; set; }
+
+    public virtual Sponor? IdSponorDetailNavigation { get; set; }
+
+    //public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
 
     // New property to hold the accountant's name
     [NotMapped]

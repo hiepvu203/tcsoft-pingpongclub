@@ -20,7 +20,7 @@
                 }
             </div>
             <div class="form-group">
-                @if (Model.Type == false) 
+                @if (Model.Type == false && Model.IdParty != null) 
                 {
                     <label asp-for="IdParty" class="control-label">Người nộp</label>
                     <select asp-for="IdParty" class="form-control" asp-items="ViewBag.IdParty"disabled></select>

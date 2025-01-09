@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
+using tcsoft_pingpongclub.ViewModels;
 
 namespace tcsoft_pingpongclub.Controllers
 {
@@ -26,6 +27,8 @@ namespace tcsoft_pingpongclub.Controllers
                 .Include(e => e.IdFundNavigation)
                 .Include(e => e.IdPartyNavigation)
                 .Include(e => e.IdReasonNavigation)
+                .Include(e => e.IdTournamentNavigation)
+                .Include(e => e.IdSponorDetailNavigation)
                 .Join(
                     _context.Members,
                     e => e.IdAccountant,
@@ -45,6 +48,8 @@ namespace tcsoft_pingpongclub.Controllers
                 Id = e.ExpenseAndIncome.Id,
                 IdFund = e.ExpenseAndIncome.IdFund,
                 IdParty = e.ExpenseAndIncome.IdParty,
+                IdTournament = e.ExpenseAndIncome.IdTournament,
+                IdSponorDetail = e.ExpenseAndIncome.IdSponorDetail,
                 IdAccountant = e.ExpenseAndIncome.IdAccountant,
                 IsDone = e.ExpenseAndIncome.IsDone,
                 Type = e.ExpenseAndIncome.Type,
@@ -55,6 +60,8 @@ namespace tcsoft_pingpongclub.Controllers
                 IdFundNavigation = e.ExpenseAndIncome.IdFundNavigation,
                 IdPartyNavigation = e.ExpenseAndIncome.IdPartyNavigation,
                 IdReasonNavigation = e.ExpenseAndIncome.IdReasonNavigation,
+                IdTournamentNavigation = e.ExpenseAndIncome.IdTournamentNavigation,
+                IdSponorDetailNavigation = e.ExpenseAndIncome.IdSponorDetailNavigation,
                 AccountantName = e.AccountantName,
                 Amount = e.ExpenseAndIncome.Amount
             }).ToList();
@@ -64,6 +71,8 @@ namespace tcsoft_pingpongclub.Controllers
 
         public void getData()
         {
+            ViewData["IdSponorDetail"] = new SelectList(_context.Sponors.Select(f => new { IdSponorDetail = f.IdSponorTour, Display = f.IdSponorNavigation.NameSponer + " - " + f.IdTournamentNavigation.TournamentName + " - " + (f.CreatedDate.HasValue ? f.CreatedDate.Value.ToString("dd/MM/yyyy") : "Không xác định") }), "IdSponorDetail", "Display");
+            ViewData["IdTournament"] = new SelectList(_context.Tournaments.Select(f => new { IdTournament = f.IdTournament, Display = f.TournamentName }), "IdTournament", "Display");
             ViewData["IdFund"] = new SelectList(_context.Funds.Select(f => new { IdFund = f.IdFund, Display = f.FundName }), "IdFund", "Display");
             ViewData["IdAccountant"] = new SelectList(_context.Members.Select(f => new { IdAccountant = f.IdMember, Display = f.MemberName }), "IdAccountant", "Display");
             ViewData["IdParty"] = new SelectList(_context.Members.Select(f => new { IdParty = f.IdMember, Display = f.MemberName }), "IdParty", "Display");
@@ -119,6 +128,7 @@ namespace tcsoft_pingpongclub.Controllers
                 .Include(e => e.IdFundNavigation)
                 .Include(e => e.IdPartyNavigation)
                 .Include(e => e.IdReasonNavigation)
+                .Include(e => e.IdTournamentNavigation)
                 .Join(
                     _context.Members,
                     e => e.IdAccountant,
@@ -128,6 +138,8 @@ namespace tcsoft_pingpongclub.Controllers
                         Id = e.Id,
                         IdFund = e.IdFund,
                         IdParty = e.IdParty,
+                        IdTournament = e.IdTournament,
+                        IdSponorDetail = e.IdSponorDetail,
                         IdAccountant = e.IdAccountant,
                         AccountantName = m.MemberName,
                         Type = e.Type,
@@ -139,7 +151,9 @@ namespace tcsoft_pingpongclub.Controllers
                         IsDone = e.IsDone,
                         IdFundNavigation = e.IdFundNavigation,
                         IdPartyNavigation = e.IdPartyNavigation,
-                        IdReasonNavigation = e.IdReasonNavigation
+                        IdReasonNavigation = e.IdReasonNavigation,
+                        IdTournamentNavigation = e.IdTournamentNavigation,
+                        IdSponorDetailNavigation = e.IdSponorDetailNavigation
                     }
                 )
                 .OrderByDescending(e => e.Id) 
@@ -147,6 +161,30 @@ namespace tcsoft_pingpongclub.Controllers
 
             return View("Index", results);
         }
+
+        public async Task<IActionResult> Statistics(int? year, int? month)
+        {
+            var statistics = await _context.ExpenseAndIncomes
+            .Include(e => e.IdFundNavigation) // Include thông tin về quỹ
+            .Where(e => e.CreatedDate.HasValue && e.CreatedDate.Value.Year == year)
+            .GroupBy(e => new { e.CreatedDate.Value.Month, e.CreatedDate.Value.Year, e.IdFundNavigation.FundName })
+            .Select(g => new StatisticsViewModel
+            {
+                Month = g.Key.Month,
+                Year = g.Key.Year,
+                FundName = g.Key.FundName,
+                TotalIncome = g.Where(e => e.Type == false).Sum(e => e.Amount), // Tổng thu
+                TotalExpense = g.Where(e => e.Type == true).Sum(e => e.Amount), // Tổng chi
+                Balance = (g.Where(e => e.Type == false).Sum(e => e.Amount)) -
+                          (g.Where(e => e.Type == true).Sum(e => e.Amount)) // Số dư
+            })
+            .OrderBy(s => s.Year).ThenBy(s => s.Month)
+            .ToListAsync();
+
+            return View(statistics);
+        }
+
+
 
         // GET: ExpenseAndIncome/Create
         public IActionResult Create()
@@ -158,10 +196,20 @@ namespace tcsoft_pingpongclub.Controllers
         // POST: ExpenseAndIncome/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFund,IdParty,IdAccountant,Type,IdReason,DaysOverdue,Status,IsDone,CreatedDate,Amount")] ExpenseAndIncome expenseAndIncome, bool isBulkAdd)
+        public async Task<IActionResult> Create([Bind("IdFund,IdParty,IdAccountant,IdTournament,IdSponorDetail,Type,IdReason,DaysOverdue,Status,IsDone,CreatedDate,Amount")] ExpenseAndIncome expenseAndIncome, bool isBulkAdd)
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrEmpty(expenseAndIncome.IdTournament?.ToString()))
+                {
+                    expenseAndIncome.IdTournament = null; 
+                }
+
+                if (string.IsNullOrEmpty(expenseAndIncome.IdSponorDetail?.ToString()))
+                {
+                    expenseAndIncome.IdSponorDetail = null;
+                }
+
                 var fund = await _context.Funds.FindAsync(expenseAndIncome.IdFund);
 
                 if (fund == null)
@@ -184,6 +232,8 @@ namespace tcsoft_pingpongclub.Controllers
                             Type = expenseAndIncome.Type,
                             IdReason = expenseAndIncome.IdReason,
                             CreatedDate = expenseAndIncome.CreatedDate,
+                            IdTournament = expenseAndIncome.IdTournament,
+                            IdSponorDetail = expenseAndIncome.IdSponorDetail,
                             IdParty = null,
                             IsDone = true,
                             DaysOverdue = 0,
@@ -237,6 +287,8 @@ namespace tcsoft_pingpongclub.Controllers
                                 IdReason = expenseAndIncome.IdReason,
                                 CreatedDate = expenseAndIncome.CreatedDate,
                                 IdParty = memberId,
+                                IdTournament = expenseAndIncome.IdTournament,
+                                IdSponorDetail = expenseAndIncome.IdSponorDetail,
                                 IsDone = false,
                                 DaysOverdue = 0,
                                 Status = false,
@@ -256,6 +308,8 @@ namespace tcsoft_pingpongclub.Controllers
                             IdReason = expenseAndIncome.IdReason,
                             CreatedDate = expenseAndIncome.CreatedDate,
                             IdParty = expenseAndIncome.IdParty,
+                            IdTournament = expenseAndIncome.IdTournament,
+                            IdSponorDetail = expenseAndIncome.IdSponorDetail,
                             IsDone = false,
                             DaysOverdue = 0,
                             Status = false,
@@ -305,7 +359,7 @@ namespace tcsoft_pingpongclub.Controllers
         // POST: ExpenseAndIncome/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdFund,IdParty,IdAccountant,Type,IdReason,DaysOverdue,Status,IsDone,CreatedDate,Amount")] ExpenseAndIncome expenseAndIncome)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdFund,IdParty,IdAccountant,IdTournament,IdSponorDetail,Type,IdReason,DaysOverdue,Status,IsDone,CreatedDate,Amount")] ExpenseAndIncome expenseAndIncome)
         {
             if (id != expenseAndIncome.Id)
             {
@@ -319,6 +373,8 @@ namespace tcsoft_pingpongclub.Controllers
                     var existingRecord = await _context.ExpenseAndIncomes
                         .Include(e => e.IdFundNavigation)
                         .Include(e => e.IdPartyNavigation)
+                        .Include(e => e.IdTournamentNavigation)
+                        .Include(e => e.IdSponorDetailNavigation)
                         .FirstOrDefaultAsync(e => e.Id == expenseAndIncome.Id);
 
                     if (existingRecord == null)
@@ -393,6 +449,8 @@ namespace tcsoft_pingpongclub.Controllers
                     existingRecord.IdReason = expenseAndIncome.IdReason;
                     existingRecord.CreatedDate = expenseAndIncome.CreatedDate;
                     existingRecord.Status = expenseAndIncome.Status;
+                    existingRecord.IdTournament = expenseAndIncome.IdTournament;
+                    existingRecord.IdSponorDetail = expenseAndIncome.IdSponorDetail;
 
                     if (existingRecord.Type == false)
                     {
@@ -434,6 +492,8 @@ namespace tcsoft_pingpongclub.Controllers
                 .Include(e => e.IdFundNavigation)
                 .Include(e => e.IdPartyNavigation)
                 .Include(e => e.IdReasonNavigation)
+                .Include(e => e.IdTournamentNavigation)
+                .Include(e => e.IdSponorDetailNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (expenseAndIncome == null)
             {

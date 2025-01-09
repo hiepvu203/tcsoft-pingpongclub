@@ -88,6 +88,8 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.IdAccountant).HasColumnName("idAccountant");
             entity.Property(e => e.IdFund).HasColumnName("idFund");
             entity.Property(e => e.IdParty).HasColumnName("idParty");
+            entity.Property(e => e.IdTournament).HasColumnName("idTournament");
+            entity.Property(e => e.IdSponorDetail).HasColumnName("idSponorDetail");
             entity.Property(e => e.IdReason).HasColumnName("idReason");
             entity.Property(e => e.IsDone).HasColumnName("isDone");
             entity.Property(e => e.Status).HasColumnName("status");
@@ -108,6 +110,14 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.HasOne(d => d.IdReasonNavigation).WithMany(p => p.ExpenseAndIncomes)
                 .HasForeignKey(d => d.IdReason)
                 .HasConstraintName("FK_ExpenseAndIncome_Reason");
+
+            entity.HasOne(d => d.IdTournamentNavigation).WithMany(p => p.ExpenseAndIncomes)
+                .HasForeignKey(d => d.IdTournament)
+                .HasConstraintName("FK_ExpenseAndIncome_Tounament");
+
+            entity.HasOne(d => d.IdSponorDetailNavigation).WithMany(p => p.ExpenseAndIncomes)
+                .HasForeignKey(d => d.IdSponorDetail)
+                .HasConstraintName("FK_ExpenseAndIncome_Sponor");
         });
 
         modelBuilder.Entity<Fund>(entity =>
@@ -406,18 +416,14 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.ToTable("Sponor");
 
             entity.Property(e => e.IdSponorTour).HasColumnName("idSponorTour");
-            entity.Property(e => e.IdIncome).HasColumnName("idIncome");
             entity.Property(e => e.IdSponor).HasColumnName("idSponor");
             entity.Property(e => e.IdTournament).HasColumnName("idTournament");
+            entity.Property(e => e.CreatedDate).HasColumnName("createdDate");
             entity.Property(e => e.Money)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("money");
             entity.Property(e => e.Other).HasColumnName("other");
             entity.Property(e => e.Status).HasColumnName("status");
-
-            entity.HasOne(d => d.IdIncomeNavigation).WithMany(p => p.Sponors)
-                .HasForeignKey(d => d.IdIncome)
-                .HasConstraintName("FK_Sponor_ExpenseAndIncome");
 
             entity.HasOne(d => d.IdSponorNavigation).WithMany(p => p.Sponors)
                 .HasForeignKey(d => d.IdSponor)
