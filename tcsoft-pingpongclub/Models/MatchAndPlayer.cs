@@ -5,6 +5,8 @@
         public int IdMatch { get; set; }
         public int IdPlayer1{ get; set; }
         public int IdPlayer2 { get; set; }
+        public string urlPlayer1 { get; set; }
+        public string urlPlayer2 { get; set; }
 
         public int IdTournament { get; set; }
 

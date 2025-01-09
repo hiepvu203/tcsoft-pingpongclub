@@ -3,69 +3,69 @@
 @{
     ViewData["Title"] = "Chỉnh sửa các set đấu";
     List<string> SetPoints = ((IEnumerable<string>)ViewBag.SetPoints).ToList();
-  
     var i = 1;
-}   
-<h1 class="text-center">Điều chỉnh thời gian</h1>
+}<h1 class="text-center">Điều chỉnh tỉ số</h1>
 <hr />
 <div class="container text-center py-4 bg-white text-dark">
-    <form asp-action="EditSet" class="mt-4">
-        <h4>@ViewBag.nameTour</h4>
+    <form asp-action="EditSet" method="post" class="mt-4">
+
+        <h1>@ViewBag.nameTour</h1>
         <div class="row align-items-center">
-            <!-- Team 1 -->
             <div class="col-md-4">
-                <img src="/image/avata1.jpg" alt="player1" class="img-fluid" style="width: 100px;border-radius:100px;">
+                <img src="~/image/@(ViewBag.urlPlayer1)" alt="Ảnh người chơi 1" class="img-fluid"
+                    style="width: 100px; border-radius: 100px;">
                 <h5 class="mt-2">@ViewBag.playerName1</h5>
             </div>
 
+            <div class="col-md-4">
+                <h3>Thời gian thi đấu</h3>
+                <h5 class="mt-2">@ViewBag.MatchTime.ToString("hh:mm tt dd/MM/yyyy")</h5>
+            </div>
 
             <div class="col-md-4">
-                <h2>Thời gian thi đấu</h2>
-                <h5 class="mt-2">@ViewBag.MatchTime</h5>
-            </div>
-            <div class="col-md-4">
-                <img src="/image/avata1.jpg" alt="player2" class="img-fluid" style="width: 100px; border-radius:100px;">
+                <img src="~/image/@(ViewBag.urlPlayer2)" alt="Ảnh người chơi 2" class="img-fluid"
+                    style="width: 100px; border-radius: 100px;">
                 <h5 class="mt-2">@ViewBag.playerName2</h5>
             </div>
         </div>
-        <div class="row align-items-center">
+
+        <div class="row align-items-center mt-4">
             @{
                 int index = 1;
+                int i = 1; // Đảm bảo biến i được khởi tạo
             }
             @foreach (var item in SetPoints)
             {
                 var points = item.Split(" - ");
-                <div class="col-md-4"> 
+                <div class="col-md-4">
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
                             <h1 class="card-title text-primary fw-bold">Set @i</h1>
 
                             <div class="d-flex justify-content-center align-items-center mt-2">
-                                <input type="number" name="point@(index)"
-                                       class="form-control text-center me-2"
-                                       style="max-width: 100px;" />
+                                <input type="number" name="point@(index)" id="point@(index)"
+                                    class="form-control text-center me-2" style="max-width: 100px;" value="@points[0]" />
                                 <span class="mx-2">-</span>
-                                <input type="number" name="point@(index + 1)"
-                                       class="form-control text-center ms-2"
-                                       style="max-width: 100px;" />
+                                <input type="number" name="point@(index + 1)" id="point@(index + 1)"
+                                    class="form-control text-center ms-2" style="max-width: 100px;" value="@points[1]" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 i++;
-                index+=2;
+                index += 2;
             }
         </div>
-        <input type="hidden" asp-for="IdMatch">
-        <button type="submit" class="btn btn-primary mt-5">Lưu</button>
+
+        <input type="hidden" name="id" value="@ViewBag.idMatch">
+        <div class="d-flex mt-5 justify-content-center">
+            <button type="submit" class="btn btn-primary me-2" id="sendRatio">Lưu</button>
+            <a asp-controller="Matches" class="btn btn-danger" style="width: fit-content" asp-action="Index"
+                asp-route-id="@ViewBag.Id">Trở lại</a>
+        </div>
+
     </form>
-</div>
-</div>
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -8,11 +8,11 @@
 }
 
 .card-title {
-    font-size: 1.5rem; /* Tăng kích cỡ chữ của tiêu đề */
+    font-size: 1.5rem;
 }
 
 .card-text {
-    font-size: 1.2rem; /* Tăng kích cỡ chữ của nội dung */
+    font-size: 1.2rem; 
 }
 .table th, .table td {
     vertical-align: middle;

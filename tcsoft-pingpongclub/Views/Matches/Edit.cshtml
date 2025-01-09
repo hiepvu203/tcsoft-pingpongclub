@@ -11,7 +11,7 @@
         <div class="row align-items-center">
             <!-- Team 1 -->
             <div class="col-md-4">
-                <img src="/image/avata1.jpg" alt="player1" class="img-fluid" style="width: 100px;border-radius:100px;">
+                <img src="~/image/@(ViewBag.urlPlayer1)" alt="Ảnh người chơi 1" class="img-fluid" style="width: 100px;border-radius:100px;">
                 <h5 class="mt-2">@ViewBag.playerName1</h5>
             </div>
 
@@ -22,18 +22,20 @@
                 <span asp-validation-for="TimeStart" class="text-danger"></span>
             </div>
             <div class="col-md-4">
-                <img src="/image/avata1.jpg" alt="player2" class="img-fluid" style="width: 100px; border-radius:100px;">
+                <img src="~/image/@(ViewBag.urlPlayer2)" alt="Ảnh người chơi 2" class="img-fluid" style="width: 100px; border-radius:100px;">
                 <h5 class="mt-2">@ViewBag.playerName2</h5>
             </div>
         </div>
-
         <input type="hidden" asp-for="IdMatch">
-        <button type="submit" class="btn btn-primary">Lưu</button>
+        <div class="d-flex mt-5 justify-content-center">
+            <button type="submit" class="btn btn-primary  me-2" >Lưu</button>
+            <a asp-action="Index" asp-route-id="@ViewBag.Id" style="width:fit-content" class="btn btn-danger">Trở lại danh sách</a>
+          
+
+        </div>
     </form>
 </div>
-<div class="text-center">
-    <a asp-action="Index" asp-route-id="@ViewBag.Id" class="btn btn-outline-primary btn-sm">Trở lại danh sách</a>
-</div>
+
 </div>
 
 

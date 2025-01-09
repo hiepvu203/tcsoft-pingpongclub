@@ -3,9 +3,11 @@ using tcsoft_pingpongclub.Models;
 using tcsoft_pingpongclub.Service;
 using tcsoft_pingpongclub.Filter;
 using LibSassHost; // Thêm thư viện LibSassHost vào
+using LibSassHost;
+using tcsoft_pingpongclub.Hubs; 
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddSignalR();
 // Cấu hình DbContext
 builder.Services.AddDbContext<ThuctapKtktcn2024Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb")));

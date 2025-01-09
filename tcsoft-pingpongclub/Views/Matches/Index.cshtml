@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<tcsoft_pingpongclub.Models.MatchAndPlayer>
-
-<div class="container my-5">
-    <div class="mx-auto w-75">
+<h1 class="text-center">@ViewBag.NameTour</h1>
+<div class="container my-5 d-flex">
+    
+    <div class="" style="width:60%; margin-right: 5%">
         <table class="table table-bordered table-striped align-middle">
             <thead class="table-light">
                 <tr>
@@ -19,7 +20,7 @@
                             <td class="text-center bg-cyan-300 text-white" style="width:40%; background-color:rgba(23, 162, 184, 1); font-size:25px">
                               
                                 @Html.DisplayFor(modelItem => item.PlayerName1)
-                                <img src="https://via.placeholder.com/30" alt="Player 1" class="rounded-circle ms-2">
+                                <img src="~/image/@(item.urlPlayer1)" alt="Player 1" style="width: 50px; height: auto" class="rounded-circle ms-2">
                             </td>
                         }
                         else
@@ -27,7 +28,7 @@
                             <td class="text-center bg-light" style="width:40%;font-size:25px">
                                
                                 @Html.DisplayFor(modelItem => item.PlayerName1)
-                                <img src="https://via.placeholder.com/30" alt="Player 1" class="rounded-circle ms-2">
+                                <img src="~/image/@(item.urlPlayer1)" alt="Player 1" style="width: 50px; height: auto" class="rounded-circle ms-2">
                             </td>
                         }
 
@@ -46,7 +47,10 @@
                                         <span class="fw-bold fs-4 text-success">@Html.DisplayFor(modelItem => item.Points2)</span>
                                     </div>
                                     <div class="mt-1">
-                                        <a asp-action="Edit" asp-route-id="@item.IdMatch" class="badge bg-primary px-3 py-2 text-decoration-none">@Html.DisplayFor(modelItem => item.TimeStart)</a>
+                                        <a asp-action="Edit" asp-route-id="@item.IdMatch" class="badge bg-primary px-3 py-2 text-decoration-none">
+                                            @(item.TimeStart?.ToString("HH:mm:ss dd-MM-yyyy"))
+
+                                        </a>
                                     </div>
                                 }
                                 else
@@ -57,7 +61,11 @@
                                     <span class="fw-bold fs-4 text-danger">@Html.DisplayFor(modelItem => item.Points2)</span>
                                 </div>
                                 <div class="mt-1">
-                                    <a asp-action="Edit" asp-route-id="@item.IdMatch" class="badge bg-primary px-3 py-2 text-decoration-none">@Html.DisplayFor(modelItem => item.TimeStart)</a>
+                                        <a asp-action="Edit" asp-route-id="@item.IdMatch" class="badge bg-primary px-3 py-2 text-decoration-none">
+                                            @(
+                                                 item.TimeStart?.ToString("HH:mm:ss dd-MM-yyyy")
+                                                )
+                                        </a>
                                 </div>
                                 }
 
@@ -67,16 +75,17 @@
                         @if (item.Points2 > item.Points1)
                         {
                             <td class="text-center bg-cyan-300 text-white " style="width:40%; background-color:rgba(23, 162, 184, 1);  font-size:22px">
+                                <img src="~/image/@(item.urlPlayer2)" alt="Player 2" style="width: 50px; height: auto" class="rounded-circle ms-2">
                                 @Html.DisplayFor(modelItem => item.PlayerName2)
-                                <img src="https://via.placeholder.com/30" alt="Player 2" class="rounded-circle ms-2">
+                               
                             </td>
                         }
                         else
                         {
                             <td class="text-center bg-light" style="width:40%; font-size:25px">
-     
+                                <img src="~/image/@(item.urlPlayer2)" alt="Player 2" style="width: 50px; height: auto" class="rounded-circle ms-2">
                                 @Html.DisplayFor(modelItem => item.PlayerName2)
-                                <img src="https://via.placeholder.com/30" alt="Player 2" class="rounded-circle ms-2">
+                                
                             </td>
                         }
                     </tr>
@@ -112,6 +121,41 @@
                         </tr>
                     }
                 }
+            </tbody>
+        </table>
+    </div>
+    <div style="width:40%;">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th class="text-center" >
+                        <span class="h4 text-primary">Vị trí</span>
+                       
+                    </th>
+                    <th class="text-center" >
+                      
+                        <span class="h4 text-primary">Tên người chơi</span>
+            
+                    </th>
+                    <th class="text-center" >
+                     
+                        <span class="h4 text-primary">Số trận thắng</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 1;
+                }
+                @foreach (var item in ViewBag.RankTour)
+                {
+                    <tr class="parent">
+                        <td>@index</td>
+                        <td>@item.NamePlayer</td>
+                        <td>@item.CountMatch</td>
+                    </tr>
+                    index++;
+                }    
             </tbody>
         </table>
     </div>
