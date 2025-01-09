@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Chi Tiết";
-    var IdTournament = (int)@ViewBag.IdTournament;
 }
 
 <h1 class="text-center mb-4">Chi Tiết Bảng Đấu</h1>
@@ -60,7 +59,7 @@
 
     <div class="mt-4 d-flex justify-content-center">
         <a asp-action="Edit" asp-route-id="@Model?.IdGroupstage" class="btn btn-primary me-3 px-4">Chỉnh Sửa</a>
-        <a asp-action="Index" asp-route-IdTournament="@IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+        <a asp-action="Index" asp-route-Id="@Model?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
     </div>
 </div>
 

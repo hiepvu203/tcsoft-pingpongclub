@@ -1,0 +1,98 @@
+﻿@model List<tcsoft_pingpongclub.Models.Award>
+
+@{
+    ViewData["Title"] = "Tạo Nhiều Giải Thưởng";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<form asp-action="CreateMultiple" method="post" class="shadow-sm p-4 bg-light rounded">
+    <div class="row">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @for (int i = 0; i < 3; i++)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="border rounded p-3 bg-white">
+                    <h4 class="text-primary text-center">
+                        Giải @if (i + 1 == 1)
+                        {
+                            @:Nhất 
+                        }else if(i + 1 == 2)
+                        {
+                            @:Nhì
+                        }else
+                        {
+                            @:ba
+                        }
+                    </h4>
+
+                    <!-- Thứ hạng -->
+                    <input type="hidden" asp-for="@Model[i].IdTournament" value="@ViewBag.IdTournament" />
+                     <input type="hidden" id="IOrder_@i" asp-for="@Model[i].IOrder" value="@(i+1)">
+
+
+                    <!-- Người chơi -->
+                    <div class="form-group mb-3">
+                        <label for="IdPlayer_@i" class="form-label fw-bold">Người chơi</label>
+                        <select id="IdPlayer_@i" asp-for="@Model[i].IdPlayer" class="form-select" asp-items="ViewBag.IdPlayer">
+                            <option value="">Chọn Người Chơi</option>
+                        </select>
+                        <span asp-validation-for="@Model[i].IdPlayer" class="text-danger"></span>
+                    </div>
+
+                    <!-- Tiền thưởng -->
+                    <div class="form-group mb-3">
+                        <label for="Money_@i" class="form-label fw-bold">Tiền thưởng</label>
+                        <input id="Money_@i" asp-for="@Model[i].Money" class="form-control" placeholder="Nhập số tiền thưởng" />
+                        <span asp-validation-for="@Model[i].Money" class="text-danger"></span>
+                    </div>
+
+                    <!-- Điểm -->
+                    <div class="form-group mb-3">
+                        <label for="Score_@i" class="form-label fw-bold">Điểm</label>
+                        <input id="Score_@i" asp-for="@Model[i].Score" class="form-control" placeholder="Nhập số điểm" />
+                        <span asp-validation-for="@Model[i].Score" class="text-danger"></span>
+                    </div>
+
+                    <!-- Mã hóa đơn -->
+                    <div class="form-group mb-3">
+                        <label for="Id_@i" class="form-label fw-bold">Mã hóa đơn chi</label>
+                        <select id="Id_@i" asp-for="@Model[i].Id" class="form-select" asp-items="ViewBag.Id">
+                            <option value="">Chọn Mã Hóa Đơn</option>
+                        </select>
+                        <span asp-validation-for="@Model[i].Id" class="text-danger"></span>
+                    </div>
+
+                    <!-- Trạng thái -->
+                    <div class="form-group mb-3">
+                        <label for="Status_@i" class="form-label fw-bold">Trạng thái</label>
+                        <select id="Status_@i" asp-for="@Model[i].Status" class="form-select">
+                            <option value="true">Hiện</option>
+                            <option value="false">Ẩn</option>
+                        </select>
+                        <span asp-validation-for="@Model[i].Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary px-4">Tạo Giải Thưởng</button>
+    </div>
+</form>
+
+<div class="text-center mt-4">
+    <a asp-action="Index" asp-route-Id="@ViewBag?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+</div>

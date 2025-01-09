@@ -53,8 +53,8 @@ namespace tcsoft_pingpongclub.Models
 
         public virtual Level? RankEndNavigation { get; set; }
 
-        public virtual Level? RankStartNavigation { get; set; }
 
-        public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
-    }
+    public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
+    public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
+}
 }

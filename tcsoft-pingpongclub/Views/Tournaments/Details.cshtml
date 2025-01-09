@@ -82,6 +82,7 @@
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.IdTournament" class="btn btn-primary">Sửa</a>   
-    <a asp-action="Index" asp-route-IdTournament="@Model?.IdTournament" asp-controller="Groupstages" class="btn btn-info">Danh Sách Bảng Đấu</a>
+    <a asp-action="Index" asp-route-Id="@Model?.IdTournament" asp-controller="Groupstages" class="btn btn-info">Quản Lý Bảng Đấu</a>
+    <a asp-action="Index" asp-route-Id="@Model?.IdTournament" asp-controller="Awards" class="btn btn-info">Quản Lý Giải Thưởng</a>
     <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
 </div>

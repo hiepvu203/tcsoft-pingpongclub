@@ -16,6 +16,7 @@ namespace tcsoft_pingpongclub.Controllers
 	{
 		private readonly ThuctapKtktcn2024Context _context;
 
+<<<<<<< HEAD
 		public TournamentsController(ThuctapKtktcn2024Context context)
 		{
 			_context = context;
@@ -44,6 +45,36 @@ namespace tcsoft_pingpongclub.Controllers
 				})
 				.OrderByDescending(t => t.IdTournament)
 				.ToListAsync();
+=======
+        public TournamentsController(ThuctapKtktcn2024Context context)
+        {
+            _context = context;
+        }
+      
+        // GET: Tournaments
+        public async Task<IActionResult> Index()
+        {
+            var tournamentsWithActualAmount = await _context.Tournaments
+                .Include(t => t.RankEndNavigation)
+                .Include(t => t.RankStartNavigation)
+                .Select(t => new Tournament
+                {
+                    IdTournament = t.IdTournament,
+                    TournamentName = t.TournamentName,
+                    UrlImage = t.UrlImage,
+                    Type = t.Type,
+                    TimeStart = t.TimeStart,
+                    TimeEnd = t.TimeEnd,
+                    Infor=t.Infor,
+                    Amount=t.Amount,
+                    RankStartNavigation = t.RankStartNavigation,
+                    RankEndNavigation = t.RankEndNavigation,
+                    Status = t.Status,
+                    ActualAmount = (short)_context.Players.Count(p => p.IdTournament == t.IdTournament)
+                })
+                .OrderByDescending(t => t.IdTournament)
+                .ToListAsync();
+>>>>>>> origin/TournamentManagerment_Tho
 
 			return View(tournamentsWithActualAmount);
 		}
@@ -139,6 +170,7 @@ namespace tcsoft_pingpongclub.Controllers
 			return View();
 		}
 
+<<<<<<< HEAD
 		// POST: Tournaments/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
@@ -151,6 +183,22 @@ namespace tcsoft_pingpongclub.Controllers
 				var extension = Path.GetExtension(tournament.ImageUpload.FileName);
 				fileName = $"{fileName}_{Guid.NewGuid()}{extension}"; // Thêm định danh duy nhất
 				var filePath = Path.Combine("wwwroot/image", fileName);
+=======
+        // POST: Tournaments/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Tournament tournament)
+        {
+           
+
+            if (ModelState.IsValid && tournament.ImageUpload != null)
+             {
+                // Lấy tên tệp và thêm định danh duy nhất nếu cần
+                var fileName = Path.GetFileNameWithoutExtension(tournament.ImageUpload.FileName);
+                var extension = Path.GetExtension(tournament.ImageUpload.FileName);
+                fileName = $"{fileName}_{Guid.NewGuid()}{extension}"; // Thêm định danh duy nhất
+                var filePath = Path.Combine("wwwroot/image", fileName);
+>>>>>>> origin/TournamentManagerment_Tho
 
 				// Đảm bảo thư mục tồn tại
 				var directory = Path.GetDirectoryName(filePath);

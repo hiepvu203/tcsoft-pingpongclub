@@ -70,11 +70,23 @@ public partial class ThuctapKtktcn2024Context : DbContext
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("money");
             entity.Property(e => e.Score).HasColumnName("score");
+            entity.Property(e => e.IdPlayer).HasColumnName("idPlayer");
             entity.Property(e => e.Status).HasColumnName("status");
 
             entity.HasOne(d => d.IdTournamentNavigation).WithMany(p => p.Awards)
                 .HasForeignKey(d => d.IdTournament)
                 .HasConstraintName("FK_Award_Tournament");
+
+            entity.HasOne(d => d.IdPlayerNavigation)
+                .WithMany(p => p.Awards)
+                .HasForeignKey(d => d.IdPlayer)
+                .HasConstraintName("FK_Award_Player");
+
+            entity.HasOne(d => d.IdNavigation)
+               .WithMany(p => p.Awards)
+               .HasForeignKey(d => d.Id)
+               .HasConstraintName("FK_Award_ExpenseAndIncome");
+
         });
 
         modelBuilder.Entity<ExpenseAndIncome>(entity =>
@@ -89,9 +101,13 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.IdFund).HasColumnName("idFund");
             entity.Property(e => e.IdParty).HasColumnName("idParty");
             entity.Property(e => e.IdReason).HasColumnName("idReason");
+            entity.Property(e => e.IdTournament).HasColumnName("IdTournament");
             entity.Property(e => e.IsDone).HasColumnName("isDone");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.Amount)
+               .HasColumnType("decimal(18, 2)")
+               .HasColumnName("Amount");
 
             entity.HasOne(d => d.IdFundNavigation).WithMany(p => p.ExpenseAndIncomes)
                 .HasForeignKey(d => d.IdFund)
@@ -104,6 +120,9 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.HasOne(d => d.IdReasonNavigation).WithMany(p => p.ExpenseAndIncomes)
                 .HasForeignKey(d => d.IdReason)
                 .HasConstraintName("FK_ExpenseAndIncome_Reason");
+
+            entity.HasOne(d => d.IdTournamentNavigation).WithMany(p => p.ExpenseAndIncomes)
+            .HasForeignKey(d => d.IdTournament).HasConstraintName("FK_ExpenseAndIncome_Tounament");
         });
 
         modelBuilder.Entity<Fund>(entity =>

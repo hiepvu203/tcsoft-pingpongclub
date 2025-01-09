@@ -1,0 +1,87 @@
+﻿@model tcsoft_pingpongclub.Models.Award
+
+@{
+    ViewData["Title"] = "Chỉnh sửa giải thưởng";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="Edit" class="shadow-sm p-4 bg-light rounded">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Hidden Fields -->
+            <input type="hidden" asp-for="IdAward" />
+            <input type="hidden" name="IdTournament" value="@ViewBag.IdTournament" />
+
+            <!-- Thứ hạng -->
+            <div class="form-group mb-3">
+                <label asp-for="IOrder" class="form-label fw-bold">Thứ hạng</label>
+                <select asp-for="IOrder" class="form-select">
+                    <option value="1">Giải Nhất</option>
+                    <option value="2">Giải Nhì</option>
+                    <option value="3">Giải Ba</option>
+                </select>
+                <span asp-validation-for="IOrder" class="text-danger"></span>
+            </div>
+
+            <!-- Tiền thưởng -->
+            <div class="form-group mb-3">
+                <label asp-for="Money" class="form-label fw-bold">Tiền thưởng</label>
+                <input asp-for="Money" class="form-control" placeholder="Nhập số tiền thưởng" />
+                <span asp-validation-for="Money" class="text-danger"></span>
+            </div>
+
+            <!-- Điểm -->
+            <div class="form-group mb-3">
+                <label asp-for="Score" class="form-label fw-bold">Điểm</label>
+                <input asp-for="Score" class="form-control" placeholder="Nhập điểm" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+
+            <!-- Người chơi -->
+            <div class="form-group mb-3">
+                <label asp-for="IdPlayer" class="form-label fw-bold">Người chơi</label>
+                <select asp-for="IdPlayer" class="form-select" asp-items="ViewBag.IdPlayer">
+                    <option value="">Chọn người chơi</option>
+                </select>
+                <span asp-validation-for="IdPlayer" class="text-danger"></span>
+            </div>
+
+            <!-- Mã hóa đơn chi -->
+            <div class="form-group mb-3">
+                <label asp-for="Id" class="form-label fw-bold">Mã hóa đơn chi</label>
+                <select asp-for="Id" class="form-select" asp-items="ViewBag.Id">
+                    <option value="">Chọn mã hóa đơn</option>
+                </select>
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="form-group mb-3">
+                <label asp-for="Status" class="form-label fw-bold">Trạng thái</label>
+                <select asp-for="Status" class="form-select">
+                    <option value="true">Hiện</option>
+                    <option value="false">Ẩn</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- Nút lưu -->
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary px-4">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-action="Index" asp-route-Id="@Model?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -17,17 +17,24 @@ public partial class ExpenseAndIncome
 
     public bool? Type { get; set; }
 
+    public decimal? Amount { get; set; }
+
     public int? IdReason { get; set; }
 
     public short? DaysOverdue { get; set; }
 
     public bool? Status { get; set; }
 
+    public int? IdTournament { get; set; }
+    public virtual Tournament? IdTournamentNavigation { get; set; }
+
     public virtual Fund? IdFundNavigation { get; set; }
 
     public virtual Member? IdPartyNavigation { get; set; }
 
     public virtual Reason? IdReasonNavigation { get; set; }
+
+    public virtual ICollection<Award> Awards { get; set; } = new List<Award>();
 
     public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
 }
