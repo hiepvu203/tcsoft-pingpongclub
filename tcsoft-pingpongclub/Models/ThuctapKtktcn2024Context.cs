@@ -219,11 +219,11 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.ToTable("Member");
 
             entity.HasIndex(e => e.Username, "constraint_name1").IsUnique();
-
             entity.Property(e => e.IdMember).HasColumnName("idMember");
             entity.Property(e => e.Address).HasColumnName("address");
             entity.Property(e => e.Emaill).HasColumnName("emaill");
             entity.Property(e => e.Gender).HasColumnName("gender");
+            entity.Property(e => e.Score).HasColumnName("score");
             entity.Property(e => e.IdLevel).HasColumnName("idLevel");
             entity.Property(e => e.IdRole).HasColumnName("idRole");
             entity.Property(e => e.LinkAvatar)
@@ -251,6 +251,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.HasOne(d => d.IdRoleNavigation).WithMany(p => p.Members)
                 .HasForeignKey(d => d.IdRole)
                 .HasConstraintName("FK_Member_Role");
+    
         });
 
         modelBuilder.Entity<NhaTaiTro>(entity =>

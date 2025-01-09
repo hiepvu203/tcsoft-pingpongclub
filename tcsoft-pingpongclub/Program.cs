@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-using LibSassHost; // Thêm thư viện LibSassHost vào
+using LibSassHost;
+using tcsoft_pingpongclub.Hubs; 
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddSignalR();
 // Cấu hình DbContext
 builder.Services.AddDbContext<ThuctapKtktcn2024Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb")));
@@ -69,5 +70,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<SetRatio>("/setRatio"); 
 
 app.Run();

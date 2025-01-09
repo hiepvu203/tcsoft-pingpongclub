@@ -1,0 +1,672 @@
+﻿<style>
+
+    h1 {
+        color: #333;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .Search {
+        background-color: #fff;
+        
+    }
+
+    .dateSearch label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .dateSearch input[type="date"] {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 1rem;
+    }
+
+    .dateSearch button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .dateSearch button:hover {
+            background-color: #218838;
+        }
+
+    .Match {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .FeaturedMatch {
+        background-color: #fff;
+        border-radius: 8px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            color: #333;
+        }
+
+</style>
+
+
+<h1 class="mt-5 text-center">@ViewBag.Tour.TournamentName</h1>
+
+<div class="">
+    <div class="Search d-flex justify-content-end">
+        <form asp-action="MatchClient" class="d-flex flex-row justify-content-center mb-5">
+ 
+            <div class="dateSearch me-5">
+                <label class="mb-2">Ngày thi đấu</label> <br />
+                <input type="date" style="width:200px" name="TimeSearch" min="@ViewBag.Tour.TimeStart.ToString("yyyy-MM-dd")" max="@ViewBag.Tour.TimeEnd.ToString("yyyy-MM-dd")" value="@ViewBag.TimeSearch.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="dateSearch me-5">
+                <button type="submit" class="btn btn-success mt-4">Tìm kiếm</button>
+            </div>
+        </form>
+    </div>
+
+    @if(ViewBag.ResultSearch == null)
+    {
+        <div class="Match row gap-3 w-full">
+        <div class="FeaturedMatch col-7 d-flex flex-column" >
+            <div class=" w-full" style="">
+                    <table class="table table-bordered align-middle">
+                        <thead>
+                            <tr>
+                                <td colspan="3" style="font-weight:bold; font-size:30px">Trận đấu trong ngày</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!((IEnumerable<dynamic>)ViewBag.todayMatches).Any())
+                            {
+                                <tr>
+                                    <td colspan="3" style="text-align:start; font-weight:bold;font-size:25px; text-align:center">Hôm này không có trận đấu nào</td>
+                                </tr>
+
+                            }
+                            @foreach (var match in ViewBag.todayMatches)
+                            {
+                                <tr>
+                                    <td colspan="3" style="text-align:start; font-weight:bold;font-size:25px">@match.Date?.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                                foreach (var item in match.Matches)
+                                {
+                                    <tr class="parent">
+                                        @if (item.Points1 > item.Points2)
+                                        {
+                                            <td class="text-center bg-cyan-300 text-white" style="width:40%; background-color:rgba(23, 162, 184, 1); font-size:25px">
+
+                                                @item.PlayerName1
+                                                <img src="~/image/@(item.urlPlayer1)" alt="Player 1" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center bg-light" style="width:40%;font-size:25px">
+
+                                                @item.PlayerName1
+                                                <img src="~/image/@(item.urlPlayer1)" alt="Player 1" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                            </td>
+                                        }
+
+                                        <td class="text-center align-middle" style="width:20%">
+                                            @if (item.TimeStart == null)
+                                            {
+                                                <p class="badge bg-danger px-3 py-2 text-decoration-none">Chưa có lịch thi đấu</p>
+                                            }
+                                            else
+                                            {
+                                                if (item.Points2 > item.Points1)
+                                                {
+                                                    <div>
+                                                        <span class="fw-bold fs-4 text-danger">@item.Points1</span>
+                                                        <span class="mx-2">-</span>
+                                                        <span class="fw-bold fs-4 text-success">@item.Points2</span>
+                                                    </div>
+                                                    <div class="mt-1">
+                                                        <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                            @(item.TimeStart?.ToString("HH:mm"))
+
+                                                        </p>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div>
+                                                        <span class="fw-bold fs-4 text-success">@item.Points1</span>
+                                                        <span class="mx-2">-</span>
+                                                        <span class="fw-bold fs-4 text-danger">@item.Points2</span>
+                                                    </div>
+                                                    <div class="mt-1">
+                                                        <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                            @(
+                                                                item.TimeStart?.ToString("HH:mm")
+                                                                )
+                                                        </p>
+                                                    </div>
+                                                }
+
+                                            }
+                                        </td>
+
+                                        @if (item.Points2 > item.Points1)
+                                        {
+                                            <td class="text-center bg-cyan-300 text-white " style="width:40%; background-color:rgba(23, 162, 184, 1);  font-size:22px">
+                                                <img src="~/image/@(item.urlPlayer2)" alt="Player 2" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                                @item.PlayerName2
+
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center bg-light" style="width:40%; font-size:25px">
+                                                <img src="~/image/@(item.urlPlayer2)" alt="Player 2" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                                @item.PlayerName2
+
+                                            </td>
+                                        }
+                                    </tr>
+
+                                    @if (item.ListSet != null && item.ListSet.Count > 0)
+                                    {
+                                        <tr class="child">
+                                            @foreach (var set in item.ListSet)
+                                            {
+                                                <td class="text-center">
+                                                    <h5 class="fw-bold">Set @set.SetName</h5>
+                                                    <span>@set.Ratio</span>
+                                                </td>
+                                            }
+                                        </tr>
+                                        <tr class="child1">
+                                            <td colspan="3" class="text-center">
+                                                <a asp-action="MatchCenter" asp-route-id="@item.IdMatch" class="badge bg-secondary px-3 py-2 text-decoration-none">Xem chi tiết</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr class="child">
+                                            <td colspan="3" class="text-center fw-bold text-danger">
+                                                <span>Trận đấu chưa diễn ra</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="child1">
+                                            <td colspan="3" class="text-center">
+                                                <a asp-action="MatchCenter" asp-route-id="@item.IdMatch" class="badge bg-secondary px-3 py-2 text-decoration-none">Xem chi tiết</a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                }
+                            }
+                            
+                        </tbody>
+                    </table>
+            </div>
+            <div class="d-flex flex-row" style="">
+                    <div class="flex-fill " style="width:40%">
+                        <table class="table table-bordered align-middle">
+                            <thead>
+                                <tr>
+                                    <td colspan="3" style="font-weight:bold; font-size:20px">Trận đấu đã diễn ra</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var match in ViewBag.resultMatches)
+                                {
+                                    <tr>
+                                        <td colspan="3" style="text-align:start; font-weight:bold;font-size:20px">@match.Date?.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                    foreach (var item in match.Matches)
+                                    {
+                                        <tr class="parent">
+                                            @if (item.Points1 > item.Points2)
+                                            {
+                                                <td class="text-center bg-cyan-300 text-white" style="width:40%; background-color:rgba(23, 162, 184, 1); font-size:20px">
+
+                                                    @item.PlayerName1
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center bg-light" style="width:40%;font-size:20px">
+
+                                                    @item.PlayerName1
+                                                  
+                                                </td>
+                                            }
+
+                                            <td class="text-center align-middle" style="width:20%">
+                                                @if (item.TimeStart == null)
+                                                {
+                                                    <p class="badge bg-danger px-3 py-2 text-decoration-none">Chưa có lịch thi đấu</p>
+                                                }
+                                                else
+                                                {
+                                                    if (item.Points2 > item.Points1)
+                                                    {
+                                                        <div>
+                                                            <span class="fw-bold fs-4 text-danger">@item.Points1</span>
+                                                            <span class="mx-2">-</span>
+                                                            <span class="fw-bold fs-4 text-success">@item.Points2</span>
+                                                        </div>
+                                                        <div class="mt-1">
+                                                            <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                                @(item.TimeStart?.ToString("HH:mm"))
+
+                                                            </p>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>
+                                                            <span class="fw-bold fs-4 text-success">@item.Points1</span>
+                                                            <span class="mx-2">-</span>
+                                                            <span class="fw-bold fs-4 text-danger">@item.Points2</span>
+                                                        </div>
+                                                        <div class="mt-1">
+                                                            <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                                @(
+                                                                    item.TimeStart?.ToString("HH:mm")
+                                                                    )
+                                                            </p>
+                                                        </div>
+                                                    }
+
+                                                }
+                                            </td>
+
+                                            @if (item.Points2 > item.Points1)
+                                            {
+                                                <td class="text-center bg-cyan-300 text-white " style="width:40%; background-color:rgba(23, 162, 184, 1);  font-size:20px">
+                                                   
+                                                    @item.PlayerName2
+
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center bg-light" style="width:40%; font-size:20px">
+                                                   
+                                                    @item.PlayerName2
+
+                                                </td>
+                                            }
+                                        </tr>
+
+                                        @if (item.ListSet != null && item.ListSet.Count > 0)
+                                        {
+                                            <tr class="child">
+                                                @foreach (var set in item.ListSet)
+                                                {
+                                                    <td class="text-center">
+                                                        <h5 class="fw-bold">Set @set.SetName</h5>
+                                                        <span>@set.Ratio</span>
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr class="child1">
+                                                <td colspan="3" class="text-center">
+                                                    <a asp-action="MatchCenter" asp-route-id="@item.IdMatch" class="badge bg-secondary px-3 py-2 text-decoration-none">Xem chi tiết</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr class="child">
+                                                <td colspan="3" class="text-center fw-bold text-danger">
+                                                    <span>Trận đấu chưa diễn ra</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="child1">
+                                                <td colspan="3" class="text-center">
+                                                    <a asp-action="MatchCenter" asp-route-id="@item.IdMatch" class="badge bg-secondary px-3 py-2 text-decoration-none">Xem chi tiết</a>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+                                
+                                }
+                            </tbody>
+                        </table>
+                </div>
+                <div class="flex-fill ms-1" style="">
+                        <table class="table table-bordered align-middle">
+                            <thead>
+                                <tr>
+                                    <td colspan="3" style="font-weight:bold; font-size:20px">trận đấu trong tương lai</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var match in ViewBag.futureMatches)
+                                {
+                                    <tr>
+                                        <td colspan="3" style="text-align:start; font-weight:bold;font-size:25px">@match.Date?.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                    foreach (var item in match.Matches)
+                                    {
+                                        <tr class="parent">
+                                            @if (item.Points1 > item.Points2)
+                                            {
+                                                <td class="text-center bg-cyan-300 text-white" style="width:40%; background-color:rgba(23, 162, 184, 1); font-size:25px">
+
+                                                    @item.PlayerName1
+                                                   
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center bg-light" style="width:40%;font-size:25px">
+
+                                                    @item.PlayerName1
+                                                   
+                                                </td>
+                                            }
+
+                                            <td class="text-center align-middle" style="width:20%">
+                                                @if (item.TimeStart == null)
+                                                {
+                                                    <p class="badge bg-danger px-3 py-2 text-decoration-none">Chưa có lịch thi đấu</p>
+                                                }
+                                                else
+                                                {
+                                                    if (item.Points2 > item.Points1)
+                                                    {
+                                                        <div>
+                                                            <span class="fw-bold fs-4 text-danger">@item.Points1</span>
+                                                            <span class="mx-2">-</span>
+                                                            <span class="fw-bold fs-4 text-success">@item.Points2</span>
+                                                        </div>
+                                                        <div class="mt-1">
+                                                            <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                                @(item.TimeStart?.ToString("HH:mm"))
+
+                                                            </p>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>
+                                                            <span class="fw-bold fs-4 text-success">@item.Points1</span>
+                                                            <span class="mx-2">-</span>
+                                                            <span class="fw-bold fs-4 text-danger">@item.Points2</span>
+                                                        </div>
+                                                        <div class="mt-1">
+                                                            <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                                @(
+                                                                    item.TimeStart?.ToString("HH:mm")
+                                                                    )
+                                                            </p>
+                                                        </div>
+                                                    }
+
+                                                }
+                                            </td>
+
+                                            @if (item.Points2 > item.Points1)
+                                            {
+                                                <td class="text-center bg-cyan-300 text-white " style="width:40%; background-color:rgba(23, 162, 184, 1);  font-size:22px">
+                                                   
+                                                    @item.PlayerName2
+
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center bg-light" style="width:40%; font-size:25px">
+                                                   
+                                                    @item.PlayerName2
+
+                                                </td>
+                                            }
+                                        </tr>
+
+                                        @if (item.ListSet != null && item.ListSet.Count > 0)
+                                        {
+                                            <tr class="child">
+                                                @foreach (var set in item.ListSet)
+                                                {
+                                                    <td class="text-center">
+                                                        <h5 class="fw-bold">Set @set.SetName</h5>
+                                                        <span>@set.Ratio</span>
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr class="child1">
+                                                <td colspan="3" class="text-center">
+                                                   
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr class="child">
+                                                <td colspan="3" class="text-center fw-bold text-danger">
+                                                    <span>Trận đấu chưa diễn ra</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="child1">
+                                                <td colspan="3" class="text-center">
+                                       
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+                               
+                                }
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="rank col-4">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">
+                                <span class="h4 text-primary">Vị trí</span>
+
+                            </th>
+                            <th class="text-center">
+
+                                <span class="h4 text-primary">Tên người chơi</span>
+
+                            </th>
+                            <th class="text-center">
+
+                                <span class="h4 text-primary">Số trận thắng</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 1;
+                        }
+                        @foreach (var item in ViewBag.RankTour)
+                        {
+                            <tr class="parent">
+                                <td>@index</td>
+                                <td>@item.NamePlayer</td>
+                                <td>@item.CountMatch</td>
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+        </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <td colspan="3" style="font-weight:bold; font-size:30px">Danh sách trận đấu  tìm kiếm</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!((IEnumerable<dynamic>)ViewBag.ResultSearch).Any())
+                    {
+                        <tr>
+                            <td colspan="3" style="text-align:start; font-weight:bold;font-size:25px; text-align:center">Ngày này không có trận đấu nào</td>
+                        </tr>
+
+                    }
+                    else
+                    {
+                             @foreach (var match in ViewBag.ResultSearch)
+                    {
+                        <tr>
+                            <td colspan="3" style="text-align:start; font-weight:bold;font-size:25px">@match.Date?.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                        foreach(var item in match.Matches)
+                        {
+                                <tr class="parent">
+                                    @if (item.Points1 > item.Points2)
+                                    {
+                                        <td class="text-center bg-cyan-300 text-white" style="width:40%; background-color:rgba(23, 162, 184, 1); font-size:25px">
+
+                                            @item.PlayerName1
+                                            <img src="~/image/@(item.urlPlayer1)" alt="Player 1" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center bg-light" style="width:40%;font-size:25px">
+
+                                            @item.PlayerName1
+                                            <img src="~/image/@(item.urlPlayer1)" alt="Player 1" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                        </td>
+                                    }
+
+                                    <td class="text-center align-middle" style="width:20%">
+                                        @if (item.TimeStart == null)
+                                        {
+                                            <p class="badge bg-danger px-3 py-2 text-decoration-none">Chưa có lịch thi đấu</p>
+                                        }
+                                        else
+                                        {
+                                            if (item.Points2 > item.Points1)
+                                            {
+                                                <div>
+                                                    <span class="fw-bold fs-4 text-danger">@item.Points1</span>
+                                                    <span class="mx-2">-</span>
+                                                    <span class="fw-bold fs-4 text-success">@item.Points2</span>
+                                                </div>
+                                                <div class="mt-1">
+                                                    <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                        @(item.TimeStart?.ToString("HH:mm"))
+
+                                                    </p>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <span class="fw-bold fs-4 text-success">@item.Points1</span>
+                                                    <span class="mx-2">-</span>
+                                                    <span class="fw-bold fs-4 text-danger">@item.Points2</span>
+                                                </div>
+                                                <div class="mt-1">
+                                                    <p class="badge bg-primary px-3 py-2 text-decoration-none">
+                                                        @(
+                                                            item.TimeStart?.ToString("HH:mm")
+                                                            )
+                                                    </p>
+                                                </div>
+                                            }
+
+                                        }
+                                    </td>
+
+                                    @if (item.Points2 > item.Points1)
+                                    {
+                                        <td class="text-center bg-cyan-300 text-white " style="width:40%; background-color:rgba(23, 162, 184, 1);  font-size:22px">
+                                            <img src="~/image/@(item.urlPlayer2)" alt="Player 2" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                            @item.PlayerName2
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center bg-light" style="width:40%; font-size:25px">
+                                            <img src="~/image/@(item.urlPlayer2)" alt="Player 2" style="width: 50px; height: auto" class="rounded-circle ms-2">
+                                            @item.PlayerName2
+
+                                        </td>
+                                    }
+                                </tr>
+
+                            @if (item.ListSet != null && item.ListSet.Count > 0)
+                                {
+                                    <tr class="child">
+                                        @foreach (var set in item.ListSet)
+                                        {
+                                            <td class="text-center">
+                                                <h5 class="fw-bold">Set @set.SetName</h5>
+                                                <span>@set.Ratio</span>
+                                            </td>
+                                        }
+                                    </tr>
+                                <tr class="child1">
+                                    <td colspan="3" class="text-center">
+                                        <a asp-action="MatchCenter" asp-route-id="@item.IdMatch" class="badge bg-secondary px-3 py-2 text-decoration-none">Xem chi tiết</a>
+                                    </td>
+                                </tr>
+                                }
+                                else
+                                {
+                                    <tr class="child">
+                                        <td colspan="3" class="text-center fw-bold text-danger">
+                                            <span>Trận đấu chưa diễn ra</span>
+                                        </td>
+                                    </tr>
+                                <tr class="child1">
+                                    <td colspan="3" class="text-center">
+                                        <a asp-action="MatchCenter" asp-route-id="@item.IdMatch" class="badge bg-secondary px-3 py-2 text-decoration-none">Xem chi tiết</a>
+                                    </td>
+                                </tr>
+                                  
+                                } 
+                            }
+                    }               
+}
+                    
+                </tbody>
+            </table>
+
+        </div>
+    }
+</div>
+
