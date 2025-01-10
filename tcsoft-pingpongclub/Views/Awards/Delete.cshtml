@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Xóa giải thưởng";
 }
-
+<div class="container mt-3">
 <h1 class="text-center text-danger">@ViewData["Title"]</h1>
 
 <h3 class="text-center">Bạn có chắc chắn muốn xóa mục này không?</h3>
@@ -84,4 +84,5 @@
         <button type="submit" class="btn btn-danger px-4">Xóa</button>
     </form>
     <a asp-action="Index" asp-route-Id="@Model?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+</div>
 </div>

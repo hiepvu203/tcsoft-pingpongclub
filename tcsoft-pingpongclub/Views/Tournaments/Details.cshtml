@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Chi tiết giải đấu";
 }
-
+<div class="container mt-3">
 <h1>Chi tiết giải đấu</h1>
 
 <div>
@@ -85,4 +85,5 @@
     <a asp-action="Index" asp-route-Id="@Model?.IdTournament" asp-controller="Groupstages" class="btn btn-info">Quản Lý Bảng Đấu</a>
     <a asp-action="Index" asp-route-Id="@Model?.IdTournament" asp-controller="Awards" class="btn btn-info">Quản Lý Giải Thưởng</a>
     <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+</div>
 </div>

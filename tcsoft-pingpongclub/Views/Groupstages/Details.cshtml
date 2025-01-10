@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Chi Tiết";
 }
-
+<div class="container mt-3">
 <h1 class="text-center mb-4">Chi Tiết Bảng Đấu</h1>
 
 <div class="container">
@@ -61,6 +61,7 @@
         <a asp-action="Edit" asp-route-id="@Model?.IdGroupstage" class="btn btn-primary me-3 px-4">Chỉnh Sửa</a>
         <a asp-action="Index" asp-route-Id="@Model?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
     </div>
+</div>
 </div>
 
 @section Scripts {
