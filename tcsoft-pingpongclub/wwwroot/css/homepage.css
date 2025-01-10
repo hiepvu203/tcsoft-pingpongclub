@@ -8,15 +8,15 @@
     width: 100%;
     border-radius: 0px !important;
   }
-  .TCSoftHomePage{
-    display: flex;
-    justify-content: space-between;
-  }
+.TCSoftHomePage{
+display: flex;
+justify-content: space-between;
+}
 
-  .tintucGiaidau{
-    padding-left: 10%;
-    margin-top: 5%;
-  }
+.tintucGiaidau{
+padding-left: 10%;
+margin-top: 5%;
+}
 
   
 .tintucGiaidau .container {

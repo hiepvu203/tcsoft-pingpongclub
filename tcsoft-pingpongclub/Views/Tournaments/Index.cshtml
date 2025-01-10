@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Danh sách giải đấu";
 }
-
+<div class="px-5 mt-3 ">
 <h1 class="text-center mb-4">Danh sách giải đấu</h1>
 <p>
     <a asp-action="Create" class="btn btn-primary mb-3">Tạo mới</a>
@@ -64,7 +64,6 @@
                     </td>
                     <td>
                         @(item.Type.HasValue ? (item.Type.Value ? "Đấu Cúp" : "Đấu Vòng") : "Không xác định")
-
                     </td>
                     <td>
                         <div class="scrollable-cell">
@@ -123,7 +122,7 @@
         }
     </tbody>
 </table>
-
+</div>
 @section Scripts {
     <script>
         // Tìm kiếm theo tên
