@@ -3,12 +3,14 @@ using tcsoft_pingpongclub.Models;
 using tcsoft_pingpongclub.Service;
 using tcsoft_pingpongclub.Filter;
 using LibSassHost; // Thêm thư viện LibSassHost vào
-using LibSassHost;
 using tcsoft_pingpongclub.Hubs; 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR();
 // Cấu hình DbContext
+// Cấu hình mã hóa UTF-8
+Console.OutputEncoding = System.Text.Encoding.UTF8;
+
 builder.Services.AddDbContext<ThuctapKtktcn2024Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb")));
 
@@ -48,5 +50,5 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "permissionRole",
     pattern: "{controller=PermissionRoles}/{action=Index}/{id?}");
-
+app.MapHub<SetRatio>("/setRatio");
 app.Run();

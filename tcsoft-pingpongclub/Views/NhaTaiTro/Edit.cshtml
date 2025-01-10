@@ -3,26 +3,42 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>NhaTaiTro</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdSponor" />
+
+            <!-- Tên nhà tài trợ -->
             <div class="form-group">
                 <label asp-for="NameSponer" class="control-label"></label>
                 <input asp-for="NameSponer" class="form-control" />
                 <span asp-validation-for="NameSponer" class="text-danger"></span>
             </div>
+
+            <!-- Hiển thị ảnh hiện tại nếu có -->
             <div class="form-group">
-                <label asp-for="UrlLogo" class="control-label"></label>
-                <input asp-for="UrlLogo" class="form-control" />
-                <span asp-validation-for="UrlLogo" class="text-danger"></span>
+                <label>Current Logo</label>
+                @if (!string.IsNullOrEmpty(Model.UrlLogo))
+                {
+                    <div>
+                        <img src="~/images/@Model.UrlLogo" alt="Logo" style="max-width: 200px; max-height: 200px;" />
+                    </div>
+                }
+                else
+                {
+                    <p>No logo available</p>
+                }
             </div>
+
+            <!-- Chọn ảnh mới -->
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Upload New Logo</label>
+                <input asp-for="ImageFile" class="form-control" type="file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <!-- Nút lưu -->
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -30,10 +46,13 @@
     </div>
 </div>
 
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

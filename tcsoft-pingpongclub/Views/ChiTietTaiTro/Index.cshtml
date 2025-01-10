@@ -1,0 +1,69 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Sponor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link href="~/css/expenseandincome.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="main-feture">
+        <div class="dropdown-container">
+            <button class="dropdown-btn">Options</button>
+            <div class="dropdown-content">
+                <a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Tài chính</a>
+                <a asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Nhà tài trợ</a>
+                <a asp-area="" asp-controller="Reason" asp-action="Index">Lý do</a>
+                <a asp-area="" asp-controller="ChiTietTaiTro" asp-action="Index">Chi tiết tài trợ</a>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a asp-action="Search" class="btn-primary">Tìm kiếm</a>
+            <a asp-action="Create" class="btn-primary">Thêm mới</a>
+            <a asp-action="Index" class="btn-primary">Làm mới</a>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>Mã tài trợ</th>
+                <th>Giải đấu</th>
+                <th>Nhà tài trợ</th>
+                <th>Tiền tài trợ</th>
+                <th>Ngày</th>
+                <th>Ghi chú</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.IdSponorTour)</td>
+                    <td>
+                        @(item.IdTournamentNavigation != null
+                            ? item.IdTournamentNavigation.TournamentName +
+                            " ( " + (item.IdTournamentNavigation.TimeStart.HasValue
+                            ? item.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy")
+                            : "N/A") +
+                            " - " + (item.IdTournamentNavigation.TimeEnd.HasValue
+                            ? item.IdTournamentNavigation.TimeEnd.Value.ToString("dd/MM/yyyy")
+                            : "N/A") + " )"
+                            : "N/A")
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.IdSponorNavigation.NameSponer)</td>
+                    <td>@item.Money.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                    <td>@item.CreatedDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@Html.DisplayFor(modelItem => item.Other)</td>
+                    <td>
+                        <a class="btn-warning" asp-action="Edit" asp-route-id="@item.IdSponorTour">Sửa</a>
+                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.IdSponorTour">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

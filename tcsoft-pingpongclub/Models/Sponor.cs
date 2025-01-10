@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace tcsoft_pingpongclub.Models;
 
@@ -7,9 +8,7 @@ public partial class Sponor
 {
     public int IdSponorTour { get; set; }
 
-    public int? IdIncome { get; set; }
-
-    public decimal? Money { get; set; }
+    public decimal Money { get; set; }
 
     public int? IdTournament { get; set; }
 
@@ -19,9 +18,11 @@ public partial class Sponor
 
     public string? Other { get; set; }
 
-    public virtual ExpenseAndIncome? IdIncomeNavigation { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime? CreatedDate { get; set; }
 
     public virtual NhaTaiTro? IdSponorNavigation { get; set; }
 
     public virtual Tournament? IdTournamentNavigation { get; set; }
+    public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
 }

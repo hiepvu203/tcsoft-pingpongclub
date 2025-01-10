@@ -4,7 +4,7 @@
 
 }
 
-<nav class="navbar">
+<nav class="headerNvabar">
     <ul>
         <li class="img-logo-header"><img src="~/image/logo.png"></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
@@ -14,25 +14,7 @@
         <li><a asp-area="" asp-controller="Members" asp-action="Index">Quản lý xếp hạng</i></a></li>
         <li><a asp-area="" asp-controller="RegTour" asp-action="Index">Đăng ký giải đấu</a></li>
         <li><a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Quản lý thu chi</i></a></li>
-        <li><a asp-area="" asp-controller="User" asp-action="Index">Chỉnh sửa thông tin cá nhân</a></li>
-        @if (isLoggedIn == null)
-        {
-            isLoggedIn = "";
-            <p>@isLoggedIn</p>
-        }
-        <li id="SignInButtonHomePage"><a asp-controller="Login" asp-action="Index">Đăng nhập</a></li>
-        @if (isLoggedIn != null)
-        {
-            <form class="formLogout" asp-action="Logout" asp-controller="Account" method="post"
-                style="display:@(isLoggedIn != null ? "inline" : "none");">
-                <li id="RegisterButtonHomePage">
-                    <a asp-controller="" asp-action="">
-                        <button type="submit" id="RegisterButtonHomePage">
-                            Đăng Xuất
-                        </button>
-                    </a>
-                </li>
-            </form>
-        }
+        <li><a asp-area="" asp-controller="User" asp-action="Index">Chỉnh sửa thông tin cá nhân</i></a></li>
+       
     </ul>
 </nav>

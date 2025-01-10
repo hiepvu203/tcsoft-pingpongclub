@@ -1,74 +1,71 @@
 ﻿@model IEnumerable<tcsoft_pingpongclub.Models.ExpenseAndIncome>
 
-@{
-    ViewData["Title"] = "Index";
-}
+<link href="~/css/expenseandincome.css" rel="stylesheet" />
 
+<div class="container">
+    <div class="main-feture">
+        <div class="dropdown-container">
+            <button class="dropdown-btn">Options</button>
+            <div class="dropdown-content">
+                <a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Tài chính</a>
+                <a asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Nhà tài trợ</a>
+                <a asp-area="" asp-controller="Reason" asp-action="Index">Lý do</a>
+                <a asp-area="" asp-controller="ChiTietTaiTro" asp-action="Index">Chi tiết tài trợ</a>
+            </div>
+        </div>
 
-<p>
-    <a class="nav-link text-dark" asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Financial</a>
-</p>
-<p>
-    <a class="nav-link text-dark" asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Sponsors</a>
-</p>
-<p>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
-</p>
-<h1>Index</h1>
-<p>
-    <a asp-action="Create">Thêm mới</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã thu chi</th>
-            <th>Kế toán</th>
-            <th>Hoàn thành</th>
-            <th>Loại</th>
-            <th>Quá hạn</th>
-            <th>Trạng thái</th>
-            <th>Qũy</th>
-            <th>Người thu/chi</th>
-            <th>Lý do</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+        <div class="actions">
+            <a asp-action="Statistics" class="btn-primary">Thống kê</a>
+            <a asp-action="Search" class="btn-primary">Tìm kiếm</a>
+            <a asp-action="Index" class="btn-primary">Làm mới</a>
+            <a class="btn-primary" asp-action="Create">Thêm mới</a>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <table class="custom-table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdAccountant)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsDone)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DaysOverdue)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdFundNavigation.IdFund)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdPartyNavigation.IdMember)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdReasonNavigation.IdReason)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th>Mã</th>
+                <th>Loại</th>
+                <th>Kế toán</th>
+                <th>Quỹ</th>
+                <th>Người nộp</th>
+                <th>Số tiền</th>
+                <th>Ngày tạo</th>
+                <th>Lý do</th>
+                <th>Giải đấu</th>
+                <th>Quá hạn</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td>@(item.Type == true ? "Chi" : "Thu")</td>
+                    <td>@Html.DisplayFor(modelItem => item.AccountantName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdFundNavigation.FundName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdPartyNavigation.MemberName)</td>
+                    <td>@item.Amount.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                    <td>@item.CreatedDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdReasonNavigation.ReasonName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdTournamentNavigation.TournamentName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DaysOverdue)</td>
+                    <td>@(item.IsDone == true ? "Hoàn thành" : "Chưa hoàn thành")</td>
+                    <td>
+                        @if(item.IsDone == true)
+                        {
+                            <a class="btn-warning" asp-action="Edit" asp-route-id="@item.Id">Xem</a>
+                        }else{
+                            <a class="btn-warning" asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                        }
+                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

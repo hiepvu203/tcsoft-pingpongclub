@@ -1,0 +1,47 @@
+﻿@model tcsoft_pingpongclub.Models.Sponor
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdTournament" class="control-label">Giải đấu</label>
+                <select asp-for="IdTournament" class ="form-control" asp-items="ViewBag.IdTournament"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdSponor" class="control-label">Nhà tài trợ</label>
+                <select asp-for="IdSponor" class ="form-control" asp-items="ViewBag.IdSponor"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Money" class="control-label">Tiền tài trợ</label>
+                <input asp-for="Money" class="form-control" />
+                <span asp-validation-for="Money" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="CreatedDate" class="form-label">Ngày tạo</label>
+                <input asp-for="CreatedDate" class="form-input" type="date" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Other" class="control-label">Ghi chú</label>
+                <input asp-for="Other" class="form-control" />
+                <span asp-validation-for="Other" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

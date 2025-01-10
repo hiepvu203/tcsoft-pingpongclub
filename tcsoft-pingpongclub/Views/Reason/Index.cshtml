@@ -1,10 +1,8 @@
-﻿@model IEnumerable<tcsoft_pingpongclub.Models.NhaTaiTro>
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Reason>
 
 @{
-    ViewData["Title"] = "Danh sách nhà tài trợ";
+    ViewData["Title"] = "Index";
 }
-
-
 <link href="~/css/expenseandincome.css" rel="stylesheet" />
 <div class="container">
     <div class="main-feture">
@@ -27,8 +25,8 @@
         <thead>
             <tr>
                 <th>Mã</th>
-                <th>Tên nhà tài trợ</th>
-                <th>Logo</th>
+                <th>Tên lý do</th>
+                <th>Loại</th>
                 <th>Hành động</th>
             </tr>
         </thead>
@@ -36,22 +34,12 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.IdSponor)</td>
-                    <td>@Html.DisplayFor(modelItem => item.NameSponer)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdReason)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ReasonName)</td>
+                    <td>@(item.Type == true ? "Chi" : "Thu")</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.UrlLogo))
-                        {
-                            <img src="@Url.Content("~/images/" + item.UrlLogo)" alt="Logo" class="img-fluid" style="max-width: 100px; height: auto;" />
-                        }
-                        else
-                        {
-                            <span>Không có logo</span>
-                        }
-                    </td>
-                    <td>
-
-                        <a class="btn-warning" asp-action="Edit" asp-route-id="@item.IdSponor">Sửa</a>
-                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.IdSponor">Xóa</a>
+                        <a class="btn-warning" asp-action="Edit" asp-route-id="@item.IdReason">Sửa</a>
+                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.IdReason">Xóa</a>
                     </td>
                 </tr>
             }

@@ -1,0 +1,80 @@
+﻿.container {
+    max-width: 1200px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    font-size: 1.75rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Form Controls */
+.form-select, .form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 12px;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+}
+
+.form-check-label {
+    font-size: 1rem;
+    color: #333;
+}
+
+.form-check-input {
+    width: 20px;
+    height: 20px;
+}
+
+/* Button */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+/* Grid Layout */
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.col-lg-4, .col-md-6, .col-12 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+}
+
+/* Radio Button Spacing */
+.d-flex .form-check {
+    margin-right: 20px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}

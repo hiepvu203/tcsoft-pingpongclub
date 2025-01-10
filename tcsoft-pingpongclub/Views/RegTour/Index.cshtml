@@ -38,7 +38,7 @@
 		<div class="tournament-highlight">
 			<a href="@Url.Action("Details", new { id = newestTournament.IdTournament })" class="tournament-link">
 				<div class="highlight-image">
-					<img src="~/image/@(newestTournament.UrlImage ?? "defaultImage.jpg")" alt="Featured Tournament" />
+					<img src="@(newestTournament.UrlImage ?? "defaultImage.jpg")" alt="Featured Tournament" />
 				</div>
 				<div class="highlight-details">
 					<h2>@newestTournament.TournamentName</h2>
@@ -154,7 +154,7 @@
 
 	.highlight-image {
 		width: 50%;
-		height: 200px;
+		height: 400px;
 	}
 
 	.highlight-image img {

@@ -1,0 +1,39 @@
+﻿@model tcsoft_pingpongclub.Models.Reason
+
+@{
+    ViewData["Title"] = "Create";
+}
+<link href="~/css/expenseandincomeformcreate.css" rel="stylesheet" />
+<div class="form-container">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ReasonName" class="control-label">Tên lý do</label>
+                <input asp-for="ReasonName" class="form-control" />
+                <span asp-validation-for="ReasonName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Loại</label>
+                <div class="radio-group">
+                    <input type="radio" asp-for="Type" value="false" id="TypeThu" class="form-radio" />
+                    <label for="TypeThu" class="radio-label">Thu</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" asp-for="Type" value="true" id="TypeChi" class="form-radio" />
+                    <label for="TypeChi" class="radio-label">Chi</label>
+                </div>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -3,71 +3,108 @@
 @{
     ViewData["Title"] = "Create";
 }
+<link href="~/css/formcreatev2.css" rel="stylesheet" />
+@* <link href="~/css/expenseandincomeformcreate.css" rel="stylesheet" /> *@
 
-<h1>Create</h1>
+<div class="form-container">
+    <form asp-action="Create" class="form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h4>ExpenseAndIncome</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <!-- Groupbox 1 -->
+        <fieldset class="groupbox">
+            <legend>Thông tin cơ bản</legend>
             <div class="form-group">
-                <label asp-for="IdFund" class="control-label"></label>
-                <select asp-for="IdFund" class ="form-control" asp-items="ViewBag.IdFund"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdParty" class="control-label"></label>
-                <select asp-for="IdParty" class ="form-control" asp-items="ViewBag.IdParty"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdAccountant" class="control-label"></label>
-                <input asp-for="IdAccountant" class="form-control" />
+                <label for="IdAccountant" class="form-label">Kế toán</label>
+                <input asp-for="IdAccountant" class="form-input" />
                 <span asp-validation-for="IdAccountant" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IsDone" class="control-label"></label>
-                <input asp-for="IsDone" class="form-control" />
-                <span asp-validation-for="IsDone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Loại</label>
-                <div>
-                    <input type="radio" asp-for="Type" value="false" id="TypeThu" />
-                    <label for="TypeThu">Thu</label>
+
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label for="IdFund" class="form-label">Chọn quỹ</label>
+                    <select asp-for="IdFund" class="form-select" asp-items="ViewBag.IdFund"></select>
                 </div>
-                <div>
-                    <input type="radio" asp-for="Type" value="true" id="TypeChi" />
-                    <label for="TypeChi">Chi</label>
+
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label">Loại</label>
+                    <div class="radio-group">
+                        <input type="radio" asp-for="Type" value="false" id="TypeThu" class="form-radio" onchange="toggleMemberList()" />
+                        <label for="TypeThu" class="radio-label">Thu</label>
+                        <input type="radio" asp-for="Type" value="true" id="TypeChi" class="form-radio" onchange="toggleMemberList()" />
+                        <label for="TypeChi" class="radio-label">Chi</label>
+                    </div>
+                    <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
-                <span asp-validation-for="Type" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="IdReason" class="control-label"></label>
-                <select asp-for="IdReason" class ="form-control" asp-items="ViewBag.IdReason"></select>
+                <label for="IdReason" class="form-label">Lý do</label>
+                <select asp-for="IdReason" class="form-select" id="IdReason">
+                    <option value="">Chọn lý do</option>
+                </select>
             </div>
+
+            <div class="form-group" id="bulkAddGroup" style="display:none;">
+                <input type="checkbox" id="isBulkAdd" onchange="toggleMemberList()" />
+                <label for="isBulkAdd" class="checkbox-label">Bạn có muốn thêm toàn bộ?</label>
+            </div>
+
+            <div class="form-group" id="membersList" style="display:none;">
+                <label for="IdParty" class="form-label">Thành viên</label>
+                <select asp-for="IdParty" class="form-select" asp-items="ViewBag.IdParty">
+                    <option value="">Chọn thành viên</option>
+                </select>
+                <input type="hidden" asp-for="IdParty" id="selectedMemberId" />
+            </div>
+
             <div class="form-group">
-                <label asp-for="DaysOverdue" class="control-label"></label>
-                <input asp-for="DaysOverdue" class="form-control" />
-                <span asp-validation-for="DaysOverdue" class="text-danger"></span>
+                <label asp-for="Amount" class="form-label">Số tiền</label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <label for="CreatedDate" class="form-label">Ngày tạo</label>
+                <input asp-for="CreatedDate" class="form-input" type="date" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
             </div>
+        </fieldset>
+
+        <!-- Groupbox 2 -->
+        <fieldset class="groupbox">
+            <legend>Thông tin bổ sung</legend>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label for="IdTournament" class="form-label">Giải đấu</label>
+                <select asp-for="IdTournament" class="form-select" asp-items="ViewBag.IdTournament">
+                    <option value="">Chọn giải đấu</option>
+                </select>
             </div>
-        </form>
+
+            <div class="form-group">
+                <label for="IdSponorDetail" class="form-label">Nhà tài trợ</label>
+                <select asp-for="IdSponorDetail" class="form-select" asp-items="ViewBag.IdSponorDetail">
+                    <option value="">Chọn nhà tài trợ</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn-submit" />
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="Index" class="back-link">Back to List</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/getreason.js"></script>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+

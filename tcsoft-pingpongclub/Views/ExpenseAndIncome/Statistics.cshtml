@@ -1,0 +1,45 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.ViewModels.StatisticsViewModel>
+
+<h2>Thống kê thu chi</h2>
+
+<form method="get" asp-action="Statistics" class="mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="month" class="form-label">Tháng:</label>
+            <input type="number" id="month" name="month" class="form-control" min="1" max="12" value="@ViewData["Month"]" placeholder="Nhập tháng (1-12)" required />
+        </div>
+        <div class="col-md-4">
+            <label for="year" class="form-label">Năm:</label>
+            <input type="number" id="year" name="year" class="form-control" min="2000" max="@DateTime.Now.Year" value="@ViewData["Year"]" placeholder="Nhập năm" required />
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tháng</th>
+            <th>Năm</th>
+            <th>Quỹ</th>
+            <th>Tổng thu</th>
+            <th>Tổng chi</th>
+            <th>Số dư</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stat in Model)
+        {
+            <tr>
+                <td>@stat.Month</td>
+                <td>@stat.Year</td>
+                <td>@stat.FundName</td>
+                <td>@stat.TotalIncome.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                <td>@stat.TotalExpense.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                <td>@stat.Balance.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
