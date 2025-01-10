@@ -120,200 +120,202 @@ namespace tcsoft_pingpongclub.Controllers
 
 			return View(tournament);
 		}
-		
 
-		// GET: Tournaments/Create
-		public IActionResult Create()
-		{
-			ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName");
-			ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName");
-			ViewBag.TypeList = new SelectList(new[]
-			{
-				new { Value = true, Text = "Đấu Cúp" },
-				new { Value = false, Text = "Đấu Vòng" }
-			}, "Value", "Text");
-			ViewBag.StatusList = new SelectList(new[]
-			{
-				new { Value = true, Text = "Đang diễn ra" },
-				new { Value = false, Text = "Ẩn" }
-			}, "Value", "Text");
-			return View();
-		}
 
-		// POST: Tournaments/Create
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(Tournament tournament)
-		{
-			if (ModelState.IsValid && tournament.ImageUpload != null)
-			 {
-				// Lấy tên tệp và thêm định danh duy nhất nếu cần
-				var fileName = Path.GetFileNameWithoutExtension(tournament.ImageUpload.FileName);
-				var extension = Path.GetExtension(tournament.ImageUpload.FileName);
-				fileName = $"{fileName}_{Guid.NewGuid()}{extension}"; // Thêm định danh duy nhất
-				var filePath = Path.Combine("wwwroot/image", fileName);
+        // GET: Tournaments/Create
+        public IActionResult Create()
+        {
+            ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName");
+            ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName");
+            ViewBag.TypeList = new SelectList(new[]
+            {
+                new { Value = true, Text = "Đấu Cúp" },
+                new { Value = false, Text = "Đấu Vòng" }
+            }, "Value", "Text");
+            ViewBag.StatusList = new SelectList(new[]
+            {
+                new { Value = true, Text = "Đang diễn ra" },
+                new { Value = false, Text = "Ẩn" }
+            }, "Value", "Text");
+            return View();
+        }
 
-				// Đảm bảo thư mục tồn tại
-				var directory = Path.GetDirectoryName(filePath);
-				if (!Directory.Exists(directory))
-				{
-					Directory.CreateDirectory(directory);
-				}
+        // POST: Tournaments/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Tournament tournament)
+        {
 
-				// Lưu tệp vào thư mục
-				using (var stream = new FileStream(filePath, FileMode.Create))
-				{
-					await tournament.ImageUpload.CopyToAsync(stream);
-				}
 
-				// Lưu URL của tệp vào model
-				tournament.UrlImage = "/image/" + fileName;
-				// Thêm dữ liệu vào cơ sở dữ liệu
-				_context.Add(tournament);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			else
-			{
-				ModelState.AddModelError(nameof(tournament.ImageUpload), "Vui lòng chọn hình ảnh.");
-				ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
-				ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
-				ViewBag.TypeList = new SelectList(new[] { new { Value = true, Text = "Đấu Cúp" }, new { Value = false, Text = "Đấu Vòng" } }, "Value", "Text", tournament.Type);
-				ViewBag.StatusList = new SelectList(new[] { new { Value = true, Text = "Đang diễn ra" }, new { Value = false, Text = "Ẩn" } }, "Value", "Text", tournament.Status);             
-			}
-			return View(tournament);
-		}
+            if (ModelState.IsValid && tournament.ImageUpload != null)
+            {
+                // Lấy tên tệp và thêm định danh duy nhất nếu cần
+                var fileName = Path.GetFileNameWithoutExtension(tournament.ImageUpload.FileName);
+                var extension = Path.GetExtension(tournament.ImageUpload.FileName);
+                fileName = $"{fileName}_{Guid.NewGuid()}{extension}"; // Thêm định danh duy nhất
+                var filePath = Path.Combine("wwwroot/image", fileName);
 
-		// GET: Tournaments/Edit/5
-		public async Task<IActionResult> Edit(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+                // Đảm bảo thư mục tồn tại
+                var directory = Path.GetDirectoryName(filePath);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
 
-			var tournament = await _context.Tournaments.FindAsync(id);
-			if (tournament == null)
-			{
-				return NotFound();
-			}
-			ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
-			ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
-			ViewBag.TypeList = new SelectList(new[]
-			{
-				new { Value = true, Text = "Đấu Cúp" },
-				new { Value = false, Text = "Đấu Vòng" }
-			}, "Value", "Text", tournament.Type);
-			ViewBag.StatusList = new SelectList(new[]
-			{
-				new { Value = true, Text = "Đang Diễn Ra" },
-				new { Value = false, Text = "Ẩn" }
-			}, "Value", "Text", tournament.Status);
-			ViewData["UrlImage"] = tournament.UrlImage;
-			return View(tournament);
-		}
+                // Lưu tệp vào thư mục
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await tournament.ImageUpload.CopyToAsync(stream);
+                }
 
-		// POST: Tournaments/Edit/5
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id,[Bind("IdTournament,TournamentName,Type,TimeStart,TimeEnd,UrlImage,Amount,RankStart,RankEnd,Infor,Status,ImageUpload")] Tournament tournament)
-		{
-			if (id != tournament.IdTournament)
-			{
-				return NotFound();
-			}
+                // Lưu URL của tệp vào model
+                tournament.UrlImage = "/image/" + fileName;
+                // Thêm dữ liệu vào cơ sở dữ liệu
+                _context.Add(tournament);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ModelState.AddModelError(nameof(tournament.ImageUpload), "Vui lòng chọn hình ảnh.");
+                ViewData["Rank"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
+                ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
+                ViewBag.TypeList = new SelectList(new[] { new { Value = true, Text = "Đấu Cúp" }, new { Value = false, Text = "Đấu Vòng" } }, "Value", "Text", tournament.Type);
+                ViewBag.StatusList = new SelectList(new[] { new { Value = true, Text = "Đang diễn ra" }, new { Value = false, Text = "Ẩn" } }, "Value", "Text", tournament.Status);
+            }
+            return View(tournament);
+        }
 
-			// Lấy giải đấu hiện tại trong cơ sở dữ liệu
-			var existingTournament = await _context.Tournaments
-				.FirstOrDefaultAsync(t => t.IdTournament == id);
+        // GET: Tournaments/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-			if (existingTournament == null)
-			{
-				return NotFound(); // Không tìm thấy giải đấu
-			}
-			if (ModelState.IsValid)
-			{
-				try
-				{
-				   
+            var tournament = await _context.Tournaments.FindAsync(id);
+            if (tournament == null)
+            {
+                return NotFound();
+            }
+            ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
+            ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
+            ViewBag.TypeList = new SelectList(new[]
+            {
+                new { Value = true, Text = "Đấu Cúp" },
+                new { Value = false, Text = "Đấu Vòng" }
+            }, "Value", "Text", tournament.Type);
+            ViewBag.StatusList = new SelectList(new[]
+            {
+                new { Value = true, Text = "Đang Diễn Ra" },
+                new { Value = false, Text = "Ẩn" }
+            }, "Value", "Text", tournament.Status);
+            ViewData["UrlImage"] = tournament.UrlImage;
+            return View(tournament);
+        }
 
-					// Kiểm tra và xử lý hình ảnh nếu có
-					if (tournament.ImageUpload != null)
-					{
-						// Lấy đường dẫn của ảnh cũ
-						var oldUrlImage = existingTournament.UrlImage;
-						if (!string.IsNullOrEmpty(oldUrlImage))
-						{
-							var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", oldUrlImage.TrimStart('/'));
-							if (System.IO.File.Exists(oldFilePath))
-							{
-								System.IO.File.Delete(oldFilePath); // Xóa tệp ảnh cũ
-							}
-						}
+        // POST: Tournaments/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("IdTournament,TournamentName,Type,TimeStart,TimeEnd,UrlImage,Amount,RankStart,RankEnd,Infor,Status,ImageUpload")] Tournament tournament)
+        {
+            if (id != tournament.IdTournament)
+            {
+                return NotFound();
+            }
 
-						// Tạo tên tệp duy nhất
-						var fileName = $"{Path.GetFileNameWithoutExtension(tournament.ImageUpload.FileName)}_{Guid.NewGuid()}{Path.GetExtension(tournament.ImageUpload.FileName)}";
-						var filePath = Path.Combine("wwwroot/image", fileName);
+            // Lấy giải đấu hiện tại trong cơ sở dữ liệu
+            var existingTournament = await _context.Tournaments
+                .FirstOrDefaultAsync(t => t.IdTournament == id);
 
-						// Đảm bảo thư mục tồn tại
-						var directory = Path.GetDirectoryName(filePath);
-						if (!Directory.Exists(directory))
-						{
-							Directory.CreateDirectory(directory);
-						}
+            if (existingTournament == null)
+            {
+                return NotFound(); // Không tìm thấy giải đấu
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
 
-						// Lưu tệp vào thư mục
-						using (var stream = new FileStream(filePath, FileMode.Create))
-						{
-							await tournament.ImageUpload.CopyToAsync(stream);
-						}
 
-						// Cập nhật URL của tệp vào model
-						tournament.UrlImage = "/image/" + fileName;
-					}
-					else
-					{
-						// Giữ nguyên UrlImage nếu không thay đổi ảnh
-						tournament.UrlImage = existingTournament.UrlImage;
-					}
+                    // Kiểm tra và xử lý hình ảnh nếu có
+                    if (tournament.ImageUpload != null)
+                    {
+                        // Lấy đường dẫn của ảnh cũ
+                        var oldUrlImage = existingTournament.UrlImage;
+                        if (!string.IsNullOrEmpty(oldUrlImage))
+                        {
+                            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", oldUrlImage.TrimStart('/'));
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath); // Xóa tệp ảnh cũ
+                            }
+                        }
 
-					// Cập nhật thông tin giải đấu vào cơ sở dữ liệu
-					_context.Entry(existingTournament).CurrentValues.SetValues(tournament);
-					await _context.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!TournamentExists(tournament.IdTournament))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
+                        // Tạo tên tệp duy nhất
+                        var fileName = $"{Path.GetFileNameWithoutExtension(tournament.ImageUpload.FileName)}_{Guid.NewGuid()}{Path.GetExtension(tournament.ImageUpload.FileName)}";
+                        var filePath = Path.Combine("wwwroot/image", fileName);
 
-				return RedirectToAction(nameof(Index));
-			}
+                        // Đảm bảo thư mục tồn tại
+                        var directory = Path.GetDirectoryName(filePath);
+                        if (!Directory.Exists(directory))
+                        {
+                            Directory.CreateDirectory(directory);
+                        }
 
-			ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
-			ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
-			ViewBag.TypeList = new SelectList(new[]
-			{
-				new { Value = true, Text = "Đấu Cúp" },
-				new { Value = false, Text = "Đấu Vòng" }
-			}, "Value", "Text", tournament.Type);
-			ViewBag.StatusList = new SelectList(new[]
-			{
-				new { Value = true, Text = "Đang Diễn Ra" },
-				new { Value = false, Text = "Ẩn" }
-			}, "Value", "Text", tournament.Status);
-			ViewData["UrlImage"] = existingTournament.UrlImage;
-			return View(tournament);
-		}
+                        // Lưu tệp vào thư mục
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await tournament.ImageUpload.CopyToAsync(stream);
+                        }
 
-		// GET: Tournaments/Delete/5
-		public async Task<IActionResult> Delete(int? id)
+                        // Cập nhật URL của tệp vào model
+                        tournament.UrlImage = "/image/" + fileName;
+                    }
+                    else
+                    {
+                        // Giữ nguyên UrlImage nếu không thay đổi ảnh
+                        tournament.UrlImage = existingTournament.UrlImage;
+                    }
+
+                    // Cập nhật thông tin giải đấu vào cơ sở dữ liệu
+                    _context.Entry(existingTournament).CurrentValues.SetValues(tournament);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TournamentExists(tournament.IdTournament))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["RankEnd"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankEnd);
+            ViewData["RankStart"] = new SelectList(_context.Levels, "IdLevel", "LevelName", tournament.RankStart);
+            ViewBag.TypeList = new SelectList(new[]
+            {
+                new { Value = true, Text = "Đấu Cúp" },
+                new { Value = false, Text = "Đấu Vòng" }
+            }, "Value", "Text", tournament.Type);
+            ViewBag.StatusList = new SelectList(new[]
+            {
+                new { Value = true, Text = "Đang Diễn Ra" },
+                new { Value = false, Text = "Ẩn" }
+            }, "Value", "Text", tournament.Status);
+            ViewData["UrlImage"] = existingTournament.UrlImage;
+            return View(tournament);
+        }
+
+        // GET: Tournaments/Delete/5
+        public async Task<IActionResult> Delete(int? id)
 		{
 			if (id == null)
 			{

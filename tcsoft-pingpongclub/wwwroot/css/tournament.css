@@ -19,3 +19,7 @@
     max-height: 130px;
     overflow-y: auto;
 }
+.tho-container{
+    padding: 0 100px;
+    margin-top: 20px;
+}

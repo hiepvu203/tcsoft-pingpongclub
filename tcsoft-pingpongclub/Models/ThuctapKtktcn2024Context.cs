@@ -89,6 +89,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
 
         });
 
+
         modelBuilder.Entity<ExpenseAndIncome>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk");
@@ -100,7 +101,6 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.IdAccountant).HasColumnName("idAccountant");
             entity.Property(e => e.IdFund).HasColumnName("idFund");
             entity.Property(e => e.IdParty).HasColumnName("idParty");
-            entity.Property(e => e.IdTournament).HasColumnName("idTournament");
             entity.Property(e => e.IdSponorDetail).HasColumnName("idSponorDetail");
             entity.Property(e => e.IdReason).HasColumnName("idReason");
             entity.Property(e => e.IdTournament).HasColumnName("IdTournament");
@@ -483,6 +483,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
                 .HasForeignKey(d => d.RankStart)
                 .HasConstraintName("FK_Tournament_Level");
         });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

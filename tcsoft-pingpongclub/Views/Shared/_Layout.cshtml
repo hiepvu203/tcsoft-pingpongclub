@@ -17,13 +17,13 @@
     <link rel="stylesheet" href="~/cssUser/user.css" />
     <link rel="stylesheet" href="~/cssUser/reg.css" />
 </head>
+<<<<<<< HEAD
 @{
     var isLoggedIn = ViewBag.IsLoggedIn;
     var IsLoginRole = ViewBag.IsLoginRole;
 
 }
 <body>
-<<<<<<< HEAD
     <header>
         @await Html.PartialAsync("Header")
          @if (isLoggedIn == null)
@@ -51,6 +51,7 @@
         <div style="width:100%">
             <main role="main" class="">
                 @RenderBody()
+
         </div>
        
         <footer class="footer">
