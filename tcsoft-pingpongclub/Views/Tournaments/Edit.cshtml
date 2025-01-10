@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Edit Tournament";
 }
-<div class="container mt-3">
+<div class="tho-container">
 <h1 class="text-center mb-4">Sửa giải đấu</h1>
 
 <h4>Thông tin giải đấu</h4>
@@ -46,13 +46,7 @@
 
             <!-- Hình ảnh -->
             <div class="form-group mb-3">
-                <label asp-for="ImageUpload" class="control-label">Hình ảnh</label>
-                @if (!string.IsNullOrEmpty(ViewBag.UrlImage))
-                {
-                    <div class="mb-3">
-                        <img src="@ViewBag.UrlImage" alt="Current Image" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
-                    </div>
-                }
+                <label asp-for="ImageUpload" class="control-label">Hình ảnh</label>              
                 <input asp-for="ImageUpload" type="file" class="form-control w-100" />
             </div>
 
@@ -94,7 +88,7 @@
             <!-- Nút lưu và quay lại -->
             <div class="form-group d-flex justify-content-between">
                 <input type="submit" value="Lưu" class="btn btn-primary" />
-                <a asp-action="Management" class="btn btn-secondary">Quay lại</a>
+                    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
             </div>
         </form>
     </div>
