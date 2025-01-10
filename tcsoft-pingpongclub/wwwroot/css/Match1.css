@@ -2,8 +2,8 @@
     display: none;
 }
 .card {
-    border-radius: 8px; /* Làm tròn góc thẻ */
-    background-color: #f9f9f9; /* Màu nền sáng */
+    border-radius: 8px; 
+    background-color: #f9f9f9; 
     padding: 10px;
 }
 
@@ -14,10 +14,7 @@
 .card-text {
     font-size: 1.2rem; 
 }
-.table th, .table td {
-    vertical-align: middle;
-    text-align: center;
-}
+
 
 .parent {
     transition: background-color 0.3s ease;
@@ -53,4 +50,73 @@
 
     .badge.bg-secondary {
         background-color: #6c757d;
+    }
+h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.Search {
+    background-color: #fff;
+}
+
+.dateSearch label {
+    font-weight: bold;
+    color: #555;
+}
+
+.dateSearch input[type="date"] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 1rem;
+}
+
+.dateSearch button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .dateSearch button:hover {
+        background-color: #218838;
+    }
+
+.Match {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.FeaturedMatch {
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+    .tbl th, .tbl td {
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .tbl th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+        color: #333;
     }

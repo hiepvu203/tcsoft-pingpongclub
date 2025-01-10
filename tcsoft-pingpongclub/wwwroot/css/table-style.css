@@ -19,6 +19,7 @@ h1 {
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
+    margin-left: 17%;
 }
 
     .btn-create:hover {
@@ -26,7 +27,7 @@ h1 {
     }
 
 .table {
-    width: 90%;
+    width: 65%;
     margin: 20px auto;
     border-collapse: collapse;
     background-color: #fff;
@@ -73,4 +74,7 @@ a {
 
 .btn-delete {
     color: #dc3545;
+}
+.Role{
+    height: 40px;
 }

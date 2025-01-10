@@ -7,6 +7,7 @@ using tcsoft_pingpongclub.Filter;
 
 namespace tcsoft_pingpongclub.Controllers
 {
+	[ServiceFilter(typeof(MenuActionFilter))]
 	[ServiceFilter(typeof(AuthorizationFilter))]
 	public class MembersController : Controller
 	{

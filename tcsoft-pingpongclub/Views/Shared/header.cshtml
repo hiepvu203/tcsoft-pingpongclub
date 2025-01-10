@@ -1,20 +1,33 @@
 @{
     var isLoggedIn = ViewBag.IsLoggedIn;
-    var IsLoginRole = ViewBag.IsLoginRole;
-
+    var menu = ViewBag.menu;
 }
 
-<nav class="headerNvabar">
-    <ul>
-        <li class="img-logo-header"><img src="~/image/logo.png"></li>
-        <li><a asp-area="" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
-        <li><a asp-area="" asp-controller="Role" asp-action="Index">Quản lý tài khoản</a></li>
-        <li><a asp-area="" asp-controller="Tournaments" asp-action="Index">Quản lý giải đấu</i></a></li>
-        <li><a asp-area="" asp-controller="Matches" asp-action="Index">Quản lý trận đấu</i></a></li>
-        <li><a asp-area="" asp-controller="Members" asp-action="Index">Quản lý xếp hạng</i></a></li>
-        <li><a asp-area="" asp-controller="RegTour" asp-action="Index">Đăng ký giải đấu</a></li>
-        <li><a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Quản lý thu chi</i></a></li>
-        <li><a asp-area="" asp-controller="User" asp-action="Index">Chỉnh sửa thông tin cá nhân</i></a></li>
-       
+<nav class="headerNavbar">
+    <ul class="headerNvabar">
+        <li class="img-logo-header"><img src="~/image/logo.png" alt="Logo"></li>
+        @if (menu != null)
+        {
+            foreach (var item in menu)
+            {
+                <li><a asp-area="" asp-controller="@item.Item1" asp-action="Index">@item.Item2</a></li>
+            }
+        }
+        @if (isLoggedIn == null || (bool)isLoggedIn == false)
+        {
+            <li id="SignInButtonHomePage">
+                <a asp-controller="Login" asp-action="Index">Đăng nhập</a>
+            </li>
+        }
+        else
+        {
+            <form class="formLogout" asp-action="Logout" asp-controller="Account" method="post">
+                <li id="RegisterButtonHomePage">
+                    <button type="submit" id="RegisterButtonHomePage">
+                        Đăng Xuất
+                    </button>
+                </li>
+            </form>
+        }
     </ul>
 </nav>

@@ -11,6 +11,7 @@ using tcsoft_pingpongclub.Service;
 
 namespace tcsoft_pingpongclub.Controllers
 {
+	[ServiceFilter(typeof(MenuActionFilter))]
 	[ServiceFilter(typeof(AuthorizationFilter))]
 	public class TournamentsController : Controller
 	{

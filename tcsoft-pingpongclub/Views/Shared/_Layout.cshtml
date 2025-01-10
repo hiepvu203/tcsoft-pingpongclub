@@ -17,36 +17,13 @@
     <link rel="stylesheet" href="~/cssUser/user.css" />
     <link rel="stylesheet" href="~/cssUser/reg.css" />
 </head>
-@{
-    var isLoggedIn = ViewBag.IsLoggedIn;
-    var IsLoginRole = ViewBag.IsLoginRole;
 
-}
 <body>
-    <header>
+   
         @await Html.PartialAsync("Header")
-         @if (isLoggedIn == null)
-        {
-            isLoggedIn = "";
-            <p>@isLoggedIn</p>
-        }
-        <li id="SignInButtonHomePage"><a asp-controller="Login" asp-action="Index">Đăng nhập</a></li>
-        @if (isLoggedIn != null)
-        {
-            <form class="formLogout" asp-action="Logout" asp-controller="Account" method="post"
-                style="display:@(isLoggedIn != null ? "inline" : "none");">
-                <li id="RegisterButtonHomePage">
-                    <a asp-controller="" asp-action="">
-                        <button type="submit" id="RegisterButtonHomePage">
-                            Đăng Xuất
-                        </button>
-                    </a>
-                </li>
-            </form>
-        }
-    </header>
     
-    <div class="">
+    
+    <div class="" style="width: 100%;">
         <div style="width:100%">
             <main role="main" class="">
                 @RenderBody()

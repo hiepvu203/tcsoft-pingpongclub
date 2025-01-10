@@ -9,6 +9,7 @@ using tcsoft_pingpongclub.Models;
 
 namespace tcsoft_pingpongclub.Controllers
 {
+	[ServiceFilter(typeof(MenuActionFilter))]
 	public class AwardsController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;

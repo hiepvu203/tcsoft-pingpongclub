@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+   
 }
 <link href="~/css/formcreatev2.css" rel="stylesheet" />
 @* <link href="~/css/expenseandincomeformcreate.css" rel="stylesheet" /> *@
@@ -13,11 +14,7 @@
         <!-- Groupbox 1 -->
         <fieldset class="groupbox">
             <legend>Thông tin cơ bản</legend>
-            <div class="form-group">
-                <label for="IdAccountant" class="form-label">Kế toán</label>
-                <input asp-for="IdAccountant" class="form-input" />
-                <span asp-validation-for="IdAccountant" class="text-danger"></span>
-            </div>
+          
 
             <div class="form-row">
                 <div class="form-group" style="flex: 1;">

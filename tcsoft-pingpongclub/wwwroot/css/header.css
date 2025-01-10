@@ -36,7 +36,7 @@
 }
 
 .headerNvabar li {
-    margin: 0 15px;
+    margin: 0 5px;
     display: flex;
     align-items: center;
 }
@@ -46,7 +46,7 @@
     /* Màu chữ */
     text-decoration: none;
     /* Bỏ gạch chân */
-    padding: 8px 16px;
+    
     /* Khoảng cách cho các mục */
     transition: background-color 0.3s;
     /* Hiệu ứng chuyển màu */
@@ -64,12 +64,12 @@
 }
 
 .img-logo-header {
-    width: 30%;
+    width: 10%;
 }
 
 .img-logo-header img {
     padding-left: 5%;
-    width: 35%;
+    width: 100%;
     display: flex;
     text-align: left;
 }

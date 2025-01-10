@@ -10,57 +10,58 @@ using tcsoft_pingpongclub.Service;
 using tcsoft_pingpongclub.Filter;
 namespace tcsoft_pingpongclub.Controllers
 {
-	[ServiceFilter(typeof(AuthorizationFilter))]
+	[ServiceFilter(typeof(MenuActionFilter))]
+	
 	public class GroupstagesController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
 
-        public GroupstagesController(ThuctapKtktcn2024Context context)
-        {
-            _context = context;
-        }
-        // GET: Groupstages
-        public async Task<IActionResult> Index(int? Id)
-        {
-            if (Id == null)
-            {
-                return NotFound("IdTournament không được truyền vào.");
-            }
-            var tournament = await _context.Tournaments
-           .Where(t => t.IdTournament == Id)
-           .FirstOrDefaultAsync();
+		public GroupstagesController(ThuctapKtktcn2024Context context)
+		{
+			_context = context;
+		}
+		// GET: Groupstages
+		public async Task<IActionResult> Index(int? Id)
+		{
+			if (Id == null)
+			{
+				return NotFound("IdTournament không được truyền vào.");
+			}
+			var tournament = await _context.Tournaments
+		   .Where(t => t.IdTournament == Id)
+		   .FirstOrDefaultAsync();
 
-                if (tournament == null)
-                {
-                    return NotFound();
-                }
+				if (tournament == null)
+				{
+					return NotFound();
+				}
 
-                ViewBag.Type = tournament.Type;
+				ViewBag.Type = tournament.Type;
 
-            var groupStages = await _context.Groupstages
-                .Include(g => g.IdTournamentNavigation)
-                .Where(g => g.IdTournament == Id)
-                .ToListAsync();
-            ViewBag.IdTournament = Id;
-            return View(groupStages);
-        }
-        // GET: Groupstages/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+			var groupStages = await _context.Groupstages
+				.Include(g => g.IdTournamentNavigation)
+				.Where(g => g.IdTournament == Id)
+				.ToListAsync();
+			ViewBag.IdTournament = Id;
+			return View(groupStages);
+		}
+		// GET: Groupstages/Details/5
+		public async Task<IActionResult> Details(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-            var groupstage = await _context.Groupstages
-                .Include(g => g.IdTournamentNavigation)
-                .FirstOrDefaultAsync(m => m.IdGroupstage == id);
-            if (groupstage == null)
-            {
-                return NotFound();
-            }    
-            return View(groupstage);
-        }
+			var groupstage = await _context.Groupstages
+				.Include(g => g.IdTournamentNavigation)
+				.FirstOrDefaultAsync(m => m.IdGroupstage == id);
+			if (groupstage == null)
+			{
+				return NotFound();
+			}    
+			return View(groupstage);
+		}
 
 
 		// GET: Groupstages/Create
@@ -136,8 +137,8 @@ namespace tcsoft_pingpongclub.Controllers
 			await _context.SaveChangesAsync();
 
 
-            return RedirectToAction("Index", new { Id = Id });
-        }
+			return RedirectToAction("Index", new { Id = Id });
+		}
 
 		public async Task<IActionResult> CreateFourGroups(int Id)
 		{
@@ -207,26 +208,26 @@ namespace tcsoft_pingpongclub.Controllers
 
 			await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", new { Id = Id });
-        }
+			return RedirectToAction("Index", new { Id = Id });
+		}
 
 
-        // POST: Groupstages/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Groupstage groupstage)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Groupstages.Add(groupstage);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", new { Id = groupstage.IdTournament });
-            }
-            ViewBag.IdTournament = groupstage.IdTournament;
-            return View(groupstage);
-        }
+		// POST: Groupstages/Create
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(Groupstage groupstage)
+		{
+			if (ModelState.IsValid)
+			{
+				_context.Groupstages.Add(groupstage);
+				await _context.SaveChangesAsync();
+				return RedirectToAction("Index", new { Id = groupstage.IdTournament });
+			}
+			ViewBag.IdTournament = groupstage.IdTournament;
+			return View(groupstage);
+		}
 
 
 		// GET: Groupstages/Edit/5
@@ -261,17 +262,17 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 
 
-        // POST: Groupstages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdGroupstage,NameGroup,Amount,IOrder,Status,IdTournament")] Groupstage groupstage)
-        {
-            if (id != groupstage.IdGroupstage)
-            {
-                return NotFound();
-            }
+		// POST: Groupstages/Edit/5
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, [Bind("IdGroupstage,NameGroup,Amount,IOrder,Status,IdTournament")] Groupstage groupstage)
+		{
+			if (id != groupstage.IdGroupstage)
+			{
+				return NotFound();
+			}
 
 			if (ModelState.IsValid)
 			{
@@ -292,14 +293,14 @@ namespace tcsoft_pingpongclub.Controllers
 					}
 				}
 
-                return RedirectToAction(nameof(Index), new { Id = groupstage.IdTournament });
-            }
-            ViewBag.IOrderList = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "1", Text = "Loại", Selected = (groupstage.IOrder == 1) },
-                new SelectListItem { Value = "2", Text = "Tứ kết", Selected = (groupstage.IOrder == 2) },
-                new SelectListItem { Value = "3", Text = "Bán kết", Selected = (groupstage.IOrder == 3) },
-                new SelectListItem { Value = "4", Text = "Chung kết", Selected = (groupstage.IOrder == 4) }
+				return RedirectToAction(nameof(Index), new { Id = groupstage.IdTournament });
+			}
+			ViewBag.IOrderList = new List<SelectListItem>
+			{
+				new SelectListItem { Value = "1", Text = "Loại", Selected = (groupstage.IOrder == 1) },
+				new SelectListItem { Value = "2", Text = "Tứ kết", Selected = (groupstage.IOrder == 2) },
+				new SelectListItem { Value = "3", Text = "Bán kết", Selected = (groupstage.IOrder == 3) },
+				new SelectListItem { Value = "4", Text = "Chung kết", Selected = (groupstage.IOrder == 4) }
 
 			};
 			ViewBag.IdTournament = groupstage.IdTournament;
@@ -336,16 +337,16 @@ namespace tcsoft_pingpongclub.Controllers
 			}
 
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { Id = IdTournament });
-        }
-        public IActionResult DeleteAll(int Id)
-        {
-            if (Id == null)
-            {
-                return NotFound();
-            }
-            var groupstages = _context.Groupstages.Where(g => g.IdTournament == Id).ToList();
+			await _context.SaveChangesAsync();
+			return RedirectToAction(nameof(Index), new { Id = IdTournament });
+		}
+		public IActionResult DeleteAll(int Id)
+		{
+			if (Id == null)
+			{
+				return NotFound();
+			}
+			var groupstages = _context.Groupstages.Where(g => g.IdTournament == Id).ToList();
 
 			if (groupstages.Any())
 			{
@@ -353,8 +354,8 @@ namespace tcsoft_pingpongclub.Controllers
 				_context.SaveChanges();
 			}
 
-            return RedirectToAction("Index", new { Id = Id });
-        }
+			return RedirectToAction("Index", new { Id = Id });
+		}
 
 		private bool GroupstageExists(int id)
 		{

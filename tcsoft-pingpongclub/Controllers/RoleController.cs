@@ -12,7 +12,8 @@ using tcsoft_pingpongclub.Filter;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-
+	[ServiceFilter(typeof(MenuActionFilter))]
+	[ServiceFilter(typeof(AuthorizationFilter))]
 	public class RoleController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
