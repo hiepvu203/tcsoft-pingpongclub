@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Tạo Nhiều Giải Thưởng";
 }
-
+<div class="tho-container">
 <h1 class="text-center">@ViewData["Title"]</h1>
 
 <form asp-action="CreateMultiple" method="post" class="shadow-sm p-4 bg-light rounded">
@@ -95,4 +95,5 @@
 
 <div class="text-center mt-4">
     <a asp-action="Index" asp-route-Id="@ViewBag?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+</div>
 </div>
