@@ -62,7 +62,8 @@ else
                         @Html.DisplayFor(modelItem => item.IdPlayerNavigation.IdMemberNavigation.MemberName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IdNavigation.Id)
+
+                            @item.IdTournamentNavigation.TournamentName: @item.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") - Mã Hóa Đơn: @item.Id
                     </td>
                     <td>
                         @if (item.Status == true)

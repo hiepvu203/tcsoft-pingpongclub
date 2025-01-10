@@ -29,7 +29,7 @@ namespace tcsoft_pingpongclub.Controllers
 			var awards = await _context.Awards.Include(a => a.IdPlayerNavigation).ThenInclude(p => p.IdMemberNavigation)
 				.Include(a => a.IdTournamentNavigation)
 				.Include(a => a.IdNavigation)
-				.Where(g => g.IdTournament == Id)
+                .Where(g => g.IdTournament == Id)
 				.ToListAsync();
 			ViewBag.IdTournament = Id;
 			return View(awards);
@@ -170,8 +170,10 @@ namespace tcsoft_pingpongclub.Controllers
 			 "IdPlayer",
 			 "IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
 			 award.IdPlayer);
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", award.Id);
-			ViewBag.IdTournament = award.IdTournament;
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+                .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+                .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+            ViewBag.IdTournament = award.IdTournament;
 			return View(award);
 		}
 
@@ -197,8 +199,10 @@ namespace tcsoft_pingpongclub.Controllers
 			 "IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
 			 award.IdPlayer);
 
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", award.Id);
-			ViewBag.IdTournament = award.IdTournament;
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+               .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+            ViewBag.IdTournament = award.IdTournament;
 			return View(award);
 		}
 
@@ -240,8 +244,10 @@ namespace tcsoft_pingpongclub.Controllers
 				"IdPlayer",
 				"IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
 				award.IdPlayer);
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", award.Id);
-			ViewBag.IdTournament = award.IdTournament;
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+               .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+            ViewBag.IdTournament = award.IdTournament;
 			return View(award);
 		}
 

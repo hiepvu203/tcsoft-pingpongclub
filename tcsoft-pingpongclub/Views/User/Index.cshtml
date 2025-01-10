@@ -7,9 +7,8 @@
 			<div class="row align-items-center">
 				<!-- Avatar Section -->
 				<div class="col-md-3 text-center">
-					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content(Model.LinkAvatar) : Url.Content("~/path/to/placeholder-image.png"))"
-						 class="rounded-circle img-fluid" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
-				</div>
+					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content(Model.LinkAvatar) : Url.Content("~/path/to/placeholder-image.jpg"))"
+		 alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
 				<!-- Information Section -->
 				<div class="col-md-9">
 					<h4 class="mb-3">Personal Information</h4>

@@ -17,12 +17,20 @@
     <link rel="stylesheet" href="~/cssUser/user.css" />
     <link rel="stylesheet" href="~/cssUser/reg.css" />
 </head>
+
+@{
+    var isLoggedIn = ViewBag.IsLoggedIn;
+    var IsLoginRole = ViewBag.IsLoginRole;
+
+}
 <body>
+    <header>
         @await Html.PartialAsync("Header")
     <div class="" style="width: 100%;">
         <div style="width:100%">
             <main role="main" class="">
                 @RenderBody()
+
         </div>
        
         <footer class="footer">
@@ -83,6 +91,10 @@
         <script src="~/js/Match.js" asp-append-version="true"></script>
         @await RenderSectionAsync("Scripts", required: false)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/dev
 </body>
 
 </html>

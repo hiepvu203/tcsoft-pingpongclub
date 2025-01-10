@@ -3,109 +3,6 @@
 @{
 	ViewData["Title"] = "Danh sách giải đấu";
 }
-
-<div class="header-container">
-	<h2>GIẢI ĐẤU BÓNG BÀN</h2>
-</div>
-<div class="d-flex justify-content-between mb-5">
-
-	<!-- Form Lọc Rank -->
-	<form method="get" action="@Url.Action("Index")" class="me-auto">
-		<select name="selectedLevel" class="form-control">
-			<option value="" selected="@ViewBag.SelectedLevel">--Chọn cấp bậc--</option>
-			@foreach (var level in ViewBag.Levels)
-			{
-				var isSelected = level.IdLevel == ViewBag.SelectedLevel ? "selected" : "";
-				<option value="@level.IdLevel">@level.LevelName</option>
-			}
-		</select>
-		<button type="submit" class="btn btn-primary mt-2">Lọc theo Rank</button>
-	</form>
-	<!-- Form Tìm kiếm -->
-	<form method="get" action="@Url.Action("Index")" class="ms-auto">
-		<input type="text" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control"
-			placeholder="Tìm kiếm theo tên giải đấu" />
-		<button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
-	</form>
-</div>
-
-
-<div class="featured-tournament">
-	<!-- Hiển thị giải đấu mới nhất -->
-	@if (Model.Any())
-	{
-		var newestTournament = Model.First();
-		<div class="tournament-highlight">
-			<a href="@Url.Action("Details", new { id = newestTournament.IdTournament })" class="tournament-link">
-				<div class="highlight-image">
-					<img src="@(newestTournament.UrlImage ?? "defaultImage.jpg")" alt="Featured Tournament" />
-				</div>
-				<div class="highlight-details">
-					<h2>@newestTournament.TournamentName</h2>
-					<p class="tournament-description">@newestTournament.Infor</p> <!-- Truncated description -->
-				</div>
-			</a>
-		</div>
-	}
-</div>
-
-<div class="other-tournaments">
-	<!-- Hiển thị các giải đấu còn lại -->
-	@foreach (var item in Model.Skip(1))
-	{
-		<div class="tournament-item">
-			<a href="@Url.Action("Details", new { id = item.IdTournament })" class="tournament-link">
-				<div class="tournament-img">
-					<img src="~/image/@(item.UrlImage ?? "defaultImage.jpg")" alt="Tournament" />
-				</div>
-				<div class="tournament-info">
-					<h4>@item.TournamentName</h4>
-					<p class="tournament-description">@item.Infor</p> <!-- Truncated description -->
-				</div>
-			</a>
-		</div>
-	}
-</div>
-
-<div class="text-center mt-4">
-	<!-- Hiển thị phân trang -->
-	<ul class="pagination">
-		@if (ViewBag.CurrentPage > 1)
-		{
-			<li class="page-item">
-				<a class="page-link" href="@Url.Action("Index", new { page = 1, searchTerm = ViewBag.SearchTerm })">Trang
-					đầu</a>
-			</li>
-			<li class="page-item">
-				<a class="page-link"
-					href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchTerm = ViewBag.SearchTerm })">Trang
-					trước</a>
-			</li>
-		}
-
-		@for (int i = 1; i <= ViewBag.TotalPages; i++)
-		{
-			<li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-				<a class="page-link" href="@Url.Action("Index", new { page = i, searchTerm = ViewBag.SearchTerm })">@i</a>
-			</li>
-		}
-
-		@if (ViewBag.CurrentPage < ViewBag.TotalPages)
-		{
-			<li class="page-item">
-				<a class="page-link"
-					href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchTerm = ViewBag.SearchTerm })">Trang
-					sau</a>
-			</li>
-			<li class="page-item">
-				<a class="page-link"
-					href="@Url.Action("Index", new { page = ViewBag.TotalPages, searchTerm = ViewBag.SearchTerm })">Trang
-					cuối</a>
-			</li>
-		}
-	</ul>
-</div>
-
 <style>
 	a.custom-link {
 		color: #007bff;
@@ -120,10 +17,10 @@
 		align-items: center;
 	}
 
-	a.custom-link:hover {
-		background-color: #007bff;
-		color: #fff;
-	}
+		a.custom-link:hover {
+			background-color: #007bff;
+			color: #fff;
+		}
 
 	.featured-tournament {
 		display: flex;
@@ -153,7 +50,7 @@
 	}
 
 	.highlight-image {
-		width: 50%;
+		width: 40%;
 		height: 400px;
 	}
 
@@ -175,35 +72,34 @@
 	}
 
 
-	.highlight-details h2 {
-		font-size: 24px;
-		color: #333;
-		margin-bottom: 10px;
-		text-align: center;
-		align-self: center;
-	}
+		.highlight-details h2 {
+			font-size: 24px;
+			color: #333;
+			margin-bottom: 10px;
+			text-align: center;
+			align-self: center;
+		}
 
 
-	.highlight-details p {
-		color: #666;
-		font-size: 16px;
-		margin-bottom: 15px;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+		.highlight-details p {
+			color: #666;
+			font-size: 16px;
+			margin-bottom: 15px;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 
-	.highlight-details .btn {
-		width: fit-content;
-	}
+		.highlight-details .btn {
+			width: fit-content;
+		}
 
 	.other-tournaments {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		gap: 20px;
+		display: flex;
 		justify-items: center;
+		justify-content: space-between;
 	}
 
 	.tournament-item {
@@ -220,7 +116,7 @@
 	}
 
 	.tournament-img {
-		width: 150px;
+		width: 250px;
 		height: 150px;
 		margin-right: 15px;
 		display: flex;
@@ -286,7 +182,110 @@
 		align-items: center;
 	}
 
-	.tournament-link:hover {
-		text-decoration: underline;
-	}
+		.tournament-link:hover {
+			text-decoration: underline;
+		}
 </style>
+
+<div class="header-container">
+	<h2>GIẢI ĐẤU BÓNG BÀN</h2>
+</div>
+<div class="d-flex justify-content-between mb-5">
+
+	<!-- Form Lọc Rank -->
+	<form method="get" action="@Url.Action("Index")" class="me-auto">
+		<select name="selectedLevel" class="form-control">
+			<option value="" selected="@ViewBag.SelectedLevel">--Chọn cấp bậc--</option>
+			@foreach (var level in ViewBag.Levels)
+			{
+				var isSelected = level.IdLevel == ViewBag.SelectedLevel ? "selected" : "";
+				<option value="@level.IdLevel">@level.LevelName</option>
+			}
+		</select>
+		<button type="submit" class="btn btn-primary mt-2">Lọc theo Rank</button>
+	</form>
+	<!-- Form Tìm kiếm -->
+	<form method="get" action="@Url.Action("Index")" class="ms-auto">
+		<input type="text" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control"
+			placeholder="Tìm kiếm theo tên giải đấu" />
+		<button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
+	</form>
+</div>
+
+
+<div class="featured-tournament">
+	<!-- Hiển thị giải đấu mới nhất -->
+	@if (Model.Any())
+	{
+		var newestTournament = Model.First();
+		<div class="tournament-highlight">
+			<a href="@Url.Action("Details", new { id = newestTournament.IdTournament })" class="tournament-link">
+				<div class="highlight-image">
+					<img src="@(newestTournament.UrlImage ?? "defaultImage.jpg")" alt="Featured Tournament" />
+				</div>
+				<div class="highlight-details">
+					<h2>@newestTournament.TournamentName</h2>
+					<p class="tournament-description">@newestTournament.Infor</p> <!-- Truncated description -->
+				</div>
+			</a>
+		</div>
+	}
+</div>
+
+<div class="other-tournaments">
+	<!-- Hiển thị các giải đấu còn lại -->
+	@foreach (var item in Model.Skip(1))
+	{
+		<div class="tournament-item">
+			<a href="@Url.Action("Details", new { id = item.IdTournament })" class="tournament-link">
+				<div class="tournament-img">
+					<img src="@(item.UrlImage ?? "defaultImage.jpg")" alt="Tournament" />
+				</div>
+				<div class="tournament-info">
+					<h4>@item.TournamentName</h4>
+					<p class="tournament-description">@item.Infor</p> <!-- Truncated description -->
+				</div>
+			</a>
+		</div>
+	}
+</div>
+
+<div class="text-center mt-4">
+	<!-- Hiển thị phân trang -->
+	<ul class="pagination">
+		@if (ViewBag.CurrentPage > 1)
+		{
+			<li class="page-item">
+				<a class="page-link" href="@Url.Action("Index", new { page = 1, searchTerm = ViewBag.SearchTerm })">Trang
+					đầu</a>
+			</li>
+			<li class="page-item">
+				<a class="page-link"
+					href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchTerm = ViewBag.SearchTerm })">Trang
+					trước</a>
+			</li>
+		}
+
+		@for (int i = 1; i <= ViewBag.TotalPages; i++)
+		{
+			<li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+				<a class="page-link" href="@Url.Action("Index", new { page = i, searchTerm = ViewBag.SearchTerm })">@i</a>
+			</li>
+		}
+
+		@if (ViewBag.CurrentPage < ViewBag.TotalPages)
+		{
+			<li class="page-item">
+				<a class="page-link"
+					href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchTerm = ViewBag.SearchTerm })">Trang
+					sau</a>
+			</li>
+			<li class="page-item">
+				<a class="page-link"
+					href="@Url.Action("Index", new { page = ViewBag.TotalPages, searchTerm = ViewBag.SearchTerm })">Trang
+					cuối</a>
+			</li>
+		}
+	</ul>
+</div>
+
