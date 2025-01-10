@@ -33,6 +33,7 @@ namespace tcsoft_pingpongclub.Controllers
 					TournamentName = t.TournamentName,
 					UrlImage = t.UrlImage,
 					TimeStart = t.TimeStart,
+					Type =t.Type,
 					TimeEnd = t.TimeEnd,
 					Infor=t.Infor,
 					Amount=t.Amount,

@@ -3,10 +3,8 @@
 @{
     ViewData["Title"] = "Tạo Giải Thưởng";
 }
-
+<div class="tho-container">
 <h1 class="text-center">@ViewData["Title"]</h1>
-
-
 <div class="row justify-content-center">
     
     <div class="col-md-6">    
@@ -75,7 +73,7 @@
 <div class="text-center mt-4">
     <a asp-action="Index" asp-route-Id="@ViewBag?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
 </div>
-
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
