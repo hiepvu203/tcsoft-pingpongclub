@@ -24,72 +24,100 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: Permissions
 		public async Task<IActionResult> Index()
 		{
-			
 			return View(await _context.Permissions.ToListAsync());
 		}
 
-		// GET: Permissions/Details/5
-		public async Task<IActionResult> Details(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+        // GET: Permissions/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            // Kiểm tra id có null không
+            if (id == null)
+            {
+                return NotFound("ID không hợp lệ.");
+            }
 
-			var permission = await _context.Permissions
-				.FirstOrDefaultAsync(m => m.IdPermission == id);
-			if (permission == null)
-			{
-				return NotFound();
-			}
+            // Tìm quyền trong cơ sở dữ liệu
+            var permission = await _context.Permissions
+                   .Include(p => p.ParentPermission) 
+                   .FirstOrDefaultAsync(m => m.IdPermission == id);
 
-			return View(permission);
-		}
+            // Kiểm tra xem quyền có tồn tại hay không
+            if (permission == null)
+            {
+                return NotFound("Quyền không tồn tại.");
+            }
 
-		// GET: Permissions/Create
-		public IActionResult Create()
-		{
-			return View();
-		}
+            // Trả về View với đối tượng permission tìm thấy
+            return View(permission);
+        }
 
-		// POST: Permissions/Create
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
+
+        // GET: Permissions/Create
+        public async Task<IActionResult> Create()
+        {
+            var lstPermission = await _context.Permissions.ToListAsync();
+            ViewBag.Permission = lstPermission;
+            return View();
+        }
+
+
+        // POST: Permissions/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("IdPermission,NamePermission,Url,Status")] Permission permission)
-		{
-			if (ModelState.IsValid)
-			{
-				_context.Add(permission);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			return View(permission);
-		}
+        public async Task<IActionResult> Create([Bind("IdPermission,NamePermission,Url,IdPerParent,Status")] Permission permission)
+        {
+            if (ModelState.IsValid)
+            {
+                // Kiểm tra quyền cha có hợp lệ hay không
+                if (permission.IdPerParent.HasValue)
+                {
+                    var parentPermission = await _context.Permissions.FindAsync(permission.IdPerParent.Value);
+                    if (parentPermission == null)
+                    {
+                        ModelState.AddModelError("IdPerParent", "Quyền cha không hợp lệ.");
+                        return View(permission);
+                    }
+                }
 
-		// GET: Permissions/Edit/5
-		public async Task<IActionResult> Edit(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+                _context.Add(permission);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(permission);
+        }
 
-			var permission = await _context.Permissions.FindAsync(id);
-			if (permission == null)
-			{
-				return NotFound();
-			}
-			return View(permission);
-		}
 
-		// POST: Permissions/Edit/5
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
+        // GET: Permissions/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var permission = _context.Permissions
+                .FirstOrDefault(p => p.IdPermission == id);
+
+            if (permission == null)
+            {
+                return NotFound();
+            }
+
+            // Đưa danh sách quyền vào ViewBag để hiển thị trong dropdown
+            ViewBag.Permissions =  _context.Permissions.ToList();
+
+            return View(permission);
+        }
+
+
+        // POST: Permissions/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("IdPermission,NamePermission,Url,Status")] Permission permission)
+		public async Task<IActionResult> Edit(int id, [Bind("IdPermission,NamePermission,Url,IdPerParent,Status")] Permission permission)
 		{
 			if (id != permission.IdPermission)
 			{
@@ -100,6 +128,10 @@ namespace tcsoft_pingpongclub.Controllers
 			{
 				try
 				{
+					if (permission.IdPermission == permission.IdPerParent)
+					{
+						permission.IdPerParent = null;
+					}
 					_context.Update(permission);
 					await _context.SaveChangesAsync();
 				}
@@ -127,9 +159,10 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 
-			var permission = await _context.Permissions
-				.FirstOrDefaultAsync(m => m.IdPermission == id);
-			if (permission == null)
+            var permission = await _context.Permissions
+                   .Include(p => p.ParentPermission)
+                   .FirstOrDefaultAsync(m => m.IdPermission == id);
+            if (permission == null)
 			{
 				return NotFound();
 			}
