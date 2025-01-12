@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ThuctapKtktcn2024Context>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb")));
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddMemoryCache();
 // Cấu hình Session
 builder.Services.AddSession(options =>
 {

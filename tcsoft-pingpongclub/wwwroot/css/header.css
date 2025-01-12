@@ -4,9 +4,9 @@
     box-sizing: border-box;
 }
 
-.headerNvabar {
+/* Navbar container */
+.headerNavbar {
     background-color: white;
-    /* position: fixed; */
     top: 0;
     width: 100%;
     z-index: 1000;
@@ -14,33 +14,26 @@
     color: black;
     display: flex;
     text-align: center;
-    /* border-bottom: 0.1px solid black; */
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
     padding-bottom: 30px;
-    /* Thêm hiệu ứng đổ bóng */
-}
-.headerNvabar ul{
-    display: flex;
 }
 
-.headerNvabar ul ol {
-    list-style-type: none;
+/* Menu list */
+.headerNvabar {
     display: flex;
-    /* Sắp xếp thành hàng ngang */
-    justify-content: space-around;
-    /* Căn giữa các mục */
-    /* Khoảng cách trên và dưới */
+    list-style: none;
+    padding: 0;
     width: 100%;
-    align-items: center;
-    padding: none;
 }
 
-.headerNvabar li {
-    margin: 0 5px;
-    display: flex;
-    align-items: center;
-}
+    .headerNvabar li {
+        margin: 0 5px;
+        display: flex;
+        align-items: center;
+        position: relative; /* Needed for submenu positioning */
+    }
 
+/* <<<<<<< HEAD */
 .headerNvabar a {
     color: black;
     /* Màu chữ */
@@ -58,16 +51,30 @@
     font-weight: 700;
    
 }
+/* ======= */
+    /* Menu links */
+    .headerNvabar a {
+        color: black;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        font-weight: 700;
+        border-radius: 5%;
+    }
+/* >>>>>>> origin/TranHuyHoang */
 
-.headerNvabar a:hover {
-    background-color: #bebebe;
-    /* Màu nền khi hover */
-}
+        .headerNvabar a:hover {
+            background-color: #bebebe;
+        }
 
+/* Logo */
 .img-logo-header {
     width: 80%;
 }
 
+/* <<<<<<< HEAD */
 .img-logo-header img {
     padding-left: 5%;
     width: 100%;
@@ -110,30 +117,76 @@
 
 
 
+/* ======= */
+    .img-logo-header img {
+        padding-left: 5%;
+        width: 100%;
+    }
+/* >>>>>>> origin/TranHuyHoang */
 
+/* Button styles for Sign In and Logout */
+#SignInButtonHomePage a,
+#RegisterButtonHomePage a,
 #RegisterButtonHomePage button {
     border: 1px solid black;
     border-radius: 30px;
     background-color: rgb(65, 65, 65);
     color: rgb(206, 206, 206);
+/* <<<<<<< HEAD */
     border: none;
     padding-right: 10px;
     width: max-content;
     padding-left: 10px;
     padding: 10px;
-
+/* 
+=======
+>>>>>>> origin/TranHuyHoang */
 }
 
-#RegisterButtonHomePage button:hover {
-    background-color: rgb(206, 206, 206);
-    color: rgb(65, 65, 65);
+    #SignInButtonHomePage a:hover,
+    #RegisterButtonHomePage a:hover,
+    #RegisterButtonHomePage button:hover {
+        background-color: rgb(206, 206, 206);
+        color: rgb(65, 65, 65);
+    }
+
+/* Submenu (hidden by default) */
+.submenu {
+    display: none; /* Hide submenu */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 10px;
+    list-style-type: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 150px;
+    background-color: white; /* Nền màu trắng */
 }
 
+/* Show submenu on hover */
+.menu-item:hover > .submenu {
+    display: block;
+}
 
+/* Submenu item styles */
+.submenu li a {
+    padding: 8px 15px;
+    color: black; /* Màu chữ giống như menu cha */
+    font-weight: 700; /* Độ đậm giống như menu cha */
+}
+
+    /* Submenu hover effect */
+    .submenu li a:hover {
+        background-color: #bebebe; /* Màu nền khi hover vào mục submenu */
+    }
+
+/* Logout form style */
 .formLogout {
     border-radius: 0px;
     box-shadow: none;
     padding: none;
+/* <<<<<<< HEAD */
     display: flex;
     padding: 10px;
     
@@ -141,3 +194,6 @@
 .link_home_page_img{
     width: 6%;
 }
+/* ======= */
+
+/* >>>>>>> origin/TranHuyHoang */

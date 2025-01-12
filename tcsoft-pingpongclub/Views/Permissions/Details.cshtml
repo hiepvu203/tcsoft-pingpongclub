@@ -6,10 +6,10 @@
 <head>
     <link rel="stylesheet" href="/css/form-detail-style.css">
 </head>
-<h1>Details</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div class="table-container">
-    <h4>Permission Information</h4>
+    <h4>Thông tin quyền</h4>
     <hr />
     <table>
         <tr>
@@ -19,6 +19,19 @@
         <tr>
             <th>@Html.DisplayNameFor(model => model.Url)</th>
             <td>@Html.DisplayFor(model => model.Url)</td>
+        </tr>
+        <tr>
+            <th>Quyền cha</th>
+            <td>
+                @if (Model.ParentPermission != null)
+                {
+                    @Html.DisplayFor(model => model.ParentPermission.NamePermission)
+                }
+                else
+                {
+                    @:Không có quyền cha
+                }
+            </td>
         </tr>
         <tr>
             <th>@Html.DisplayNameFor(model => model.Status)</th>
@@ -37,6 +50,6 @@
 </div>
 
 <div style="text-align:center; margin-top: 20px;">
-    <a asp-action="Edit" asp-route-id="@Model?.IdPermission">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.IdPermission" class="btn-edit">Sửa</a> |
+    <a asp-action="Index" class="btn-back">Quay lại danh sách</a>
 </div>

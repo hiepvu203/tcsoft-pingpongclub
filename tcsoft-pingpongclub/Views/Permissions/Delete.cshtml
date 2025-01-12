@@ -22,6 +22,19 @@
             <td>@Html.DisplayFor(model => model.Url)</td>
         </tr>
         <tr>
+            <th>Quyền cha</th>
+            <td>
+                @if (Model.ParentPermission != null)
+                {
+                    @Html.DisplayFor(model => model.ParentPermission.NamePermission)
+                }
+                else
+                {
+                    @:Không có quyền cha
+                }
+            </td>
+        </tr>
+        <tr>
             <th>@Html.DisplayNameFor(model => model.Status)</th>
             <td>
                 @if (Model.Status == true)

@@ -309,6 +309,11 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.Url)
                 .IsUnicode(false)
                 .HasColumnName("url");
+            entity.Property(e => e.IdPerParent).HasColumnName("IdPerParent");
+            entity.HasOne(d => d.ParentPermission)
+            .WithMany(p => p.SubPermissions)
+            .HasForeignKey(d => d.IdPerParent)
+            .HasConstraintName("FK_Permission_IDParent");
         });
 
         modelBuilder.Entity<PermissionRole>(entity =>

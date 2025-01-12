@@ -24,7 +24,8 @@
             <tr>
                 <th>@Html.DisplayNameFor(model => model.NamePermission)</th>
                 <th>@Html.DisplayNameFor(model => model.Url)</th>
-                <th>@Html.DisplayNameFor(model => model.Status)</th>
+                <th>@Html.DisplayNameFor(model => model.ParentPermission.NamePermission)</th>
+                <th>Trạng thái</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
@@ -34,6 +35,16 @@
                 <tr class="Role">
                     <td>@Html.DisplayFor(modelItem => item.NamePermission)</td>
                     <td>@Html.DisplayFor(modelItem => item.Url)</td>
+                    <td>
+                        @if (item.ParentPermission != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.ParentPermission.NamePermission)
+                        }
+                        else
+                        {
+                            @:Không có quyền cha
+                        }
+                    </td>
                     <td>
                         @if (item.Status == true)
                         {
