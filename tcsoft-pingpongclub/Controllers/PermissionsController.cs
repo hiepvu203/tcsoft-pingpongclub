@@ -55,7 +55,7 @@ namespace tcsoft_pingpongclub.Controllers
         // GET: Permissions/Create
         public async Task<IActionResult> Create()
         {
-            var lstPermission = await _context.Permissions.ToListAsync();
+            var lstPermission = await _context.Permissions.Where(p=>p.IdPerParent==null).ToListAsync();
             ViewBag.Permission = lstPermission;
             return View();
         }
@@ -106,7 +106,7 @@ namespace tcsoft_pingpongclub.Controllers
             }
 
             // Đưa danh sách quyền vào ViewBag để hiển thị trong dropdown
-            ViewBag.Permissions =  _context.Permissions.ToList();
+            ViewBag.Permissions = _context.Permissions.Where(p => p.IdPerParent == null || p.IdPermission == permission.IdPermission).ToList();
 
             return View(permission);
         }
@@ -148,7 +148,8 @@ namespace tcsoft_pingpongclub.Controllers
 				}
 				return RedirectToAction(nameof(Index));
 			}
-			return View(permission);
+            ViewBag.Permissions = _context.Permissions.Where(p => p.IdPerParent == null||p.IdPermission== permission.IdPermission).ToList();
+            return View(permission);
 		}
 
 		// GET: Permissions/Delete/5

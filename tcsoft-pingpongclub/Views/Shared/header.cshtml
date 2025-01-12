@@ -1,18 +1,32 @@
 @{
     var isLoggedIn = ViewBag.IsLoggedIn;
-    var menu = ViewBag.menu;
+    var menu = ViewBag.Menu;
 }
 
 <nav class="headerNavbar">
     <ul class="headerNvabar">
         <li class="img-logo-header"><img src="~/image/logo.png" alt="Logo"></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+
         @if (menu != null)
         {
             foreach (var item in menu)
             {
-                <li><a asp-area="" asp-controller="@item.Item1" asp-action="Index">@item.Item2</a></li>
+                <li class="menu-item">
+                    <a asp-area="" asp-controller="@item.Url" asp-action="Index">@item.NamePermission</a>
+                    @if (item.SubPermissions != null && item.SubPermissions.Count > 0) 
+                    {
+                        <ul class="submenu">
+                            @foreach (var subItem in item.SubPermissions)
+                            {
+                                <li><a asp-area="" asp-controller="@subItem.Url" asp-action="Index">@subItem.NamePermission</a></li>
+                            }
+                        </ul>
+                    }
+                </li>
             }
         }
+
         @if (isLoggedIn == null || (bool)isLoggedIn == false)
         {
             <li id="SignInButtonHomePage">

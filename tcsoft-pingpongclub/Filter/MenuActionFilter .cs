@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
 using System.Linq;
 using System.Collections.Generic;
@@ -12,42 +13,47 @@ public class MenuActionFilter : ActionFilterAttribute
     {
         _context = context;
     }
-	private void SetMenuItemsToViewBag(ActionExecutingContext context, List<Tuple<string, string>> menuItems)
-{
-    if (context.Controller is Controller controller)
-    {
-        controller.ViewBag.menu = menuItems;
-    }
-}
-    public override void OnActionExecuting(ActionExecutingContext context)
-{
-    var resultList = new List<Tuple<string, string>>();
-	resultList.Add(Tuple.Create("home", "Trang chủ"));
-    var idRole = context.HttpContext.Session.GetInt32("IdRole");
-    var idMember = context.HttpContext.Session.GetInt32("IdMember");
 
-    if (idRole != null && idMember != null)
+    private void SetMenuItemsToViewBag(ActionExecutingContext context, List<Permission> menuItems)
     {
-        var user = _context.Members.FirstOrDefault(m => m.IdMember == idMember);
-        if (user != null)
+        if (context.Controller is Controller controller)
         {
-            var urlsAndNames = (from r in _context.Roles
-                                join pr in _context.PermissionRoles on r.IdRole equals pr.IdRole
-                                join p in _context.Permissions on pr.IdPermission equals p.IdPermission
-                                where r.IdRole == user.IdRole && r.Status == true
-                                      && pr.Status == true && p.Status == true
-                                select new
-                                {
-                                    Url = p.Url,
-                                    Name = p.NamePermission
-                                }).Distinct().ToList();
-
-           resultList.AddRange(urlsAndNames.Select(item => Tuple.Create(item.Url, item.Name)));
+            controller.ViewBag.Menu = menuItems;
         }
     }
-    SetMenuItemsToViewBag(context, resultList);
 
-    base.OnActionExecuting(context);
-}
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var menuList = new List<Permission>();
 
+        var idRole = context.HttpContext.Session.GetInt32("IdRole");
+        var idMember = context.HttpContext.Session.GetInt32("IdMember");
+
+        if (idRole.HasValue && idMember.HasValue)
+        {
+            var parentPermissions = (from p in _context.Permissions
+                                     join pr in _context.PermissionRoles on p.IdPermission equals pr.IdPermission
+                                     where pr.IdRole == idRole && p.Status == true && p.IdPerParent == null
+                                     select p).ToList().Distinct();
+
+            var childPermissions = (from p in _context.Permissions
+                                    join pr in _context.PermissionRoles on p.IdPermission equals pr.IdPermission
+                                    where pr.IdRole == idRole && p.Status == true && p.IdPerParent != null
+                                    select p).ToList().Distinct();
+
+            foreach (var parent in parentPermissions)
+            {
+                var subPermissions = childPermissions
+                    .Where(c => c.IdPerParent == parent.IdPermission)
+                    .ToList();
+
+                parent.SubPermissions = subPermissions;
+
+                menuList.Add(parent);
+            }
+        }
+
+        SetMenuItemsToViewBag(context, menuList);
+        base.OnActionExecuting(context);
+    }
 }
