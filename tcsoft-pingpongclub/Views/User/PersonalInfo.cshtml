@@ -1,14 +1,14 @@
 ﻿@model tcsoft_pingpongclub.Models.Member
 
-<div class="container mt-5">
+<div class="cuong_container mt-5">
 	<h2 class="mb-4">Thông Tin User</h2>
 	<div class="card shadow-sm">
 		<div class="card-body">
 			<div class="row align-items-center">
 				<!-- Avatar Section -->
 				<div class="col-md-3 text-center">
-					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content($"~/image/{Model.LinkAvatar}") : "/path/to/placeholder-image.png")"
-						 class="rounded-circle img-fluid" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
+					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content($"~/image/{Model.LinkAvatar}") : "/path/to/placeholder-image.jpg")"
+						 alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
 				</div>
 				<!-- Information Section -->
 				<div class="col-md-9">

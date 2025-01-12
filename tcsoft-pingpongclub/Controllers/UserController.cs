@@ -72,7 +72,6 @@ namespace tcsoft_pingpongclub.Controllers
 
             if (!ModelState.IsValid)
             {
-                // Ghi lại lỗi nếu ModelState không hợp lệ
                 var errors = ModelState.Values.SelectMany(v => v.Errors);
                 foreach (var error in errors)
                 {
@@ -83,24 +82,24 @@ namespace tcsoft_pingpongclub.Controllers
 
             try
             {
-                // Lấy dữ liệu cũ từ cơ sở dữ liệu
                 var existingMember = await _context.Members.FirstOrDefaultAsync(m => m.IdMember == id);
                 if (existingMember == null)
                 {
                     return NotFound();
                 }
+
+                // Cập nhật thông tin khác
                 existingMember.MemberName = member.MemberName;
                 existingMember.Address = member.Address;
                 existingMember.Phone = member.Phone;
                 existingMember.Emaill = member.Emaill;
                 existingMember.Gender = member.Gender;
 
-
-                // Xử lý file ảnh nếu có
+                // Chỉ xử lý ảnh nếu có file mới
                 if (LinkAvatarFile != null && LinkAvatarFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image");
-                    Directory.CreateDirectory(uploadsFolder); // Tạo thư mục nếu chưa tồn tại
+                    Directory.CreateDirectory(uploadsFolder);
 
                     // Xóa ảnh cũ nếu tồn tại
                     if (!string.IsNullOrEmpty(existingMember.LinkAvatar))
@@ -108,11 +107,11 @@ namespace tcsoft_pingpongclub.Controllers
                         var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingMember.LinkAvatar.TrimStart('/'));
                         if (System.IO.File.Exists(oldFilePath))
                         {
-                            System.IO.File.Delete(oldFilePath); // Xóa ảnh cũ
+                            System.IO.File.Delete(oldFilePath);
                         }
                     }
 
-                    // Tạo tên file ảnh mới duy nhất
+                    // Tạo tên file mới
                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(LinkAvatarFile.FileName);
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -129,9 +128,8 @@ namespace tcsoft_pingpongclub.Controllers
                 _context.Update(existingMember);
                 await _context.SaveChangesAsync();
 
-
                 TempData["Success"] = "Cập nhật thông tin cá nhân thành công!";
-                return RedirectToAction(nameof(Index)); // Chuyển hướng về trang thông tin cá nhân
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
             {
@@ -208,8 +206,26 @@ namespace tcsoft_pingpongclub.Controllers
                 return RedirectToAction("ChangePassword");
             }
         }
+        // GET: User/MemberList
+        public async Task<IActionResult> MemberList(string searchTen = "")
+        {
+            // Lấy danh sách thành viên từ cơ sở dữ liệu
+            var members = await _context.Members
+                .Include(m => m.IdLevelNavigation) // Bao gồm thông tin cấp bậc
+                .Where(m => string.IsNullOrEmpty(searchTen) || m.MemberName.ToLower().Contains(searchTen.ToLower()))
+                .Select(m => new
+                {
+                    m.LinkAvatar,
+                    m.MemberName,
+                    m.Phone,
+                    m.Score,
+                    LevelName = m.IdLevelNavigation.LevelName // Lấy tên cấp bậc từ bảng liên kết
+                })
+                .ToListAsync();
 
-
+            ViewBag.SearchTen = searchTen;
+            return View(members);
+        }
 
         private bool MemberExists(int id)
         {

@@ -1,14 +1,17 @@
 ﻿@model tcsoft_pingpongclub.Models.Member
 
-<div class="container mt-5">
+<div class="cuong_container mt-5">
 	<h2 class="mb-4">Thông Tin User</h2>
 	<div class="card shadow-sm">
 		<div class="card-body">
 			<div class="row align-items-center">
 				<!-- Avatar Section -->
 				<div class="col-md-3 text-center">
-					<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content(Model.LinkAvatar) : Url.Content("~/path/to/placeholder-image.png"))"
-						 class="rounded-circle img-fluid" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
+					<div class="col-md-3 text-center">
+						<img src="@(!string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content(Model.LinkAvatar) : Url.Content("default-avatar.jpg"))"
+							 alt="User Avatar"
+							 style="width: 200px; height: 265px; object-fit: cover;">
+					</div>
 				</div>
 				<!-- Information Section -->
 				<div class="col-md-9">
@@ -72,11 +75,6 @@
 	<div class="mt-5 text-center">
 		<a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
 	</div>
-	@* <!-- Nút Quay lại -->
-	<div class="mt-5 text-center">
-		<a asp-controller="Userr" asp-action="Details" asp-route-id="@Model.IdMember" class="btn btn-secondary">Quay lại</a>
-	</div> *@
-
 
 </div>
 

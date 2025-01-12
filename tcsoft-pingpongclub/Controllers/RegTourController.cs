@@ -167,13 +167,16 @@ namespace tcsoft_pingpongclub.Controllers
                 TempData["Error"] = "Giải đấu không tồn tại. Vui lòng kiểm tra lại.";
                 return RedirectToAction("Index");
             }
+            // Lấy điểm của thành viên từ bảng Members
+            var member = _context.Members.FirstOrDefault(m => m.IdMember == idMember);
+            int score = member?.Score ?? 0;  // Lấy điểm nếu có, nếu không thì gán 0
 
             // Tạo mới Player
             var player = new Player
             {
                 IdTournament = idTournament,
                 IdMember = idMember,
-                Score = 0,
+                Score = (short?)score,
                 Status = true
             };
 
@@ -292,20 +295,22 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 return NotFound();
             }
-            // Truyền searchTerm cho View để giữ giá trị tìm kiếm
+            // Kiểm tra xem người dùng đã đăng ký chưa
+            int idMember = HttpContext.Session.GetInt32("IdMember") ?? 0;
+            var isRegistered = await _context.Players
+                .AnyAsync(p => p.IdMember == idMember && p.IdTournament == id);
             ViewBag.SearchTerm = searchTerm;
             ViewBag.IdTournament = id;
             ViewBag.TournamentName = tournament.TournamentName;
+            ViewBag.IsRegistered = isRegistered;
             return View(tournament);
         }
-       
-       
 
         private bool TournamentExists(int id)
         {
             return _context.Tournaments.Any(e => e.IdTournament == id);
         }
-      
+
 
     }
 }

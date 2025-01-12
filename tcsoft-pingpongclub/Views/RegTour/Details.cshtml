@@ -60,7 +60,7 @@
 		color: #721c24;
 	}
 
-	.btn-container {
+	.cuong_btn-container {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -108,7 +108,7 @@
 		}
 
 
-	.btn-container-row {
+	.cuong_btn-container-row {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 15px;
@@ -180,7 +180,7 @@
 	</div>
 	<div class="tournament-image-and-description">
 		<h4>Ảnh Giải Đấu</h4>
-		<img src="~/image/@Model.UrlImage" alt="Tournament Image" class="img-thumbnail" />
+		<img src="@Model.UrlImage" alt="Tournament Image" class="img-thumbnail" />
 		<p>@Html.DisplayFor(model => model.Infor)</p>
 	</div>
 </div>
@@ -200,20 +200,26 @@
 	</div>
 }
 
-<div class="btn-container">
-	<!-- Form đăng ký -->
-	<form method="post" asp-action="Register" asp-controller="RegTour">
-		<input type="hidden" name="idTournament" value="@Model.IdTournament" />
-		<button type="submit" class="btn btn-primary">Đăng ký</button>
-	</form>
-
-	<!-- Nút Hủy -->
-	<form method="post" asp-action="CancelRegistration" asp-controller="RegTour">
-		<input type="hidden" name="idTournament" value="@Model.IdTournament" />
-		<button type="submit" class="btn btn-danger">Hủy đăng ký</button>
-	</form>
+<div class="cuong_btn-container">
+    @if (!(bool)ViewBag.IsRegistered)
+    {
+        <!-- Form đăng ký -->
+        <form method="post" asp-action="Register" asp-controller="RegTour">
+            <input type="hidden" name="idTournament" value="@Model.IdTournament" />
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+        </form>
+    }
+    else
+    {
+        <!-- Form hủy đăng ký -->
+        <form method="post" asp-action="CancelRegistration" asp-controller="RegTour">
+            <input type="hidden" name="idTournament" value="@Model.IdTournament" />
+            <button type="submit" class="btn btn-danger">Hủy đăng ký</button>
+        </form>
+    }
 </div>
-<div class="btn-container-row">
+
+<div class="cuong_btn-container-row">
 	<!-- Nút Quay lại -->
 	<a href="@Url.Action("Index", new { searchTerm = ViewBag.SearchTerm })" class="btn btn-secondary">Quay lại</a>
 
