@@ -1,56 +1,410 @@
-﻿.child, .child1 {
-    display: none;
+﻿
+     /*CSS Edit*/
+
+.containerTien {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.playerTien {
+    margin-top: 20px;
+    justify-content:center;
+    flex-direction:column;
+}
+
+.imgTien {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.timeInputTien {
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.btnTien button,
+.btnTien a {
+    min-width: 120px;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+    .contentTien {
+        flex-direction: column;
+    }
+
+    .playerTien {
+        flex-direction: row; 
+        justify-content:center;
+        align-items: center;
+        text-align: left;
+    }
+
+    .playerTien h5 {
+            margin-left: 10px;
+            font-size: 1rem; 
+        }
+
+    .imgTien {
+        width: 60px; 
+        height: 60px;
+    }
+
+    .timeTien {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .formTien h4 {
+        font-size: 1.2rem;
+    }
+
+    .btnTien button,
+    .btnTien a {
+        font-size: 0.9rem;
+    }
+}
+
+
+/*CSS EditSet
+*/
+
+.containerSet {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.playerSet {
+    margin-top: 20px;
+    display: flex;
+    justify-content:center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.imgSet {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
 .card {
-    border-radius: 8px; /* Làm tròn góc thẻ */
-    background-color: #f9f9f9; /* Màu nền sáng */
-    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
 .card-title {
     font-size: 1.5rem;
 }
 
-.card-text {
-    font-size: 1.2rem; 
-}
-.table th, .table td {
-    vertical-align: middle;
-    text-align: center;
+.pointInput {
+    max-width: 80px;
 }
 
-.parent {
-    transition: background-color 0.3s ease;
+@media (max-width: 768px) {
+    #time{
+        display:none;
+    }
+    .playerSet {
+        flex-direction: row;
+        justify-content:center;
+        gap: 10px;
+        text-align: left;
+    }
+    
+    .timeSet{
+        margin:10px 0;
+    }
+    .imgSet {
+        width: 60px;
+        height: 60px;
+    }
+
+    .ratioSet {
+        width: 100%;
+    }
 }
 
-    .parent:hover {
+@media (max-width: 576px) {
+    h1, h3 {
+        font-size: 1.2rem;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+    }
+
+    .pointInput {
+        max-width: 60px;
+    }
+}
+
+
+/*Css Index*/
+
+.containerMatch {
+
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; 
+}
+.rankMatch {
+
+    margin-bottom: 20px;
+}
+
+.tblMatch, .tblRank {
+    width: 100%;
+    margin: 0 auto;
+    table-layout: auto; 
+}
+
+    .tblMatch th, .tblRank th {
+        text-align: center;
+        font-size: 1.1rem;
         background-color: #f8f9fa;
+        padding: 10px 5px;
     }
 
-.child td {
-    background-color: #f4f6f7;
+    .tblMatch td, .tblRank td {
+        vertical-align: middle;
+        text-align: center;
+        font-size: 0.9rem;
+        word-wrap: break-word; 
+        
+     
+    }
+    .tblMatch .match-info {
+        width:20%;
+    }
+    .tblMatch .playerWin {
+        width: 40%;
+        background-color: rgba(23, 162, 184, 1);
+        font-size: 20px;
+    }
+
+    .tblMatch .player {
+        width: 100%;
+        font-size: 20px;
+    }
+
+    .tblMatch td .player-image {
+        margin-right: 10px;
+        margin-bottom: 5px;
+        width: 20%;
+        height: auto;
+    }
+@media (max-width: 768px) {
+    .rankMatch{
+
+        display:none;
+    }
+    .containerMatch, .rankMatch {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .tblMatch .player-image, .tblRank .player-image {
+        width: 30px;
+        height: 30px;
+        border-radius:30px;
+    }
+
+    .tblMatch td, .tblRank td {
+        display: block;
+        text-align: left;
+        font-size: 0.9rem;
+        width: 100%; 
+    }
+    .tblMatch .match-info {
+        width: 100%;
+    } .tblMatch .match-info a{
+        font-size:15px;
+    }
+    .tblMatch .playerWin {
+        width: 100%;
+        background-color: rgba(23, 162, 184, 1);
+        font-size: 20px;
+    }
+    .tblMatch .player {
+       width:100%;
+       font-size:20px;
+    }
+        .tblMatch td .player-image  
+       {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            width: 20%;
+            height:auto;
+        }
+
+    .match-info {
+        display: block;
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    .match-winner, .match-normal {
+        font-size: 1rem;
+    }
+
+    .rank-header {
+        font-size: 1.2rem;
+    }
 }
 
-.child1 td {
-    background-color: #e9ecef;
+/*CSS MatchCenter*/
+
+
+.containerCenter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
 }
 
-.badge {
-    font-size: 1rem;
+.tblCenter {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+    margin-left:5%;
 }
 
-    .badge.bg-success {
-        background-color: #28a745;
+.tblCenter {
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+    .tblCenter th, .tblCenter td {
+        text-align: center;
+        font-size: 14px;
+    }
+    .tblCenter .player-name{
+        width:40%;
+    }
+    .player {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
     }
 
-    .badge.bg-primary {
-        background-color: #007bff;
+    .player img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
     }
 
-    .badge.bg-danger {
-        background-color: #dc3545;
+.matchInfor {
+    margin: 10px 0;
+}
+
+    .matchInfor h1 {
+        font-size: 24px;
+        font-weight: bold;
     }
 
-    .badge.bg-secondary {
-        background-color: #6c757d;
+    .matchInfor #live {
+        font-size: 16px;
+        padding: 5px 10px;
+        border-radius: 20px;
     }
+
+    .matchInfor #pts {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+.setCenter {
+    margin-top: 10px;
+    
+}
+.matchCenter{
+    padding:20px;
+}
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+    .card .card-title {
+        font-size: 18px;
+    }
+
+    .card .set-ratio {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+@media (max-width: 768px) {
+
+    .containerCenter{
+        flex-direction:column;
+        
+    }
+    .tblCenter {
+        width: 100%;
+        margin: 5% 0;
+    }
+
+    .player img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .matchInfor h1 {
+        font-size: 20px;
+    }
+
+    .matchInfor #pts {
+        font-size: 18px;
+    }
+
+    .card .card-title {
+        font-size: 16px;
+    }
+
+    .card .set-ratio {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tblCenter {
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .player img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .matchInfor h1 {
+        font-size: 18px;
+    }
+
+    .matchInfor #pts {
+        font-size: 16px;
+    }
+
+    .card .card-title {
+        font-size: 14px;
+    }
+
+    .card .set-ratio {
+        font-size: 12px;
+    }
+}

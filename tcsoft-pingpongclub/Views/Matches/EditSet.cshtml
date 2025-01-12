@@ -7,117 +7,105 @@
 }
 <h1 class="text-center">Điều chỉnh tỉ số</h1>
 <hr />
-<div class="container text-center py-4 bg-white text-dark">
-    <form asp-action="EditSet" class="mt-4">
-
+<div class="container text-center py-4 bg-white text-dark containerSet">
+    <form asp-action="EditSet" class="mt-4 formSet">
         <h1>@ViewBag.nameTour</h1>
         <div class="row align-items-center">
-            <div class="col-md-4">
-                <img src="~/image/@(ViewBag.urlPlayer1)" alt="Ảnh người chơi 1" class="img-fluid" style="width: 100px;border-radius:100px;">
+            <div class="col-md-4 playerSet d-flex    align-items-center">
+                <img src="~/image/@(ViewBag.urlPlayer1)" alt="Ảnh người chơi 1" class="imgSet">
                 <h5 class="mt-2">@ViewBag.playerName1</h5>
             </div>
 
-            <div class="col-md-4">
-                <h3>Thời gian thi đấu</h3>
-                <h5 class="mt-2">@ViewBag.MatchTime.ToString("hh:mm tt dd/MM/yyyy")</h5>
+            <div class="col-md-4 timeSet">
+                <h3 id="time">Thời gian thi đấu</h3>
+                <h5 class="mt-2 ">@ViewBag.MatchTime.ToString("hh:mm tt dd/MM/yyyy")</h5>
             </div>
-            <div class="col-md-4">
-                <img src="~/image/@(ViewBag.urlPlayer2)" alt="Ảnh người chơi 2" class="img-fluid" style="width: 100px; border-radius:100px;">
+
+            <div class="col-md-4 playerSet d-flex  align-items-center">
+                <img src="~/image/@(ViewBag.urlPlayer2)" alt="Ảnh người chơi 2" class="imgSet">
                 <h5 class="mt-2">@ViewBag.playerName2</h5>
             </div>
         </div>
-        <div class="row align-items-center">
-            @{
-                int index = 1;
-            }
+        <div class="row align-items-center mt-4">
             @foreach (var item in SetPoints)
             {
                 var points = item.Split(" - ");
-                <div class="col-md-4">
+                <div class="col-md-4 ratioSet mb-3">
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
                             <h1 class="card-title text-primary fw-bold">Set @i</h1>
-
                             <div class="d-flex justify-content-center align-items-center mt-2">
-                                <input type="number" name="point@(index)" id="point@(index)"
-                                       class="form-control text-center me-2"
-                                       style="max-width: 100px;" value="@points[0]" />
+                                <input type="number" name="point@(i * 2 - 1)" id="point@(i * 2 - 1)" class="form-control text-center me-2 pointInput" value="@points[0]" />
                                 <span class="mx-2">-</span>
-                                <input type="number" name="point@(index + 1)" id="point@(index + 1)"
-                                       class="form-control text-center ms-2"
-                                       style="max-width: 100px;" value="@points[1]" />
+                                <input type="number" name="point@(i * 2)" id="point@(i * 2)" class="form-control text-center ms-2 pointInput" value="@points[1]" />
                             </div>
                         </div>
                     </div>
                 </div>
-
                 i++;
-                index += 2;
             }
         </div>
         <input type="hidden" name="id" value="@ViewBag.idMatch">
-        <div class="d-flex mt-5 justify-content-center">
-            <button type="submit" class="btn btn-primary  me-2" id="sendRatio">Lưu</button>
-            <a asp-controller="Matches" class=" btn btn-danger" style="width:fit-content" asp-action="Index" asp-route-id="@ViewBag.Id">Trở lại</a>
-
+        <div class="d-flex mt-5 justify-content-center btnSet">
+            <button type="submit" class="btn btn-primary me-2">Lưu</button>
+            <a asp-controller="Matches" class="btn btn-danger" asp-action="Index" asp-route-id="@ViewBag.Id">Trở lại</a>
         </div>
-       
     </form>
 </div>
-<div>
-</div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-@*  <script>
-       document.getElementById("sendRatio").addEventListener("click", (event) => {
-    event.preventDefault();
+<sc@* ript>
+    document.getElementById("sendRatio").addEventListener("click", (event) => {
+        event.preventDefault();
 
-    // Declare formData before using it
-    const formData = new FormData();
+        // Declare formData before using it
+        const formData = new FormData();
 
-    const point1 = parseInt(document.getElementById("point1").value);
-    const point2 = parseInt(document.getElementById("point2").value);
-    const point3 = parseInt(document.getElementById("point3").value);
-    const point4 = parseInt(document.getElementById("point4").value);
-    const point5 = parseInt(document.getElementById("point5").value);
-    const point6 = parseInt(document.getElementById("point6").value);
+        const point1 = parseInt(document.getElementById("point1").value);
+        const point2 = parseInt(document.getElementById("point2").value);
+        const point3 = parseInt(document.getElementById("point3").value);
+        const point4 = parseInt(document.getElementById("point4").value);
+        const point5 = parseInt(document.getElementById("point5").value);
+        const point6 = parseInt(document.getElementById("point6").value);
 
-    formData.append("point1", point1);
-    formData.append("point2", point2);
-    formData.append("point3", point3);
-    formData.append("point4", point4);
-    formData.append("point5", point5);
-    formData.append("point6", point6);
+        formData.append("point1", point1);
+        formData.append("point2", point2);
+        formData.append("point3", point3);
+        formData.append("point4", point4);
+        formData.append("point5", point5);
+        formData.append("point6", point6);
 
-    fetch(`/Matches/EditSet/@(ViewBag.idMatch)`, {
-        method: 'POST',
-        headers: {
-            "X-Requested-With": "XMLHttpRequest"
-        },
-        body: formData
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Convert the response to JSON
+        for (const pair of formData.entries()) {
+            console.log(`${pair[0]}: ${pair[1]}`);
+        }
+
+        fetch(`https://localhost:44319/Matches/EditSet/642`, {
+            method: 'POST',
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: formData
         })
-        .then(data => {
-            if (data.success) {
-                alert("Dữ liệu đã được lưu thành công!");
-                // You can add logic to update the interface if needed
-            } else {
-                alert("Lưu dữ liệu thất bại, vui lòng thử lại.");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("Có lỗi xảy ra khi gửi yêu cầu!");
-        });
-});
-
-    </script>  *@
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json(); // Convert the response to JSON
+            })
+            .then(data => {
+                if (data.success) {
+                    alert("Dữ liệu đã được lưu thành công!");
+                    // You can add logic to update the interface if needed
+                } else {
+                    alert("Lưu dữ liệu thất bại, vui lòng thử lại.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Có lỗi xảy ra khi gửi yêu cầu!");
+            });
+    });
+</script> *@

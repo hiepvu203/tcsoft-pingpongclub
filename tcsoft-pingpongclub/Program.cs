@@ -21,7 +21,7 @@ app.Use(async (context, next) =>
     if (context.Request.Path.Value.EndsWith(".css"))
     {
         string scssPath = Path.Combine("wwwroot", Path.ChangeExtension(context.Request.Path.Value, ".scss"));
-
+       
         // Kiểm tra xem file SCSS có tồn tại không
         if (File.Exists(scssPath))
         {
