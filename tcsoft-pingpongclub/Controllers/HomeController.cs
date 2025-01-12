@@ -20,26 +20,47 @@ namespace tcsoft_pingpongclub.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly ThuctapKtktcn2024Context _context;
-		
-	
+
+
 
 		public HomeController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
-			_context=new ThuctapKtktcn2024Context();
+			_context = new ThuctapKtktcn2024Context();
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index(int limit = 3)
 		{
-			
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			ViewBag.IsLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			
-			return View();
+
+			var tournamentsWithActualAmount = await _context.Tournaments
+				.Include(t => t.RankEndNavigation)
+				.Include(t => t.RankStartNavigation)
+				.Select(t => new Tournament
+				{
+					IdTournament = t.IdTournament,
+					TournamentName = t.TournamentName,
+					UrlImage = t.UrlImage,
+					TimeStart = t.TimeStart,
+					TimeEnd = t.TimeEnd,
+					Infor = t.Infor,
+					Amount = t.Amount,
+					RankStartNavigation = t.RankStartNavigation,
+					RankEndNavigation = t.RankEndNavigation,
+					Status = t.Status,
+					ActualAmount = (short)_context.Players.Count(p => p.IdTournament == t.IdTournament)
+				})
+				.OrderByDescending(t => t.IdTournament)
+				.Take(limit)
+				.ToListAsync();
+
+			return View(tournamentsWithActualAmount);
 		}
-		
-		public async Task<IActionResult> HienThiThongTinGiaiDau()
+
+
+
+		public async Task<IActionResult> IndexWithTournaments()
 		{
 			var tournamentsWithActualAmount = await _context.Tournaments
 				.Include(t => t.RankEndNavigation)
@@ -51,12 +72,11 @@ namespace tcsoft_pingpongclub.Controllers
 					UrlImage = t.UrlImage,
 					TimeStart = t.TimeStart,
 					TimeEnd = t.TimeEnd,
-					Infor=t.Infor,
-					Amount=t.Amount,
+					Infor = t.Infor,
+					Amount = t.Amount,
 					RankStartNavigation = t.RankStartNavigation,
 					RankEndNavigation = t.RankEndNavigation,
 					Status = t.Status,
-					// Tính ActualAmount bằng cách đếm số Players liên quan
 					ActualAmount = (short)_context.Players.Count(p => p.IdTournament == t.IdTournament)
 				})
 				.OrderByDescending(t => t.IdTournament)
@@ -65,7 +85,6 @@ namespace tcsoft_pingpongclub.Controllers
 			return View(tournamentsWithActualAmount);
 		}
 
-	  
 
 
 		public IActionResult Privacy()

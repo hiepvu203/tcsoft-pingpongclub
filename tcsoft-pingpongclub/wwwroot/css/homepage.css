@@ -1,5 +1,5 @@
 .TCSoftHomePage{
-    font-size: 12px;
+    font-size: 1vw;
     margin-left: 10%;
     width: 80%;
 }
@@ -136,4 +136,19 @@ body {
 
 .tintucGiaidau h1{
     margin-bottom: 3%;
+}
+
+
+.MainTourOnHomePage p:last-of-type {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* Change this number to control the number of lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+    .MainTourOnHomePage {
+        margin: 10px;
+    }
 }

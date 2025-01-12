@@ -16,7 +16,7 @@ public class MenuActionFilter : ActionFilterAttribute
 {
     if (context.Controller is Controller controller)
     {
-        controller.ViewBag.menu = menuItems;
+        controller.ViewBag.menu = menuItems; 
     }
 }
     public override void OnActionExecuting(ActionExecutingContext context)

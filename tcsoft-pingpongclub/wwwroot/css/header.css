@@ -56,6 +56,7 @@
     border-radius: 5%;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: 700;
+   
 }
 
 .headerNvabar a:hover {
@@ -64,7 +65,7 @@
 }
 
 .img-logo-header {
-    width: 10%;
+    width: 80%;
 }
 
 .img-logo-header img {
@@ -79,7 +80,9 @@
     border-radius: 30px;
     background-color: rgb(65, 65, 65);
     color: rgb(206, 206, 206);
-
+    position: absolute;
+    width: max-content;
+    padding: 10px;
 }
 
 #SignInButtonHomePage a:hover {
@@ -95,6 +98,7 @@
     color: rgb(206, 206, 206);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: 700;
+    font-size: 5vw;
 
 }
 
@@ -113,6 +117,10 @@
     background-color: rgb(65, 65, 65);
     color: rgb(206, 206, 206);
     border: none;
+    padding-right: 10px;
+    width: max-content;
+    padding-left: 10px;
+    padding: 10px;
 
 }
 
@@ -126,4 +134,10 @@
     border-radius: 0px;
     box-shadow: none;
     padding: none;
+    display: flex;
+    padding: 10px;
+    
+}
+.link_home_page_img{
+    width: 6%;
 }

@@ -3,47 +3,46 @@
     ViewData["Title"] = "Home Page"; // Đặt tiêu đề cho trang
     Layout = "_Layout"; // Chỉ định layout sử dụng
 }
-
 <div class="">
     <div>
         <img src="~/image/anhhomepage.jpg" class="ImageHomePage">
     </div>
-    <div class="TCSoftHomePage">
-        <h1>TC SOFT CLUB</h1>
-        <h1>TC SOFT CLUB</h1>
-        <h1>TC SOFT CLUB</h1>
-        <h1>TC SOFT CLUB</h1>
-        <h1>TC SOFT CLUB</h1>
-    </div>
-    <div class="tintucGiaidau"> 
+    <marquee behavior="scroll" direction="left">
+        <div class="TCSoftHomePage">
+            <h1>TC SOFT CLUB </h1>
+            <h1>TC SOFT CLUB </h1>
+            <h1>TC SOFT CLUB </h1>
+            <h1>TC SOFT CLUB </h1>
+            <h1>TC SOFT CLUB </h1>
+        </div>
+    </marquee>
+    <div class="tintucGiaidau">
         <div class="">
             <h1>Giải Đấu Mới Nhất</h1>
-            <div class="MainTourOnHomePage">
-                <img src="~/image/anhhomepage.jpg" alt="Tour Image">
-                <div class="content">
-                    <h2>Title 1</h2>
-                    <p>Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a
-                        very very short story.</p>
-                </div>
-            </div>
-            <div class="MainTourOnHomePage">
-                <img src="~/image/anhhomepage.jpg" alt="Tour Image">
-                <div class="content">
-                    <h2>Title 2</h2>
-                    <p>Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a
-                        very very short story.</p>
-                </div>
-            </div>
-            <div class="MainTourOnHomePage">
-                <img src="~/image/anhhomepage.jpg" alt="Tour Image">
-                <div class="content">
-                    <h2>Title 3</h2>
-                    <p>Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a
-                        very very short story.</p>
-                </div>
+
+            <div class="tournaments-container">
+                @if (Model != null && Model is IEnumerable<tcsoft_pingpongclub.Models.Tournament> tournaments && tournaments.Any())
+                {
+                    foreach (var tournament in tournaments)
+                    {
+                        <div class="MainTourOnHomePage">
+                            <img src="@tournament.UrlImage" alt="Tour Image">
+                            <div class="content">
+                                <h2>@tournament.TournamentName</h2>
+                                <p>Thời gian bắt đầu: @(tournament.TimeStart?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa xác định")
+                                </p>
+                                <p>Thời gian kết thúc: @(tournament.TimeEnd?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa xác định")
+                                </p>
+                                <p>Thông tin: @tournament.Infor</p>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Không có giải đấu nào được hiển thị.</p>
+                }
             </div>
         </div>
     </div>
 </div>
-
-
