@@ -64,21 +64,16 @@ namespace tcsoft_pingpongclub.Controllers
 			return View(award);
 		}
 
-		// GET: Awards/Create
-		public IActionResult CreateMultiple(int Id)
-		{
-			ViewData["IdPlayer"] = new SelectList(
-				_context.Players
-					.Where(p => p.IdTournament == Id)
-					.Include(p => p.IdMemberNavigation)
-					.ToList(),
-				"IdPlayer",
-				"IdMemberNavigation.MemberName");
-			ViewBag.IdTournament = Id;
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id");
+        // GET: Awards/Create
+        public IActionResult CreateMultiple(int Id)
+        {
+            ViewBag.IdTournament = Id;
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == Id)
+               .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
 
-			return View(); 
-		}
+            return View();
+        }
 
 		// POST: Awards/Create
 		[HttpPost]
@@ -87,102 +82,72 @@ namespace tcsoft_pingpongclub.Controllers
 		{
 			decimal totalMoney = awards.Sum(a => a.Money ?? 0); // Sử dụng toán tử null-coalescing (??) để tránh null
 
-			// Lấy Amount từ ExpenseAndIncome
-			var expenseAndIncome = _context.ExpenseAndIncomes.FirstOrDefault(e => e.Id == awards.First().Id);
-			if (expenseAndIncome != null)
-			{
-				decimal amount = expenseAndIncome.Amount ;
-				
+            // Lấy Amount từ ExpenseAndIncome
+            var expenseAndIncome = _context.ExpenseAndIncomes.FirstOrDefault(e => e.Id == awards.First().Id);
+            if (expenseAndIncome != null)
+            {
+                decimal amount = expenseAndIncome.Amount;
 
-				// Kiểm tra nếu tổng tiền của giải thưởng bằng Amount
-				if (totalMoney != amount)
-				{
-					// Hiển thị thông báo lỗi nếu tổng tiền không bằng Amount
-					ModelState.AddModelError(string.Empty, "Tổng tiền của 3 giải thưởng không bằng số tiền của giao dịch.");
-					ViewData["IdPlayer"] = new SelectList(
-				_context.Players
-					.Where(p => p.IdTournament == awards.First().IdTournament)
-					.Include(p => p.IdMemberNavigation)
-					.ToList(),
-				"IdPlayer",
-				"IdMemberNavigation.MemberName",
-				awards.First().IdPlayer);
-					ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", awards.First().Id);
-					ViewBag.IdTournament = awards.First().IdTournament;
-					return View(awards); // Trả lại view với lỗi
-				}
-			}
-			if (ModelState.IsValid)
-			{
-				// Add each award to the context
-				foreach (var award in awards)
-				{
-					_context.Add(award);
-				}
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index), new { Id = awards.First().IdTournament });
-			}
 
-			ViewData["IdPlayer"] = new SelectList(
-				_context.Players
-					.Where(p => p.IdTournament == awards.First().IdTournament)
-					.Include(p => p.IdMemberNavigation)
-					.ToList(),
-				"IdPlayer",
-				"IdMemberNavigation.MemberName",
-				awards.First().IdPlayer);
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", awards.First().Id);
-			ViewBag.IdTournament = awards.First().IdTournament;
-			return View(awards);
-		}
+                // Kiểm tra nếu tổng tiền của giải thưởng bằng Amount
+                if (totalMoney != amount)
+                {
+                    // Hiển thị thông báo lỗi nếu tổng tiền không bằng Amount
+                    ModelState.AddModelError(string.Empty, "Tổng tiền của 3 giải thưởng không bằng số tiền của giao dịch.");
+                  
+                    ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", awards.First().Id);
+                    ViewBag.IdTournament = awards.First().IdTournament;
+                    return View(awards); // Trả lại view với lỗi
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                // Add each award to the context
+                foreach (var award in awards)
+                {
+                    _context.Add(award);
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Id = awards.First().IdTournament });
+            }
+
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", awards.First().Id);
+            ViewBag.IdTournament = awards.First().IdTournament;
+            return View(awards);
+        }
 
 
 
-		// GET: Awards/Create
-		public IActionResult Create(int Id)
-		{
-			ViewData["IdPlayer"] = new SelectList(
-			 _context.Players
-				 .Where(p => p.IdTournament ==Id)
-				 .Include(p => p.IdMemberNavigation)
-				 .ToList(),  // Chuyển về List để sử dụng với SelectList
-			 "IdPlayer",
-			 "IdMemberNavigation.MemberName");
-			ViewBag.IdTournament = Id;
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-				.Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament==Id)
-				.Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id)}), "Id", "Display");
-			return View();
-		}
+        // GET: Awards/Create
+        public IActionResult Create(int Id)
+        {
+            ViewBag.IdTournament = Id;
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+                .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == Id)
+                .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+            return View();
+        }
 
 
-		// POST: Awards/Create
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("IdAward,IdTournament,IOrder,Money,Score,IdPlayer,Id,Status")] Award award)
-		{
-			if (ModelState.IsValid)
-			{
-				_context.Add(award);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index), new { Id = award.IdTournament });
-			}
-			ViewData["IdPlayer"] = new SelectList(
-			 _context.Players
-				 .Where(p => p.IdTournament == award.IdTournament)
-				 .Include(p => p.IdMemberNavigation)
-				 .ToList(),  // Chuyển về List để sử dụng với SelectList
-			 "IdPlayer",
-			 "IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
-			 award.IdPlayer);
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-				.Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
-				.Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
-			ViewBag.IdTournament = award.IdTournament;
-			return View(award);
-		}
+        // POST: Awards/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("IdAward,IdTournament,IOrder,Money,Score,IdPlayer,Id,Status")] Award award)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(award);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Id = award.IdTournament });
+            }        
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+                .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+                .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+            ViewBag.IdTournament = award.IdTournament;
+            return View(award);
+        }
 
 		// GET: Awards/Edit/5
 		public async Task<IActionResult> Edit(int? id)
@@ -206,57 +171,57 @@ namespace tcsoft_pingpongclub.Controllers
 			 "IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
 			 award.IdPlayer);
 
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-			   .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
-			   .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
-			ViewBag.IdTournament = award.IdTournament;
-			return View(award);
-		}
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+               .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+            ViewBag.IdTournament = award.IdTournament;
+            return View(award);
+        }
 
-		// POST: Awards/Edit/5
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("IdAward,IdTournament,IOrder,Money,Score,Id,IdPlayer,Status")] Award award)
-		{
-		 
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					_context.Update(award);
-					await _context.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!AwardExists(award.IdAward))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
-				return RedirectToAction(nameof(Index), new { Id = award.IdTournament });
-			}
+        // POST: Awards/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("IdAward,IdTournament,IOrder,Money,Score,Id,IdPlayer,Status")] Award award)
+        {
 
-			// Gán lại danh sách IdPlayer và Id (trong trường hợp ModelState không hợp lệ)
-			ViewData["IdPlayer"] = new SelectList(
-				_context.Players
-					.Where(p => p.IdTournament == award.IdTournament)
-					.Include(p => p.IdMemberNavigation)
-					.ToList(),  // Chuyển về List để sử dụng với SelectList
-				"IdPlayer",
-				"IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
-				award.IdPlayer);
-			ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-			   .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
-			   .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
-			ViewBag.IdTournament = award.IdTournament;
-			return View(award);
-		}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(award);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AwardExists(award.IdAward))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index), new { Id = award.IdTournament });
+            }
+
+            // Gán lại danh sách IdPlayer và Id (trong trường hợp ModelState không hợp lệ)
+            ViewData["IdPlayer"] = new SelectList(
+                _context.Players
+                    .Where(p => p.IdTournament == award.IdTournament)
+                    .Include(p => p.IdMemberNavigation)
+                    .ToList(),  // Chuyển về List để sử dụng với SelectList
+                "IdPlayer",
+                "IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
+                award.IdPlayer);
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+               .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+            ViewBag.IdTournament = award.IdTournament;
+            return View(award);
+        }
 
 
 		// GET: Awards/Delete/5
@@ -297,9 +262,9 @@ namespace tcsoft_pingpongclub.Controllers
 			return RedirectToAction(nameof(Index), new { Id = IdTournament });
 		}
 
-		private bool AwardExists(int id)
-		{
-			return _context.Awards.Any(e => e.IdAward == id);
-		}
-	}
+        private bool AwardExists(int id)
+        {
+            return _context.Awards.Any(e => e.IdAward == id);
+        }
+    }
 }

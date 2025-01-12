@@ -5,86 +5,85 @@
     var IdTournament = (int)ViewBag.IdTournament;
 }
 <div class="tho-container">
-<h1 class="text-center mb-4">@ViewData["Title"] </h1>
+    <h1 class="text-center mb-4">@ViewData["Title"] </h1>
 
-<p>
-    <a asp-action="Create" asp-route-id="@IdTournament" class="btn btn-primary">Tạo Giải Thưởng</a>
-    <a asp-action="CreateMultiple" asp-route-id="@IdTournament" class="btn btn-primary">Tạo 3 Giải Thưởng </a>
-</p>
-@if (!Model.Any())
-{
-    <p class="text-center text-danger">Chưa có giải thưởng nào trong bảng đấu này</p>
-}
-else
-{
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Giải</th>
-                <th>Tiền thưởng</th>
-                <th>Điểm</th>
-                <th>Giải đấu</th>
-                <th>Người chơi</th>
-                <th>Mã Hóa Đơn Chi</th>
-                <th>Trạng thái</th>
-                <th>Hành Động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <p>
+        <a asp-action="Create" asp-route-id="@IdTournament" class="btn btn-primary">Tạo Giải Thưởng</a>
+        <a asp-action="CreateMultiple" asp-route-id="@IdTournament" class="btn btn-primary">Tạo 3 Giải Thưởng </a>
+    </p>
+    @if (!Model.Any())
+    {
+        <p class="text-center text-danger">Chưa có giải thưởng nào trong giải đấu này</p>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="bg-primary text-white">
                 <tr>
-                    <td>
-                        @if (item.IOrder == 1)
-                        {
-                            <span>Giải Nhất</span>
-                        }
-                        else if (item.IOrder == 2)
-                        {
-                            <span>Giải Nhì</span>
-                        }
-                        else
-                        {
-                            <span>Giải Ba</span>
-                        }
-                       
-                    </td>
-                    <td>
-                        @String.Format("{0:#,0} VND", item.Money)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Score)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IdTournamentNavigation.TournamentName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IdPlayerNavigation.IdMemberNavigation.MemberName)
-                    </td>
-                    <td>
+
+                    <th>Giải</th>
+                    <th>Tiền thưởng</th>
+                    <th>Điểm</th>
+                    <th>Giải đấu</th>
+                    <th>Mã Hóa Đơn Chi</th>
+                    <th>Trạng thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.IOrder == 1)
+                            {
+                                <span>Giải Nhất</span>
+                            }
+                            else if (item.IOrder == 2)
+                            {
+                                <span>Giải Nhì</span>
+                            }
+                            else
+                            {
+                                <span>Giải Ba</span>
+                            }
+
+                        </td>
+                        <td>
+                            @String.Format("{0:#,0} VND", item.Money)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Score)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdTournamentNavigation.TournamentName)
+                        </td>
+                        <td>
 
                             @item.IdTournamentNavigation.TournamentName: @item.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") - Mã Hóa Đơn: @item.Id
-                    </td>
-                    <td>
-                        @if (item.Status == true)
-                        {
-                            @:Hiện
-                        }
-                        else
-                        {
-                            @:Ẩn
-                        }
-                    </td>
-                    <td>
-                        <div class="d-flex flex-column align-items-stretch">
-                            <a asp-action="Edit" asp-route-id="@item.IdAward" class="btn btn-warning btn-sm w-100 mb-1">Sửa</a>
-                            <a asp-action="Details" asp-route-id="@item.IdAward" class="btn btn-info btn-sm w-100 mb-1">Chi tiết</a>
-                            <a asp-action="Delete" asp-route-id="@item.IdAward" class="btn btn-danger btn-sm w-100">Xóa</a>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+                        </td>
+                        <td>
+                            @if (item.Status == true)
+                            {
+                                @:Hiện
+                            }
+                            else
+                            {
+                                @:Ẩn
+                            }
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column align-items-stretch">
+                                <a asp-action="Edit" asp-route-id="@item.IdAward" class="btn btn-warning btn-sm w-100 mb-1">Sửa</a>
+                                <a asp-action="Details" asp-route-id="@item.IdAward" class="btn btn-info btn-sm w-100 mb-1">Chi tiết</a>
+                                <a asp-action="Delete" asp-route-id="@item.IdAward" class="btn btn-danger btn-sm w-100">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+     <a asp-action="Details" asp-controller="Tournaments" asp-route-Id="@IdTournament" class="btn btn-secondary px-4">Quay lại chi tiết giải đấu</a>
 </div>

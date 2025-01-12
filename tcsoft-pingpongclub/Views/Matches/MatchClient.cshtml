@@ -1,78 +1,4 @@
-﻿<style>
-
-    h1 {
-        color: #333;
-        font-size: 2.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .Search {
-        background-color: #fff;
-        
-    }
-
-    .dateSearch label {
-        font-weight: bold;
-        color: #555;
-    }
-
-    .dateSearch input[type="date"] {
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 5px 10px;
-        font-size: 1rem;
-    }
-
-    .dateSearch button {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-        .dateSearch button:hover {
-            background-color: #218838;
-        }
-
-    .Match {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-    }
-
-    .FeaturedMatch {
-        background-color: #fff;
-        border-radius: 8px;
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-
-        .table th, .table td {
-            border: 1px solid #ddd;
-
-            text-align: center;
-        }
-
-        .table th {
-            background-color: #f4f4f4;
-            font-weight: bold;
-            color: #333;
-        }
-
-</style>
+﻿
 
 
 <h1 class="mt-5 text-center">@ViewBag.Tour.TournamentName</h1>
@@ -96,7 +22,7 @@
         <div class="Match row gap-3 w-full">
         <div class="FeaturedMatch col-7 d-flex flex-column" >
             <div class=" w-full" style="">
-                    <table class="table table-bordered align-middle">
+                    <table class="table table-bordered align-middle tbl">
                         <thead>
                             <tr>
                                 <td colspan="3" style="font-weight:bold; font-size:30px">Trận đấu trong ngày</td>
@@ -232,7 +158,7 @@
             </div>
             <div class="d-flex flex-row" style="">
                     <div class="flex-fill " style="width:40%">
-                        <table class="table table-bordered align-middle">
+                        <table class="table table-bordered align-middle tbl">
                             <thead>
                                 <tr>
                                     <td colspan="3" style="font-weight:bold; font-size:20px">Trận đấu đã diễn ra</td>
@@ -359,7 +285,7 @@
                         </table>
                 </div>
                 <div class="flex-fill ms-1" style="">
-                        <table class="table table-bordered align-middle">
+                        <table class="table table-bordered align-middle tbl">
                             <thead>
                                 <tr>
                                     <td colspan="3" style="font-weight:bold; font-size:20px">trận đấu trong tương lai</td>
@@ -490,7 +416,7 @@
 
         </div>
         <div class="rank col-4">
-                <table class="table table-bordered align-middle">
+                <table class="table table-bordered align-middle tbl">
                     <thead class="table-light">
                         <tr>
                             <th class="text-center">
@@ -529,7 +455,7 @@
     else
     {
         <div>
-            <table class="table table-bordered align-middle">
+            <table class="table table-bordered align-middle tbl">
                 <thead>
                     <tr>
                         <td colspan="3" style="font-weight:bold; font-size:30px">Danh sách trận đấu  tìm kiếm</td>

@@ -6,99 +6,56 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-using tcsoft_pingpongclub.Filter;
-using tcsoft_pingpongclub.Service;
+
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-	[ServiceFilter(typeof(MenuActionFilter))]
-	[ServiceFilter(typeof(AuthorizationFilter))]
-	public class TournamentsController : Controller
-	{
-		private readonly ThuctapKtktcn2024Context _context;
+   
+    public class TournamentsController : Controller
+    {
+        private readonly ThuctapKtktcn2024Context _context;
 
-		public TournamentsController(ThuctapKtktcn2024Context context)
-		{
-			_context = context;
-		}
-	  
-		// GET: Tournaments
-		public async Task<IActionResult> Index()
-		{
-			var tournamentsWithActualAmount = await _context.Tournaments
-				.Include(t => t.RankEndNavigation)
-				.Include(t => t.RankStartNavigation)
-				.Select(t => new Tournament
-				{
-					IdTournament = t.IdTournament,
-					TournamentName = t.TournamentName,
-					UrlImage = t.UrlImage,
-					TimeStart = t.TimeStart,
-					Type =t.Type,
-					TimeEnd = t.TimeEnd,
-					Infor=t.Infor,
-					Amount=t.Amount,
-					RankStartNavigation = t.RankStartNavigation,
-					RankEndNavigation = t.RankEndNavigation,
-					Status = t.Status,
-					// Tính ActualAmount bằng cách đếm số Players liên quan
-					ActualAmount = (short)_context.Players.Count(p => p.IdTournament == t.IdTournament)
-				})
-				.OrderByDescending(t => t.IdTournament)
-				.ToListAsync();
+        public TournamentsController(ThuctapKtktcn2024Context context)
+        {
+            _context = context;
+        }
 
-			return View(tournamentsWithActualAmount);
-		}
+        // GET: Tournaments
+        public async Task<IActionResult> Index(int page = 1)
+        {
+            int pageSize = 5; // Số giải đấu mỗi trang
+            var totalItems = await _context.Tournaments.CountAsync(); // Tổng số giải đấu
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
+            var tournamentsWithActualAmount = await _context.Tournaments
+                .Include(t => t.RankEndNavigation)
+                .Include(t => t.RankStartNavigation)
+                .Select(t => new Tournament
+                {
+                    IdTournament = t.IdTournament,
+                    TournamentName = t.TournamentName,
+                    UrlImage = t.UrlImage,
+                    TimeStart = t.TimeStart,
+                    Type = t.Type,
+                    TimeEnd = t.TimeEnd,
+                    Infor = t.Infor,
+                    Amount = t.Amount,
+                    RankStartNavigation = t.RankStartNavigation,
+                    RankEndNavigation = t.RankEndNavigation,
+                    Status = t.Status,
+                    ActualAmount = (short)_context.Players.Count(p => p.IdTournament == t.IdTournament)
+                })
+                .OrderByDescending(t => t.IdTournament)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-		public async Task<IActionResult> demoviewuser(int page = 1)
-		{
-			int pageSize = 8; // Số giải đấu tối đa mỗi trang
-			var totalTournaments = _context.Tournaments.Count();
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
 
-			// Tính pageSize = tổng số giải đấu chia cho 8 cộng số dư
-			int totalPages = (int)Math.Ceiling((double)totalTournaments / pageSize);
-		   
-			var thuctapKtktcn2024Context = _context.Tournaments
-				.Include(t => t.RankEndNavigation)
-				.Include(t => t.RankStartNavigation)
-				.Skip((page - 1) * pageSize)
-				.Take(pageSize);
-			
-			ViewBag.TotalPages = (int)Math.Ceiling((double)totalTournaments / pageSize);
-			ViewBag.CurrentPage = page;
-			var sortedTournaments = thuctapKtktcn2024Context.OrderByDescending(t => t.IdTournament).Where(t => t.Status ==true );
-			ViewBag.Rank = new SelectList(_context.Levels, "IdLevel", "LevelName");
-		   
-			return View(await sortedTournaments.ToListAsync());
-		}
-
-		public IActionResult Information(int id)
-		{
-			// Lấy giải đấu hiện tại
-			var tournament = _context.Tournaments
-				.Include(t => t.RankStartNavigation)
-				.Include(t => t.RankEndNavigation)
-				.FirstOrDefault(t => t.IdTournament == id);
-
-			if (tournament == null)
-			{
-				return NotFound(); // Nếu không tìm thấy, trả về 404
-			}
-
-			// Lấy danh sách các giải đấu khác trong cùng hạng
-			var relatedTournaments = _context.Tournaments
-				.Include(t => t.RankStartNavigation)
-				.Include(t => t.RankEndNavigation)
-				.Where(t => t.RankStart == tournament.RankStart && t.RankEnd == tournament.RankEnd && t.IdTournament != id)
-				.Take(3)
-				.ToList();
-
-			// Gửi dữ liệu sang view
-			ViewBag.RelatedTournaments = relatedTournaments;
-
-			return View(tournament);
-		}
+            return View(tournamentsWithActualAmount);
+        }
 
 
 		// GET: Tournaments/Details/5
@@ -119,8 +76,8 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 
-			return View(tournament);
-		}
+            return View(tournament);
+        }
 
 
         // GET: Tournaments/Create
@@ -223,7 +180,7 @@ namespace tcsoft_pingpongclub.Controllers
         {
             if (id != tournament.IdTournament)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             // Lấy giải đấu hiện tại trong cơ sở dữ liệu
@@ -347,17 +304,18 @@ namespace tcsoft_pingpongclub.Controllers
 				// Lấy đường dẫn đầy đủ của file cũ
 				var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", tournament.UrlImage.TrimStart('/'));
 
-				// Kiểm tra xem file có tồn tại không và xóa
-				if (System.IO.File.Exists(oldFilePath))
-				{
-					System.IO.File.Delete(oldFilePath); // Xóa ảnh cũ
-				}
-				
-			}
-			if (tournament != null)
-			{
-				_context.Tournaments.Remove(tournament);
-			}
+
+                // Kiểm tra xem file có tồn tại không và xóa
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath); // Xóa ảnh cũ
+                }
+
+            }
+            if (tournament != null)
+            {
+                _context.Tournaments.Remove(tournament);
+            }
 
 			await _context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));

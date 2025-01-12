@@ -4,75 +4,70 @@
     ViewData["Title"] = "Tạo Giải Thưởng";
 }
 <div class="tho-container">
-<h1 class="text-center">@ViewData["Title"]</h1>
-<div class="row justify-content-center">
-    
-    <div class="col-md-6">    
-        <form asp-action="Create" class="shadow-sm p-4 rounded bg-light">
-            <h4 class="mb-4 text-center">Thông Tin Giải Thưởng</h4>
-            <input type="hidden" name="IdTournament" value="@ViewBag.IdTournament" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h1 class="text-center">@ViewData["Title"]</h1>
+    <div class="row justify-content-center">
 
-            <!-- Thứ hạng -->
-            <div class="form-group mb-3">
-                <label for="IOrder" class="form-label fw-bold">Thứ hạng</label>
-                <select id="IOrder" asp-for="IOrder" class="form-select">
-                    <option value="1">Giải Nhất</option>
-                    <option value="2">Giải Nhì</option>
-                    <option value="3">Giải Ba</option>
-                </select>
-                <span asp-validation-for="IOrder" class="text-danger"></span>
-            </div>
+        <div class="col-md-6">
+            <form asp-action="Create" class="shadow-sm p-4 rounded bg-light">
+                <h4 class="mb-4 text-center">Thông Tin Giải Thưởng</h4>
+                <input type="hidden" name="IdTournament" value="@ViewBag.IdTournament" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Tiền thưởng -->
-            <div class="form-group mb-3">
-                <label asp-for="Money" class="form-label fw-bold">Tiền thưởng</label>
-                <input asp-for="Money" class="form-control" placeholder="Nhập số tiền thưởng" />
-                <span asp-validation-for="Money" class="text-danger"></span>
-            </div>
+                <!-- Thứ hạng -->
+                <div class="form-group mb-3">
+                    <label for="IOrder" class="form-label fw-bold">Thứ hạng</label>
+                    <select id="IOrder" asp-for="IOrder" class="form-select">
+                        <option value="1">Giải Nhất</option>
+                        <option value="2">Giải Nhì</option>
+                        <option value="3">Giải Ba</option>
+                    </select>
+                    <span asp-validation-for="IOrder" class="text-danger"></span>
+                </div>
 
-            <!-- Điểm -->
-            <div class="form-group mb-3">
-                <label asp-for="Score" class="form-label fw-bold">Điểm</label>
-                <input asp-for="Score" class="form-control" placeholder="Nhập số điểm" />
-                <span asp-validation-for="Score" class="text-danger"></span>
-            </div>
+                <!-- Tiền thưởng -->
+                <div class="form-group mb-3">
+                    <label asp-for="Money" class="form-label fw-bold">Tiền thưởng</label>
+                    <input asp-for="Money" class="form-control" placeholder="Nhập số tiền thưởng" />
+                    <span asp-validation-for="Money" class="text-danger"></span>
+                </div>
 
-            <!-- Người chơi -->
-            <div class="form-group mb-3">
-                <label asp-for="IdPlayer" class="form-label fw-bold">Người chơi</label>
-                <select asp-for="IdPlayer" class="form-select" asp-items="ViewBag.IdPlayer"></select>
-                <span asp-validation-for="IdPlayer" class="text-danger"></span>
-            </div>
+                <!-- Điểm -->
+                <div class="form-group mb-3">
+                    <label asp-for="Score" class="form-label fw-bold">Điểm</label>
+                    <input asp-for="Score" class="form-control" placeholder="Nhập số điểm" />
+                    <span asp-validation-for="Score" class="text-danger"></span>
+                </div>
 
-            <!-- Mã hóa đơn -->
-            <div class="form-group mb-3">
-                <label asp-for="Id" class="form-label fw-bold">Mã hóa đơn chi</label>
-                <select asp-for="Id" class="form-select" asp-items="ViewBag.Id"></select>
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
+                <!-- Mã hóa đơn -->
+                <div class="form-group mb-3">
+                    <label asp-for="Id" class="form-label fw-bold">Mã hóa đơn chi</label>
+                    <select asp-for="Id" class="form-select" asp-items="ViewBag.Id">                   
+                    <option value="" disabled selected>Chọn Mã Hóa Đơn</option>                  
+                    </select>
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
 
-            <!-- Trạng thái -->
-            <div class="form-group mb-3">
-                <label for="Status" class="form-label fw-bold">Trạng thái</label>
-                <select id="Status" asp-for="Status" class="form-select">
-                    <option value="true">Hiện</option>
-                    <option value="false">Ẩn</option>
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
+                <!-- Trạng thái -->
+                <div class="form-group mb-3">
+                    <label for="Status" class="form-label fw-bold">Trạng thái</label>
+                    <select id="Status" asp-for="Status" class="form-select">
+                        <option value="true">Hiện</option>
+                        <option value="false">Ẩn</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
 
-            <!-- Nút tạo -->
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary w-100">Tạo mới</button>
-            </div>
-        </form>
+                <!-- Nút tạo -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary w-100">Tạo mới</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div class="text-center mt-4">
-    <a asp-action="Index" asp-route-Id="@ViewBag?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
-</div>
+    <div class="text-center mt-4">
+        <a asp-action="Index" asp-route-Id="@ViewBag?.IdTournament" class="btn btn-secondary px-4">Quay lại danh sách</a>
+    </div>
 </div>
 @section Scripts {
     @{

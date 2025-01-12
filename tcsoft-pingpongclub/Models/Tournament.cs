@@ -32,10 +32,13 @@ namespace tcsoft_pingpongclub.Models
 
 		[NotMapped]
 		public short? ActualAmount { get; set; }
-
-		public int RankStart { get; set; }
-		public int? RankEnd { get; set; }
 		public string? Infor { get; set; }
+		[Required(ErrorMessage = "Xếp hạng bắt đầu là bắt buộc")]
+		public int? RankStart { get; set; }
+
+		[Required(ErrorMessage = "Xếp hạng kết thúc là bắt buộc")]
+		[RankRange(nameof(RankStart), nameof(RankEnd))]
+		public int? RankEnd { get; set; }
 
 		[Required(ErrorMessage = "Trạng thái là bắt buộc")]
 		public bool? Status { get; set; }
@@ -54,7 +57,7 @@ namespace tcsoft_pingpongclub.Models
 		public virtual Level? RankEndNavigation { get; set; }
 		public virtual Level? RankStartNavigation { get; set; }
 
-    public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
-    public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
-}
+		public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
+		public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
+	}
 }
