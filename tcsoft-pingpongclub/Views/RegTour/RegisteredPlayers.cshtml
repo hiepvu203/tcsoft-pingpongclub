@@ -10,6 +10,7 @@
 		color: #333;
 		text-align: center;
 		margin-bottom: 20px;
+		margin-top: 30px;
 	}
 
 	table {
@@ -67,6 +68,8 @@
 
 
 <h2>Danh sách người chơi đã đăng ký - @ViewBag.TournamentName</h2>
+<br />
+<a href="@Url.Action("Details", "RegTour", new { id = ViewBag.IdTournament })" class="btn btn-secondary">Quay lại</a>
 
 @if (!Model.Any())
 {
@@ -92,11 +95,11 @@ else
 					<td>@player.IdMemberNavigation.Emaill</td>
 					<td>@player.IdMemberNavigation.Address</td>
 					<td>@player.IdMemberNavigation.Phone</td>
-					<td>@player.Score</td>
+					<td>@player.IdMemberNavigation.Score</td>
 				</tr>
 			}
 		</tbody>
 	</table>
 }
-<a href="@Url.Action("Details", "RegTour", new { id = ViewBag.IdTournament })" class="btn btn-secondary">Quay lại</a>
+
 

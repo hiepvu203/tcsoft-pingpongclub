@@ -6,12 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using tcsoft_pingpongclub.Service;
+using tcsoft_pingpongclub.Filter;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-   
+    [ServiceFilter(typeof(MenuActionFilter))]
+    [ServiceFilter(typeof(AuthorizationFilter))]
     public class TournamentsController : Controller
     {
         private readonly ThuctapKtktcn2024Context _context;
@@ -58,23 +65,23 @@ namespace tcsoft_pingpongclub.Controllers
         }
 
 
-		// GET: Tournaments/Details/5
-		public async Task<IActionResult> Details(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+        // GET: Tournaments/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-			var tournament = await _context.Tournaments
-				.Include(t => t.RankEndNavigation)
-				.Include(t => t.RankStartNavigation)
-				.Include(t => t.Groupstages)
-				.FirstOrDefaultAsync(m => m.IdTournament == id);
-			if (tournament == null)
-			{
-				return NotFound();
-			}
+            var tournament = await _context.Tournaments
+                .Include(t => t.RankEndNavigation)
+                .Include(t => t.RankStartNavigation)
+                .Include(t => t.Groupstages)
+                .FirstOrDefaultAsync(m => m.IdTournament == id);
+            if (tournament == null)
+            {
+                return NotFound();
+            }
 
             return View(tournament);
         }
@@ -274,35 +281,35 @@ namespace tcsoft_pingpongclub.Controllers
 
         // GET: Tournaments/Delete/5
         public async Task<IActionResult> Delete(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-			var tournament = await _context.Tournaments
-				.Include(t => t.RankEndNavigation)
-				.Include(t => t.RankStartNavigation)
-				.FirstOrDefaultAsync(m => m.IdTournament == id);
-			if (tournament == null)
-			{
-				return NotFound();
-			}
+            var tournament = await _context.Tournaments
+                .Include(t => t.RankEndNavigation)
+                .Include(t => t.RankStartNavigation)
+                .FirstOrDefaultAsync(m => m.IdTournament == id);
+            if (tournament == null)
+            {
+                return NotFound();
+            }
 
-			return View(tournament);
-		}
+            return View(tournament);
+        }
 
-		// POST: Tournaments/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var tournament = await _context.Tournaments.FindAsync(id);
-			// Kiểm tra xem UrlImage có chứa giá trị hợp lệ không
-			if (!string.IsNullOrEmpty(tournament.UrlImage))
-			{
-				// Lấy đường dẫn đầy đủ của file cũ
-				var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", tournament.UrlImage.TrimStart('/'));
+        // POST: Tournaments/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var tournament = await _context.Tournaments.FindAsync(id);
+            // Kiểm tra xem UrlImage có chứa giá trị hợp lệ không
+            if (!string.IsNullOrEmpty(tournament.UrlImage))
+            {
+                // Lấy đường dẫn đầy đủ của file cũ
+                var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", tournament.UrlImage.TrimStart('/'));
 
 
                 // Kiểm tra xem file có tồn tại không và xóa
@@ -317,13 +324,13 @@ namespace tcsoft_pingpongclub.Controllers
                 _context.Tournaments.Remove(tournament);
             }
 
-			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
-		}
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-		private bool TournamentExists(int id)
-		{
-			return _context.Tournaments.Any(e => e.IdTournament == id);
-		}
-	}
+        private bool TournamentExists(int id)
+        {
+            return _context.Tournaments.Any(e => e.IdTournament == id);
+        }
+    }
 }

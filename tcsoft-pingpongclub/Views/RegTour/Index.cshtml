@@ -4,10 +4,58 @@
 	ViewData["Title"] = "Danh sách giải đấu";
 }
 <style>
+	body {
+		background-color: whitesmoke;
+	}
+
+	.cuong_container {
+		background-color: white;
+		padding: 10px;
+		border-radius: 30px;
+		box-shadow: 0 2px 3px rgba(30, 0, 46, 0.1);
+		max-width: 950px;
+		margin-bottom: 20px;
+		margin-top: 20px;
+	}
+
+	h2 {
+		color: #333;
+		font-size: 24px;
+		font-weight: bold;
+		margin-bottom: 5px;
+		text-align: center;
+		margin-top:30px;
+	}
+
+	.card {
+		border-radius: 10px;
+	}
+
+	.font-weight-bold {
+		font-weight: bold;
+	}
+
+	.btn-primary {
+		background-color: #007bff;
+		border-color: #007bff;
+		padding: 10px 20px;
+	}
+
+		.btn-primary:hover {
+			background-color: #0056b3;
+			border-color: #004085;
+		}
+
+	img {
+		object-fit: cover;
+	}
+
+
 	a.custom-link {
 		color: #007bff;
 		text-decoration: none;
 		font-weight: bold;
+<<<<<<< HEAD
 		padding: 8px 12px;
 		border: 2px solid #007bff;
 		border-radius: 4px;
@@ -15,6 +63,12 @@
 		display: flex;
 		text-align: center;
 		align-items: center;
+=======
+		padding: 8px 8px;
+		border: 2px solid #007bff;
+		border-radius: 4px;
+		transition: background-color 0.3s, color 0.3s;
+>>>>>>> origin/DangHungCuong
 	}
 
 		a.custom-link:hover {
@@ -25,13 +79,13 @@
 	.featured-tournament {
 		display: flex;
 		flex-direction: column;
-		margin-bottom: 30px;
+		margin-bottom: 10px;
 		transition: transform 0.3s ease, background-color 0.3s ease;
 	}
 
-	.header-container {
-		margin-top: 30px;
-		margin-bottom: 30px;
+	.cuong_header-container {
+		margin-top: 10px;
+		margin-bottom: 10px;
 		text-align: center;
 		display: flex;
 		justify-content: center;
@@ -49,17 +103,17 @@
 		transition: transform 0.3s ease, background-color 0.3s ease;
 	}
 
-	.highlight-image {
-		width: 40%;
-		height: 400px;
+	.highlight-image1 {
+		width: 70%;
+		height: 300px;
 	}
 
-	.highlight-image img {
-		width: 100%;
-		height: 100%;
-		border-radius: 10px;
-		object-fit: cover;
-	}
+		.highlight-image1 img {
+			width: 100%;
+			height: 100%;
+			border-radius: 5px;
+			object-fit: cover;
+		}
 
 	.highlight-details {
 		margin-left: 20px;
@@ -115,9 +169,15 @@
 		justify-content: space-between;
 	}
 
+<<<<<<< HEAD
 	.tournament-img {
 		width: 250px;
 		height: 150px;
+=======
+	.tournament-img2 {
+		width: 220px;
+		height: 200px;
+>>>>>>> origin/DangHungCuong
 		margin-right: 15px;
 		display: flex;
 		align-items: center;
@@ -127,12 +187,21 @@
 		overflow: hidden;
 	}
 
+<<<<<<< HEAD
 	.tournament-img img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		border-radius: 5px;
 	}
+=======
+		.tournament-img2 img {
+			width: 95%;
+			height: 90%;
+			object-fit: cover;
+			border-radius: 5px;
+		}
+>>>>>>> origin/DangHungCuong
 
 
 	.tournament-info {
@@ -187,11 +256,10 @@
 		}
 </style>
 
-<div class="header-container">
+<div class="cuong_header-container">
 	<h2>GIẢI ĐẤU BÓNG BÀN</h2>
 </div>
-<div class="d-flex justify-content-between mb-5">
-
+<div class="d-flex justify-content-between mb-3">
 	<!-- Form Lọc Rank -->
 	<form method="get" action="@Url.Action("Index")" class="me-auto">
 		<select name="selectedLevel" class="form-control">
@@ -204,14 +272,16 @@
 		</select>
 		<button type="submit" class="btn btn-primary mt-2">Lọc theo Rank</button>
 	</form>
+
 	<!-- Form Tìm kiếm -->
 	<form method="get" action="@Url.Action("Index")" class="ms-auto">
-		<input type="text" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control"
-			placeholder="Tìm kiếm theo tên giải đấu" />
-		<button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
+		<input type="text" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control" placeholder="Tìm kiếm theo tên giải đấu" />
+		<div class="d-flex justify-content-end">
+			<button type="submit" class="btn btn-primary mt-2 me-2">Tìm kiếm</button>
+			<a asp-action="MemberList" asp-controller="User" class="btn btn-success mt-2">Thành viên CLB</a>
+		</div>
 	</form>
 </div>
-
 
 <div class="featured-tournament">
 	<!-- Hiển thị giải đấu mới nhất -->
@@ -220,8 +290,10 @@
 		var newestTournament = Model.First();
 		<div class="tournament-highlight">
 			<a href="@Url.Action("Details", new { id = newestTournament.IdTournament })" class="tournament-link">
-				<div class="highlight-image">
-					<img src="@(newestTournament.UrlImage ?? "defaultImage.jpg")" alt="Featured Tournament" />
+
+				<div class="highlight-image1">
+					<img src="@(Url.Content((newestTournament.UrlImage ?? "defaultImage.jpg")))" alt="Featured Tournament" />
+
 				</div>
 				<div class="highlight-details">
 					<h2>@newestTournament.TournamentName</h2>
@@ -238,8 +310,8 @@
 	{
 		<div class="tournament-item">
 			<a href="@Url.Action("Details", new { id = item.IdTournament })" class="tournament-link">
-				<div class="tournament-img">
-					<img src="@(item.UrlImage ?? "defaultImage.jpg")" alt="Tournament" />
+				<div class="tournament-img2">
+					<img src="@(Url.Content((item.UrlImage ?? "defaultImage.jpg")))" alt="Tournament" />
 				</div>
 				<div class="tournament-info">
 					<h4>@item.TournamentName</h4>
@@ -256,13 +328,10 @@
 		@if (ViewBag.CurrentPage > 1)
 		{
 			<li class="page-item">
-				<a class="page-link" href="@Url.Action("Index", new { page = 1, searchTerm = ViewBag.SearchTerm })">Trang
-					đầu</a>
+				<a class="page-link" href="@Url.Action("Index", new { page = 1, searchTerm = ViewBag.SearchTerm })">Trang đầu</a>
 			</li>
 			<li class="page-item">
-				<a class="page-link"
-					href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchTerm = ViewBag.SearchTerm })">Trang
-					trước</a>
+				<a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchTerm = ViewBag.SearchTerm })">Trang trước</a>
 			</li>
 		}
 
@@ -276,16 +345,12 @@
 		@if (ViewBag.CurrentPage < ViewBag.TotalPages)
 		{
 			<li class="page-item">
-				<a class="page-link"
-					href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchTerm = ViewBag.SearchTerm })">Trang
-					sau</a>
+
+				<a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchTerm = ViewBag.SearchTerm })">Trang sau</a>
 			</li>
 			<li class="page-item">
-				<a class="page-link"
-					href="@Url.Action("Index", new { page = ViewBag.TotalPages, searchTerm = ViewBag.SearchTerm })">Trang
-					cuối</a>
+				<a class="page-link" href="@Url.Action("Index", new { page = ViewBag.TotalPages, searchTerm = ViewBag.SearchTerm })">Trang cuối</a>
 			</li>
 		}
 	</ul>
 </div>
-

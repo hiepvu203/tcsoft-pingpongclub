@@ -14,7 +14,7 @@
 		margin-top: 30px;
 	}
 
-	.form-group {
+	.cuong_form-group {
 		margin-bottom: 15px;
 	}
 
@@ -42,27 +42,27 @@
 
 <form asp-action="Edit" asp-route-id="@Model.IdMember" method="post" enctype="multipart/form-data">
 	<input type="hidden" asp-for="IdMember" />
-	<div class="form-group">
+	<div class="cuong_form-group">
 		<label asp-for="MemberName"></label>
 		<input asp-for="MemberName" class="form-control" />
 		<span asp-validation-for="MemberName" class="text-danger"></span>
 	</div>
-	<div class="form-group">
+	<div class="cuong_form-group">
 		<label asp-for="Address"></label>
 		<input asp-for="Address" class="form-control" />
 		<span asp-validation-for="Address" class="text-danger"></span>
 	</div>
-	<div class="form-group">
+	<div class="cuong_form-group">
 		<label asp-for="Phone"></label>
 		<input asp-for="Phone" class="form-control" />
 		<span asp-validation-for="Phone" class="text-danger"></span>
 	</div>
-	<div class="form-group">
+	<div class="cuong_form-group">
 		<label asp-for="Emaill"></label>
 		<input asp-for="Emaill" class="form-control" />
 		<span asp-validation-for="Emaill" class="text-danger"></span>
 	</div>
-	<div class="form-group">
+	<div class="cuong_form-group">
 		<label asp-for="Gender" class="form-label"></label>
 		<select asp-for="Gender" class="form-control">
 			<option value="true">Nam</option>
@@ -70,24 +70,23 @@
 		</select>
 		<span asp-validation-for="Gender" class="text-danger"></span>
 	</div>
-	<div class="form-group">
-		<label>Ảnh đại diện</label><br />
-		@if (!string.IsNullOrEmpty(Model.LinkAvatar))
-		{
-			<img src="@Model.LinkAvatar" alt="Ảnh đại diện" style="width: 100px; height: 100px;" />
-
-			<br />
-		}
+	<div class="cuong_form-group">
+		<!-- Hiển thị ảnh đã có sẵn hoặc ảnh mặc định -->
+		<img src="@(string.IsNullOrEmpty(Model.LinkAvatar) ? Url.Content("~/image/default-avatar.jpg") : Url.Content(Model.LinkAvatar))"
+			 alt="User Avatar"
+			 style="width: 150px; height: 150px; object-fit: cover;">
+		<br />
 		<input type="file" name="LinkAvatarFile" />
 	</div>
-	<div class="form-group">
+
+	<div class="cuong_form-group">
 		<label asp-for="Password"></label>
 		<input asp-for="Password" type="password" class="form-control" hidden />
 		<span asp-validation-for="Password" class="text-danger"></span>
 		<li><a asp-action="ChangePassword" asp-controller="User">Đổi mật khẩu</a></li>
 
 	</div>
-	<div class="form-group">
+	<div class="cuong_form-group">
 		<input type="submit" value="Lưu" class="btn btn-success" />
 		<a asp-action="Index" class="btn btn-secondary">Hủy</a>
 	</div>

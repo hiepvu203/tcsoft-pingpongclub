@@ -1,27 +1,35 @@
+<<<<<<< HEAD
 ﻿
 
 
 body {
     background-color: white; 
+=======
+﻿body {
+    background-color: white;
+>>>>>>> origin/DangHungCuong
     font-family: Arial, sans-serif;
+    width: 100%;
 }
 
 h2 {
-    color: orangered; 
-    text-align: center; 
-    margin-bottom: 20px; 
+    color: black;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 30px;
 }
 
-.form-container {
+.cuong_form-container {
     max-width: 600px;
-    margin: 0 auto; 
+    margin: 0 auto;
     padding: 20px;
-    background-color: #fff; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
-.form-group {
+.cuong_form-group {
     margin-bottom: 15px;
 }
 
@@ -31,7 +39,7 @@ h2 {
 }
 
 .form-control {
-    border: 1px solid #ced4da;
+    border: 1px;
     border-radius: 4px; 
     padding: 10px;
     transition: border-color 0.3s; 

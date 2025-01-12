@@ -1,0 +1,55 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="member-list">
+	<h2>Danh sách thành viên trong CLB</h2>
+	<div class="d-flex justify-content-between mb-3">
+		<!-- Form Tìm kiếm -->
+		<form method="get" action="@Url.Action("MemberList", "User")" class="ms-auto">
+			<input type="text" name="searchTen" value="@ViewBag.SearchTen" class="form-control" placeholder="Tìm kiếm theo tên thành viên" />
+			<div class="d-flex justify-content-end">
+				<button type="submit" class="btn btn-primary mt-2 me-2">Tìm kiếm</button>
+				<a asp-action="MemberList" asp-controller="User" class="btn btn-success mt-2">Xem tất cả</a>
+			</div>
+		</form>
+	</div>
+
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger">@TempData["Error"]</div>
+	}
+
+	@if (Model != null && Model.Any())
+	{
+		<p>Tìm thấy <strong>@Model.Count()</strong> thành viên.</p>
+		<table class="table table-bordered table-light table-hover">
+			<thead>
+				<tr>
+					<th>Ảnh Đại Diện</th>
+					<th>Tên</th>
+					<th>Số Điện Thoại</th>
+					<th>Điểm</th>
+					<th>Hạng Rank</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (dynamic member in Model)
+				{
+					<tr>
+						<td>
+							<img src="@(!string.IsNullOrEmpty(member.LinkAvatar) ? Url.Content(member.LinkAvatar) : Url.Content("~/image/default-avatar.jpg"))"
+								 alt="Ảnh đại diện" class="avatar" style="width:60px; height:60px; border-radius:10%;" />
+						</td>
+						<td>@member.MemberName</td>
+						<td>@member.Phone</td>
+						<td>@member.Score</td>
+						<td>@member.LevelName</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<p>Không có thành viên nào trong danh sách.</p>
+	}
+</div>
