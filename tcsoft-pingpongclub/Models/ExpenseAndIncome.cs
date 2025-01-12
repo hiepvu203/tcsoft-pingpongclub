@@ -17,7 +17,7 @@ public partial class ExpenseAndIncome
 
     public bool? Type { get; set; }
 
-    public decimal? Amount { get; set; }
+    public decimal Amount { get; set; }
 
     public int? IdReason { get; set; }
 

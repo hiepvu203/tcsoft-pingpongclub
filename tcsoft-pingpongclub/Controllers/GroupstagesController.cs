@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-
+using Microsoft.AspNetCore.Mvc.Filters;
 namespace tcsoft_pingpongclub.Controllers
 {
     public class GroupstagesController : Controller
@@ -28,12 +28,12 @@ namespace tcsoft_pingpongclub.Controllers
            .Where(t => t.IdTournament == Id)
            .FirstOrDefaultAsync();
 
-                if (tournament == null)
-                {
-                    return NotFound();
-                }
+            if (tournament == null)
+            {
+                return NotFound();
+            }
 
-                ViewBag.Type = tournament.Type;
+            ViewBag.Type = tournament.Type;
 
             var groupStages = await _context.Groupstages
                 .Include(g => g.IdTournamentNavigation)
@@ -56,7 +56,7 @@ namespace tcsoft_pingpongclub.Controllers
             if (groupstage == null)
             {
                 return NotFound();
-            }    
+            }
             return View(groupstage);
         }
 
@@ -64,7 +64,7 @@ namespace tcsoft_pingpongclub.Controllers
         // GET: Groupstages/Create
         public IActionResult Create(int Id)
         {
-            ViewBag.IdTournament = Id;          
+            ViewBag.IdTournament = Id;
             return View();
         }
 
@@ -132,6 +132,7 @@ namespace tcsoft_pingpongclub.Controllers
             _context.Groupstages.Add(group4);
 
             await _context.SaveChangesAsync();
+
 
             return RedirectToAction("Index", new { Id = Id });
         }
@@ -331,6 +332,7 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 _context.Groupstages.Remove(groupstage);
             }
+
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new { Id = IdTournament });

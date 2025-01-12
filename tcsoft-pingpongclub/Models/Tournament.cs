@@ -37,6 +37,7 @@ public partial class Tournament
 
     [Required(ErrorMessage = "Xếp hạng bắt đầu là bắt buộc")]
     public int? RankStart { get; set; }
+
     [Required(ErrorMessage = "Xếp hạng kết thúc là bắt buộc")]
     [RankRange(nameof(RankStart), nameof(RankEnd))]
     public int? RankEnd { get; set; }
