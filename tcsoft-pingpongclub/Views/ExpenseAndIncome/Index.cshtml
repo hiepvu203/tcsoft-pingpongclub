@@ -1,29 +1,32 @@
 ﻿@model IEnumerable<tcsoft_pingpongclub.Models.ExpenseAndIncome>
+@using X.PagedList.Mvc.Core
+@using X.PagedList
 
 <link href="~/css/expenseandincome.css" rel="stylesheet" />
 
 <div class="container">
-    <div class="main-feture">
-        <div class="dropdown-container">
-            <button class="dropdown-btn">Options</button>
-            <div class="dropdown-content">
+    <div class="main-feture-VH">
+        <div class="dropdown-container-VH">
+            <button class="dropdown-btn-VH">Options</button>
+            <div class="dropdown-content-VH">
                 <a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Tài chính</a>
                 <a asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Nhà tài trợ</a>
-                <a asp-area="" asp-controller="Reason" asp-action="Index">Lý do</a>
                 <a asp-area="" asp-controller="ChiTietTaiTro" asp-action="Index">Chi tiết tài trợ</a>
+                <a asp-area="" asp-controller="Reason" asp-action="Index">Lý do</a>
+                <a asp-area="" asp-controller="Fund" asp-action="Index">Qũy</a>
             </div>
         </div>
 
-        <div class="actions">
-            <a asp-action="Statistics" class="btn-primary">Thống kê</a>
-            <a asp-action="Search" class="btn-primary">Tìm kiếm</a>
-            <a asp-action="Index" class="btn-primary">Làm mới</a>
-            <a class="btn-primary" asp-action="Create">Thêm mới</a>
+        <div class="actions-VH">
+            <a asp-action="Statistics" class="btn-primary-VH">Thống kê</a>
+            <a asp-action="Search" class="btn-primary-VH">Tìm kiếm</a>
+            <a asp-action="Index" class="btn-primary-VH">Làm mới</a>
+            <a class="btn-primary-VH" asp-action="Create">Thêm mới</a>
         </div>
     </div>
 
     <!-- Table -->
-    <table class="custom-table">
+    <table class="custom-table-VH">
         <thead>
             <tr>
                 <th>Mã</th>
@@ -35,7 +38,7 @@
                 <th>Ngày tạo</th>
                 <th>Lý do</th>
                 <th>Giải đấu</th>
-                <th>Quá hạn</th>
+                @* <th>Nhà tài trợ</th>  *@
                 <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
@@ -53,19 +56,23 @@
                     <td>@item.CreatedDate?.ToString("dd/MM/yyyy")</td>
                     <td>@Html.DisplayFor(modelItem => item.IdReasonNavigation.ReasonName)</td>
                     <td>@Html.DisplayFor(modelItem => item.IdTournamentNavigation.TournamentName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.DaysOverdue)</td>
+                    @* <td>@Html.DisplayFor(modelItem => item.SponorName)</td> *@
                     <td>@(item.IsDone == true ? "Hoàn thành" : "Chưa hoàn thành")</td>
                     <td>
                         @if(item.IsDone == true)
                         {
-                            <a class="btn-warning" asp-action="Edit" asp-route-id="@item.Id">Xem</a>
+                            <a class="btn-warning-VH" asp-action="Edit" asp-route-id="@item.Id">Xem</a>
                         }else{
-                            <a class="btn-warning" asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                            <a class="btn-warning-VH" asp-action="Edit" asp-route-id="@item.Id">Cập nhật</a>
                         }
-                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                        <a class="btn-danger-VH" asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <div class="text-center-VH">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+    </div>
 </div>

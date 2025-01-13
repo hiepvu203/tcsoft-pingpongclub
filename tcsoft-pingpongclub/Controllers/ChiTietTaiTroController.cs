@@ -181,7 +181,7 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 return NotFound();
             }
-
+            getData();
             return View(sponor);
         }
 
@@ -193,10 +193,11 @@ namespace tcsoft_pingpongclub.Controllers
             var sponor = await _context.Sponors.FindAsync(id);
             if (sponor != null)
             {
-                _context.Sponors.Remove(sponor);
+                sponor.Status = true;
+                _context.Sponors.Update(sponor);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

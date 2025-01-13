@@ -182,22 +182,11 @@ namespace tcsoft_pingpongclub.Controllers
             var nhaTaiTro = await _context.NhaTaiTros.FindAsync(id);
             if (nhaTaiTro != null)
             {
-                //if (!string.IsNullOrEmpty(nhaTaiTro.UrlLogo))
-                //{
-                //    string wwwRootPath = _hostEnvironment.WebRootPath;
-                //    string path = Path.Combine(wwwRootPath + "/images/", nhaTaiTro.UrlLogo);
-                //    if (System.IO.File.Exists(path))
-                //    {
-                //        System.IO.File.Delete(path);
-                //    }
-                //}
                 nhaTaiTro.Status = true;
                 _context.Update(nhaTaiTro);
-                //_context.NhaTaiTros.Remove(nhaTaiTro);
                 await _context.SaveChangesAsync();
             }
 
-            
             return RedirectToAction(nameof(Index));
         }
 

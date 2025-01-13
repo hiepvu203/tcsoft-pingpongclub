@@ -1,10 +1,11 @@
-﻿@model IEnumerable<tcsoft_pingpongclub.Models.NhaTaiTro>
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Fund>
 
 @{
-    ViewData["Title"] = "Danh sách nhà tài trợ";
+    ViewData["Title"] = "Index";
 }
 
 <link href="~/css/expenseandincome.css" rel="stylesheet" />
+
 <div class="VuHiep-container">
     <div class="main-feture-VH">
         <div class="dropdown-container-VH">
@@ -27,30 +28,23 @@
         <thead>
             <tr>
                 <th>Mã</th>
-                <th>Tên nhà tài trợ</th>
-                <th>Logo</th>
-                <th>Hành động</th>
+                <th>Tên quỹ</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Hoạt động</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.IdSponor)</td>
-                    <td>@Html.DisplayFor(modelItem => item.NameSponer)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdFund)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FundName)</td>
+                    <td>@item.Total.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                    <td>@(item.Status == true ? "Hoạt động" : "Ngừng")</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.UrlLogo))
-                        {
-                            <img src="@Url.Content("~/images/" + item.UrlLogo)" alt="Logo" class="img-fluid" style="max-width: 100px; height: auto;" />
-                        }
-                        else
-                        {
-                            <span>Không có logo</span>
-                        }
-                    </td>
-                    <td>
-                        <a class="btn-warning-VH" asp-action="Edit" asp-route-id="@item.IdSponor">Sửa</a>
-                        <a class="btn-danger-VH" asp-action="Delete" asp-route-id="@item.IdSponor">Xóa</a>
+                        <a class="btn-warning-VH" asp-action="Edit" asp-route-id="@item.IdFund">Sửa</a>
+                        <a class="btn-danger-VH" asp-action="Delete" asp-route-id="@item.IdFund">Xóa</a>
                     </td>
                 </tr>
             }

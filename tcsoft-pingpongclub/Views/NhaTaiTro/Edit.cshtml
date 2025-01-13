@@ -3,22 +3,35 @@
 @{
     ViewData["Title"] = "Edit";
 }
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdSponor" />
 
-            <!-- Tên nhà tài trợ -->
-            <div class="form-group">
-                <label asp-for="NameSponer" class="control-label"></label>
-                <input asp-for="NameSponer" class="form-control" />
+<link href="~/css/formcreatev2.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+
+<div>
+    <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
+</div>
+
+<form asp-action="Edit" enctype="multipart/form-data" class="form-container-VH">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="IdSponor" />
+
+    <div class="form-row-VH">
+        <div>
+            <div class="form-group-VH">
+                <label asp-for="NameSponer" class="control-label">Nhà tài trợ:</label>
+                <input asp-for="NameSponer" class="form-control-VH" />
                 <span asp-validation-for="NameSponer" class="text-danger"></span>
             </div>
 
-            <!-- Hiển thị ảnh hiện tại nếu có -->
-            <div class="form-group">
-                <label>Current Logo</label>
+            <div class="form-group-VH">
+                <label asp-for="ImageFile" class="control-label">Tải logo mới</label>
+                <input asp-for="ImageFile" class="form-control-VH" type="file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+        </div>
+        <div>
+            <div class="form-group-VH">
+                <label>Logo hiện tại</label>
                 @if (!string.IsNullOrEmpty(Model.UrlLogo))
                 {
                     <div>
@@ -30,26 +43,13 @@
                     <p>No logo available</p>
                 }
             </div>
-
-            <!-- Chọn ảnh mới -->
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label">Upload New Logo</label>
-                <input asp-for="ImageFile" class="form-control" type="file" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-
-            <!-- Nút lưu -->
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group-VH">
+        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+    </div>
+</form>
 
 @section Scripts {
     @{

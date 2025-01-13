@@ -6,37 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-using X.PagedList;
-using X.PagedList.Extensions;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-    public class ReasonController : Controller
+    public class FundController : Controller
     {
         private readonly ThuctapKtktcn2024Context _context;
 
-        public ReasonController(ThuctapKtktcn2024Context context)
+        public FundController(ThuctapKtktcn2024Context context)
         {
             _context = context;
         }
 
-        // GET: Reason
-        public async Task<IActionResult> Index(int? page)
+        // GET: Fund
+        public async Task<IActionResult> Index()
         {
-            int pageSize = 5; 
-            int pageNumber = page ?? 1;
-           
-            var reasons = await _context.Reasons
-                .Where(e => e.Status == false)
-                .ToListAsync();
-
-            var paginatedList = reasons.ToPagedList(pageNumber, pageSize);
-
-            return View(paginatedList);
+            return View(await _context.Funds.ToListAsync());
         }
 
-
-        // GET: Reason/Details/5
+        // GET: Fund/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,45 +32,42 @@ namespace tcsoft_pingpongclub.Controllers
                 return NotFound();
             }
 
-            var reason = await _context.Reasons
-                .FirstOrDefaultAsync(m => m.IdReason == id);
-            if (reason == null)
+            var fund = await _context.Funds
+                .FirstOrDefaultAsync(m => m.IdFund == id);
+            if (fund == null)
             {
                 return NotFound();
             }
 
-            return View(reason);
+            return View(fund);
         }
 
         public void getData()
         {
-            ViewData["Type"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Thu" }, new SelectListItem { Value = "true", Text = "Chi" } };
-            ViewData["recurringFee"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Không" }, new SelectListItem { Value = "true", Text = "Có" } };
+            ViewData["Status"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Ngừng" }, new SelectListItem { Value = "true", Text = "Hoạt động" } };
         }
 
-        // GET: Reason/Create
+        // GET: Fund/Create
         public IActionResult Create()
         {
-            getData();
             return View();
         }
 
-        // POST: Reason/Create
+        // POST: Fund/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdReason,ReasonName,Type,Status,recurringFee")] Reason reason)
+        public async Task<IActionResult> Create([Bind("IdFund,FundName,Total,Status")] Fund fund)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(reason);
+                _context.Add(fund);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            getData();
-            return View(reason);
+            return View(fund);
         }
 
-        // GET: Reason/Edit/5
+        // GET: Fund/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,21 +75,23 @@ namespace tcsoft_pingpongclub.Controllers
                 return NotFound();
             }
 
-            var reason = await _context.Reasons.FindAsync(id);
-            if (reason == null)
+            var fund = await _context.Funds.FindAsync(id);
+            if (fund == null)
             {
                 return NotFound();
             }
             getData();
-            return View(reason);
+            return View(fund);
         }
 
-        // POST: Reason/Edit/5
+        // POST: Fund/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdReason,ReasonName,Type,Status,recurringFee")] Reason reason)
+        public async Task<IActionResult> Edit(int id, [Bind("IdFund,FundName,Total,Status")] Fund fund)
         {
-            if (id != reason.IdReason)
+            if (id != fund.IdFund)
             {
                 return NotFound();
             }
@@ -113,12 +100,12 @@ namespace tcsoft_pingpongclub.Controllers
             {
                 try
                 {
-                    _context.Update(reason);
+                    _context.Update(fund);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReasonExists(reason.IdReason))
+                    if (!FundExists(fund.IdFund))
                     {
                         return NotFound();
                     }
@@ -130,10 +117,10 @@ namespace tcsoft_pingpongclub.Controllers
                 return RedirectToAction(nameof(Index));
             }
             getData();
-            return View(reason);
+            return View(fund);
         }
 
-        // GET: Reason/Delete/5
+        // GET: Fund/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,36 +128,35 @@ namespace tcsoft_pingpongclub.Controllers
                 return NotFound();
             }
 
-            var reason = await _context.Reasons
-                .FirstOrDefaultAsync(m => m.IdReason == id);
-            if (reason == null)
+            var fund = await _context.Funds
+                .FirstOrDefaultAsync(m => m.IdFund == id);
+            if (fund == null)
             {
                 return NotFound();
             }
-            getData();
-            return View(reason);
+
+            return View(fund);
         }
 
-        // POST: Reason/Delete/5
+        // POST: Fund/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var reason = await _context.Reasons.FindAsync(id);
-            if (reason != null)
+            var fund = await _context.Funds.FindAsync(id);
+            if (fund != null)
             {
-                reason.Status = true;
-                _context.Update(reason);
+                fund.Status = true;
+                _context.Funds.Update(fund);
                 await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ReasonExists(int id)
+        private bool FundExists(int id)
         {
-            return _context.Reasons.Any(e => e.IdReason == id);
+            return _context.Funds.Any(e => e.IdFund == id);
         }
     }
 }

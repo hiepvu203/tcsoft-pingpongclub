@@ -1,46 +1,54 @@
 ﻿@model tcsoft_pingpongclub.Models.Sponor
-
 @{
     ViewData["Title"] = "Create";
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IdTournament" class="control-label">Giải đấu</label>
-                <select asp-for="IdTournament" class ="form-control" asp-items="ViewBag.IdTournament"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdSponor" class="control-label">Nhà tài trợ</label>
-                <select asp-for="IdSponor" class ="form-control" asp-items="ViewBag.IdSponor"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Money" class="control-label">Tiền tài trợ</label>
-                <input asp-for="Money" class="form-control" />
-                <span asp-validation-for="Money" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="CreatedDate" class="form-label">Ngày tạo</label>
-                <input asp-for="CreatedDate" class="form-input" type="date" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Other" class="control-label">Ghi chú</label>
-                <input asp-for="Other" class="form-control" />
-                <span asp-validation-for="Other" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<link href="~/css/formcreatev2.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
 </div>
+
+<form asp-action="Create" class="form-container-VH">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-row-VH">
+        <div class="form-group-VH" style="flex: 1;">
+            <label asp-for="IdTournament" class="control-label">Giải đấu</label>
+            <select asp-for="IdTournament" class="form-control-VH" asp-items="ViewBag.IdTournament"></select>
+        </div>
+
+        <div class="form-group-VH" style="flex: 1;">
+            <label asp-for="IdSponor" class="control-label">Nhà tài trợ</label>
+            <select asp-for="IdSponor" class="form-control-VH" asp-items="ViewBag.IdSponor"></select>
+        </div>
+    </div>
+
+    <div class="form-row-VH">
+        <div class="form-group-VH" style="flex: 1;">
+            <label asp-for="Money" class="control-label">Tiền tài trợ</label>
+            <input asp-for="Money" class="form-control-VH" />
+            <span asp-validation-for="Money" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-VH" style="flex: 1;">
+            <label for="CreatedDate" class="control-label">Ngày tạo</label>
+            <input asp-for="CreatedDate" class="form-input-VH" type="date" />
+            <span asp-validation-for="CreatedDate" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group-VH">
+        <label asp-for="Other" class="control-label">Ghi chú</label>
+        <input asp-for="Other" class="form-control-VH" />
+        <span asp-validation-for="Other" class="text-danger"></span>
+    </div>
+
+    <div class="form-group-VH">
+        <input type="submit" value="Tạo" class="btn-submit-VH" />
+    </div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

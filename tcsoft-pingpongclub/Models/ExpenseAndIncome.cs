@@ -42,11 +42,11 @@ public partial class ExpenseAndIncome
 
     public virtual Sponor? IdSponorDetailNavigation { get; set; }
 
-    //public virtual ICollection<Sponor> Sponors { get; set; } = new List<Sponor>();
-
-    // New property to hold the accountant's name
     [NotMapped]
     public string? AccountantName { get; set; }
+
+    [NotMapped]
+    public string? SponorName { get; set; }
 
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Số tiền phải lớn hơn 0.")]

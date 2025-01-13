@@ -12,6 +12,7 @@ public partial class Reason
     public bool? Type { get; set; }
 
     public bool? Status { get; set; } = false;
+    public bool? recurringFee { get; set; }
 
     public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
 }
