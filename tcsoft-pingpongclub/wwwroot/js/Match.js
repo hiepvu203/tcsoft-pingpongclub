@@ -37,3 +37,42 @@ document.querySelectorAll('.setMatchHidden').forEach(function (parent) {
     });
 });
 
+for (let i = 1; i <= 6; i += 1) {
+    if (i % 2 === 0) {
+        document.getElementById(`point${i}`).addEventListener("change", () => {
+            console.log("hihi")
+            const point1 = document.getElementById(`point${i}`);
+            const point2 = document.getElementById(`point${i - 1}`);
+
+            const point1Value = parseInt(point1.value) || 0;
+            const point2Value = parseInt(point2.value) || 0;
+
+            if ((point1Value === 21 && Math.abs(point1Value - point2Value) >= 2) ||
+                (point2Value === 21 && Math.abs(point2Value - point1Value) >= 2)) {
+
+                document.getElementById(`point${i}`).disabled = true;
+     
+                document.getElementById(`point${i - 1}`).disabled = true;
+            }
+        });
+    }
+
+    else {
+        document.getElementById(`point${i}`).addEventListener("change", () => {
+            console.log("hahah")
+        const point1 = document.getElementById(`point${i}`);
+        const point2 = document.getElementById(`point${i + 1}`);
+
+        const point1Value = parseInt(point1.value) || 0; 
+        const point2Value = parseInt(point2.value) || 0;
+
+        if ((point1Value === 21 && Math.abs(point1Value - point2Value) >= 2) ||
+            (point2Value === 21 && Math.abs(point2Value - point1Value) >= 2)) {
+          
+            document.getElementById(`point${i}`).disabled = true;
+            document.getElementById(`point${i + 1   }`).disabled = true;
+        }
+    });
+    }
+    
+}

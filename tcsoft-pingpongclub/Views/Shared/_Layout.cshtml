@@ -1,6 +1,6 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="~/css/regtour.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/cssUser/user.css" />
     <link rel="stylesheet" href="~/cssUser/IndexUser.css" />
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft.signalr/6.0.0/signalr.min.js"></script>
+     <script src="path/to/Set_Ratio_Client.js" defer></script>
 </head>
 
 @{
@@ -23,73 +25,83 @@
     var IsLoginRole = ViewBag.IsLoginRole;
 
 }
+
 <body>
     <header>
         @await Html.PartialAsync("Header")
-    <div class="" style="width: 100%;">
-        <div style="width:100%">
-            <main role="main" class="">
-                @RenderBody()
+        <div class="" style="width: 100%;">
+            <div style="width:100%">
+                <main role="main" class="">
+                    @RenderBody()
 
-        </div>
-       
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-logo">
-                        <img src="~/image/logo.png" alt="Logo" class="footer-logo-img">
-                        <div class="social-icons">
-                            <a href="#"><i class="fab fa-facebook"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <footer class="footer">
+                <div class="container">
+                    <div class="footer-content">
+                        <div class="footer-logo">
+                            <img src="~/image/logo.png" alt="Logo" class="footer-logo-img">
+                            <div class="social-icons">
+                                <a href="#"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                        <div class="footer-links">
+                            <h5>Use cases</h5>
+                            <ul>
+                                <li>UI design</li>
+                                <li>UX design</li>
+                                <li>Wireframing</li>
+                                <li>Diagramming</li>
+                                <li>Brainstorming</li>
+                                <li>Online whiteboard</li>
+                                <li>Team collaboration</li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <h5>Explore</h5>
+                            <ul>
+                                <li>Design</li>
+                                <li>Prototyping</li>
+                                <li>Development features</li>
+                                <li>Design systems</li>
+                                <li>Design process</li>
+                                <li>FigJam</li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li>Blog</li>
+                                <li>Best practices</li>
+                                <li>Colors</li>
+                                <li>Color wheel</li>
+                                <li>Support</li>
+                                <li>Developers</li>
+                                <li>Resource library</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="footer-links">
-                        <h5>Use cases</h5>
-                        <ul>
-                            <li>UI design</li>
-                            <li>UX design</li>
-                            <li>Wireframing</li>
-                            <li>Diagramming</li>
-                            <li>Brainstorming</li>
-                            <li>Online whiteboard</li>
-                            <li>Team collaboration</li>
-                        </ul>
-                    </div>
-                    <div class="footer-links">
-                        <h5>Explore</h5>
-                        <ul>
-                            <li>Design</li>
-                            <li>Prototyping</li>
-                            <li>Development features</li>
-                            <li>Design systems</li>
-                            <li>Design process</li>
-                            <li>FigJam</li>
-                        </ul>
-                    </div>
-                    <div class="footer-links">
-                        <h5>Resources</h5>
-                        <ul>
-                            <li>Blog</li>
-                            <li>Best practices</li>
-                            <li>Colors</li>
-                            <li>Color wheel</li>
-                            <li>Support</li>
-                            <li>Developers</li>
-                            <li>Resource library</li>
-                        </ul>
+                    <div class="footer-bottom">
+                        &copy; 2024 - tcsoft_pingpongclub - <a href="#" class="footer-link">Privacy</a>
                     </div>
                 </div>
-                <div class="footer-bottom">
-                    &copy; 2024 - tcsoft_pingpongclub - <a href="#" class="footer-link">Privacy</a>
-                </div>
-            </div>
-        </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/Match.js" asp-append-version="true"></script>
-        @await RenderSectionAsync("Scripts", required: false)
+            </footer>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            <script src="~/js/Match.js" asp-append-version="true"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft.signalr/6.0.0/signalr.min.js"></script>
+            @* <script src="~/js/Set_Ratio_Client.js" asp-append-version="true"></script>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            <script src="~/js/Match.js" asp-append-version="true"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+            <script src="~/js/Set_Ratio_Client.js"></script> *@
+            <script src="~/js/Set_Ratio_Client.js" asp-append-version="true"></script>
+            @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 

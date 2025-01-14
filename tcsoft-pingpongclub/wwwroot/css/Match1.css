@@ -97,30 +97,18 @@
 
 
 .card {
-<<<<<<< HEAD
-    border-radius: 8px; 
-    background-color: #f9f9f9; 
-    padding: 10px;
-=======
+
     border: 1px solid #ddd;
     border-radius: 8px;
->>>>>>> origin/Match_KhuatDuyTien
 }
 
 .card-title {
     font-size: 1.5rem;
 }
 
-<<<<<<< HEAD
-.card-text {
-    font-size: 1.2rem; 
-}
-
-=======
 .pointInput {
     max-width: 80px;
 }
->>>>>>> origin/Match_KhuatDuyTien
 
 @media (max-width: 768px) {
     #time{
@@ -206,7 +194,7 @@
 
     .tblMatch .player {
         width: 100%;
-        font-size: 20px;
+        font-size: 20px;    
     }
 
     .tblMatch td .player-image {
@@ -308,7 +296,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 20px;
+       
     }
 
     .player img {
@@ -328,80 +316,6 @@
         font-weight: bold;
     }
 
-<<<<<<< HEAD
-    .badge.bg-secondary {
-        background-color: #6c757d;
-    }
-h1 {
-    color: #333;
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.Search {
-    background-color: #fff;
-}
-
-.dateSearch label {
-    font-weight: bold;
-    color: #555;
-}
-
-.dateSearch input[type="date"] {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 5px 10px;
-    font-size: 1rem;
-}
-
-.dateSearch button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-    .dateSearch button:hover {
-        background-color: #218838;
-    }
-
-.Match {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.FeaturedMatch {
-    background-color: #fff;
-    border-radius: 8px;
-}
-
-.tbl {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-    .tbl th, .tbl td {
-        border: 1px solid #ddd;
-        text-align: center;
-    }
-
-    .tbl th {
-        background-color: #f4f4f4;
-        font-weight: bold;
-        color: #333;
-    }
-=======
     .matchInfor #live {
         font-size: 16px;
         padding: 5px 10px;
@@ -495,4 +409,3 @@ h1 {
         font-size: 12px;
     }
 }
->>>>>>> origin/Match_KhuatDuyTien
