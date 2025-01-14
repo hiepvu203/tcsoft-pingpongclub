@@ -6,6 +6,7 @@ namespace tcsoft_pingpongclub.Models;
 public partial class Award
 {
     public int IdAward { get; set; }
+    public int? IdPlayer { get; set; }
 
     public int? IdTournament { get; set; }
 

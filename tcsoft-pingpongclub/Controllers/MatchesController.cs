@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 using Humanizer.Localisation;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ namespace tcsoft_pingpongclub.Controllers
         [Route("Matches/{id}")]
         public async Task<IActionResult> Index(int id)
         {
-            var RankTour = getRank(id);
+            var RankTour = getRank(id).ToList();
             string NameTour = await _context.Tournaments.Where(m => m.IdTournament == id).Select(m => m.TournamentName).FirstOrDefaultAsync();
             var Match = _context.Matches.Where(m => m.IdTournament == id)
      .Select(p => new MatchAndPlayer
@@ -93,8 +94,39 @@ namespace tcsoft_pingpongclub.Controllers
     .Count(),
          ListSet = _context.Sets.Where(set => set.IdMatch == p.IdMatch).ToList()
      });
+            var awards = _context.Awards.Where(a => a.IdTournament == id).ToList();
+            var countMemWin = _context.Matches.Count(m => m.IdMemberWin != null && m.IdTournament == id);
+            var countMem = _context.Matches.Count(m => m.IdTournament == id);
+            Console.WriteLine(countMemWin + "hiihihi" + countMem);
+            if(countMemWin == countMem)
+            {
+                int i = 1;
+                foreach (var item in awards)
+                {
+                    var prize = awards.FirstOrDefault(a => a.IOrder == i);
+                    if (prize == null)
+                    {
+                        Console.WriteLine($"Không tìm thấy prize với IOrder = {i}");
+                        i++;
+                        continue;
+                    }
 
-    if(!Match.Any())
+                    Console.WriteLine(prize.IdAward); 
+
+              
+                        dynamic player = RankTour[i - 1];  
+                        Console.WriteLine(player.NamePlayer); 
+
+                        prize.IdPlayer = player.Id;  
+                        _context.Update(prize);  
+                        i++;  
+                
+                }
+
+                await _context.SaveChangesAsync(); 
+
+            }
+            if (!Match.Any())
           {
                 var Player = _context.Players.Where(k => k.IdTournament == id).Select(m => m.IdPlayer);
                 int CountPlay = Player.Count();
