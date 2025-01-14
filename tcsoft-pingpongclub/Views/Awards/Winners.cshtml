@@ -1,0 +1,64 @@
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Award>
+
+@{
+    ViewData["Title"] = "Danh sách người chiến thắng";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center text-primary mb-4">🏆 Danh sách người chiến thắng 🏆</h1>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered text-center shadow-sm">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Tên người chơi</th>
+                        <th>Giải thưởng</th>
+                        <th>Tiền thưởng</th>                       
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var award in Model)
+                    {
+                        <tr>
+                            <td class="align-middle">
+                                <img src="@award.IdPlayerNavigation.IdMemberNavigation.LinkAvatar" class="img-fluid rounded" style="width: 120px; height: auto;object-fit: cover;" />
+                            </td>
+                            <td class="align-middle">
+                                <strong>@award.IdPlayerNavigation.IdMemberNavigation.MemberName</strong>
+                            </td>
+                            <td class="align-middle text-success">
+                                <span class="badge bg-success">
+                                    @if (award.IOrder == 1)
+                                    {
+                                        <span>Giải Nhất</span>
+                                    }
+                                    else if (award.IOrder == 2)
+                                    {
+                                        <span>Giải Nhì</span>
+                                    }
+                                    else 
+                                    {
+                                        <span>Giải Ba</span>
+                                    }
+                                </span>
+                            </td>
+                            <td class="align-middle text-warning">
+                                <strong> @String.Format("{0:#,0} VND", award.Money)</strong>
+                            </td>
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center shadow-sm" role="alert">
+            <h4>Không tìm thấy giải thưởng nào cho giải đấu này. 😔</h4>
+        </div>
+    }
+</div>

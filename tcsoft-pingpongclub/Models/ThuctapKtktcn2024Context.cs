@@ -64,7 +64,6 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.ToTable("Award");
 
             entity.Property(e => e.IdAward).HasColumnName("idAward");
-            entity.Property(e => e.IdPlayer).HasColumnName("idPlayer");
             entity.Property(e => e.IOrder).HasColumnName("iOrder");
             entity.Property(e => e.IdTournament).HasColumnName("idTournament");
             entity.Property(e => e.Money)

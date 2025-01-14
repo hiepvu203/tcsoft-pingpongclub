@@ -121,33 +121,7 @@
                 }
             }
         </tbody>
-    </table>
-    <nav>
-        <ul class="pagination justify-content-center">
-            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-page="1">Đầu</a>
-            </li>
-
-            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Trước</a>
-            </li>
-
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
-            {
-                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
-                </li>
-            }
-
-            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Tiếp</a>
-            </li>
-
-            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.TotalPages)">Cuối</a>
-            </li>
-        </ul>
-    </nav>
+    </table>   
 </div>
 @section Scripts {
     <script>
