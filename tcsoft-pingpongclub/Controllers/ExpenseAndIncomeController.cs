@@ -263,8 +263,6 @@ namespace tcsoft_pingpongclub.Controllers
 
 		public IActionResult Create()
 		{
-			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			ViewBag.IsLoggedIn = isLoggedIn;
 			getData();
 			return View();
 		}
@@ -274,8 +272,7 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("IdFund,IdParty,IdTournament,IdSponorDetail,Type,IdReason,DaysOverdue,Status,IsDone,CreatedDate,Amount")] ExpenseAndIncome expenseAndIncome)
 		{
-			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			ViewBag.IsLoggedIn = isLoggedIn;
+            int? idMember = HttpContext.Session.GetInt32("IdMember");
 				if (ModelState.IsValid)
 				{
 					if (string.IsNullOrEmpty(expenseAndIncome.IdTournament?.ToString()))
@@ -285,7 +282,6 @@ namespace tcsoft_pingpongclub.Controllers
 						expenseAndIncome.IdSponorDetail = null;
 
 					var fund = await _context.Funds.FindAsync(expenseAndIncome.IdFund);
-					int ?idMember=HttpContext.Session.GetInt32("IdMember");
 					if (expenseAndIncome.Type == true)
 					{
 						
@@ -353,7 +349,7 @@ namespace tcsoft_pingpongclub.Controllers
 							var newRecord = new ExpenseAndIncome
 							{
 								IdFund = expenseAndIncome.IdFund,
-								IdAccountant = expenseAndIncome.IdAccountant,
+								IdAccountant = idMember,
 								Type = expenseAndIncome.Type,
 								IdReason = expenseAndIncome.IdReason,
 								CreatedDate = expenseAndIncome.CreatedDate,

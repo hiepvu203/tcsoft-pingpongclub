@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using tcsoft_pingpongclub.Filter;
 using tcsoft_pingpongclub.Models;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-	public class NhaTaiTroController : Controller
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [ServiceFilter(typeof(MenuActionFilter))]
+    public class NhaTaiTroController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
 		private readonly IWebHostEnvironment _hostEnvironment;

@@ -3,30 +3,17 @@
 @{
     ViewData["Title"] = "Create";
 }
-@{
-    var isLoggedIn = ViewBag.IsLoggedIn;
-    var menu = ViewBag.Menu;
-}
-
 <link href="~/css/formcreatev2.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
-
 <div>
     <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
 </div>
-<h1>@isLoggedIn</h1>
 <form asp-action="Create" class="form-container-VH">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <!-- groupbox-VH 1 -->
     <fieldset class="groupbox-VH">
         <legend>Thông tin cơ bản</legend>
-        <div class="form-group-VH">
-            <label for="IdAccountant" class="form-label-VH">Kế toán</label>
-             <input asp-for="IdAccountant" class="form-input-VH" />
-            <span asp-validation-for="IdAccountant" class="text-danger"></span>
-        </div>
-
         <div class="form-row-VH">
             <div class="form-group-VH" style="flex: 1;">
                 <label for="IdFund" class="form-label-VH">Chọn quỹ</label>

@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
+using tcsoft_pingpongclub.Filter;
 namespace tcsoft_pingpongclub.Controllers
 {
-	public class GroupstagesController : Controller
+    [ServiceFilter(typeof(MenuActionFilter))]
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    public class GroupstagesController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
 

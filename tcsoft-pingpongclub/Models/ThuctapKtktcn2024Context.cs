@@ -307,6 +307,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.IdPermission).HasColumnName("idPermission");
             entity.Property(e => e.NamePermission).HasColumnName("namePermission");
             entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.isDisplay).HasColumnName("isDisplay");
             entity.Property(e => e.Url)
                 .IsUnicode(false)
                 .HasColumnName("url");
