@@ -3,7 +3,13 @@
 <h1 class="text-center">@ViewBag.NameTour</h1>
 <div class="container my-5 d-flex flex-wrap">
 
-    <div class="containerMatch flex-fill me-3">
+    @if (!Model.Any())
+    {
+        <h1 class="text-danger text-center">Vui lòng thêm đủ thành viên để tạo trận đấu</h1>
+    }
+    else
+    {
+        <div class="containerMatch flex-fill me-3">
         <table class="table table-bordered  align-middle tblMatch">
             <thead class="table-light">
                 <tr>
@@ -121,6 +127,8 @@
             </tbody>
         </table>
     </div>
+    }
+    
 
     <div class="rankMatch flex-fill">
         <table class="table table-bordered table-striped align-middle tblRank">
