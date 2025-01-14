@@ -33,12 +33,12 @@ public class MenuActionFilter : ActionFilterAttribute
         {
             var parentPermissions = (from p in _context.Permissions
                                      join pr in _context.PermissionRoles on p.IdPermission equals pr.IdPermission
-                                     where pr.IdRole == idRole && p.Status == true && p.IdPerParent == null
+                                     where pr.IdRole == idRole && p.Status == true && p.IdPerParent == null && p.isDisplay == true
                                      select p).ToList().Distinct();
 
             var childPermissions = (from p in _context.Permissions
                                     join pr in _context.PermissionRoles on p.IdPermission equals pr.IdPermission
-                                    where pr.IdRole == idRole && p.Status == true && p.IdPerParent != null
+                                    where pr.IdRole == idRole && p.Status == true && p.IdPerParent != null && p.isDisplay == true
                                     select p).ToList().Distinct();
 
             foreach (var parent in parentPermissions)

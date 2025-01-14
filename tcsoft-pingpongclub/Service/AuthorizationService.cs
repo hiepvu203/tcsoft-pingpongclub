@@ -20,7 +20,7 @@ namespace tcsoft_pingpongclub.Service
 						  join pr in _context.PermissionRoles on r.IdRole equals pr.IdRole
 						  join p in _context.Permissions on pr.IdPermission equals p.IdPermission
 						  where r.IdRole == idRole && r.Status == true
-								&& pr.Status == true && p.Status == true
+								&& pr.Status == true && p.Status == true 
 						  select p.Url).Distinct();
 			if ( !urls.Contains(urlWeb)||!urls.Any())
 				return false;
