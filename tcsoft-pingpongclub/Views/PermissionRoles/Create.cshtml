@@ -36,15 +36,16 @@
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
+            
         </div>
-
         @if (ViewBag.SelectedPermission == null)
         {
             <div class="text-danger">Please select a permission to add.</div>
         }
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </form>
 
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    
 </div>
 
 <script>

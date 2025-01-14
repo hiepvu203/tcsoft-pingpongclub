@@ -8,8 +8,8 @@ using tcsoft_pingpongclub.Filter;
 namespace tcsoft_pingpongclub.Controllers
 {
 	[ServiceFilter(typeof(MenuActionFilter))]
-	
-	public class MembersController : Controller
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    public class MembersController : Controller
 	{
 
 		private readonly ThuctapKtktcn2024Context context;

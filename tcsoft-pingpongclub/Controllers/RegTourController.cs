@@ -7,7 +7,8 @@ using System.Security.Cryptography;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-	public class RegTourController : Controller
+    [ServiceFilter(typeof(MenuActionFilter))]
+    public class RegTourController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
 		private dynamic searchTerm;

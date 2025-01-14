@@ -5,13 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using tcsoft_pingpongclub.Filter;
 using tcsoft_pingpongclub.Models;
 using X.PagedList;
 using X.PagedList.Extensions;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-	[ServiceFilter(typeof(MenuActionFilter))]
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [ServiceFilter(typeof(MenuActionFilter))]
 	public class ReasonController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
