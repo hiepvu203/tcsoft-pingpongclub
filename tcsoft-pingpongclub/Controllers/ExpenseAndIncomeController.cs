@@ -263,8 +263,6 @@ namespace tcsoft_pingpongclub.Controllers
 
 		public IActionResult Create()
 		{
-			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			ViewBag.IsLoggedIn = isLoggedIn;
 			getData();
 			return View();
 		}
@@ -272,10 +270,9 @@ namespace tcsoft_pingpongclub.Controllers
 		// POST: ExpenseAndIncome/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("IdFund,IdParty,IdAccountant,IdTournament,IdSponorDetail,Type,IdReason,DaysOverdue,Status,IsDone,CreatedDate,Amount")] ExpenseAndIncome expenseAndIncome)
+		public async Task<IActionResult> Create([Bind("IdFund,IdParty,IdTournament,IdSponorDetail,Type,IdReason,DaysOverdue,Status,IsDone,CreatedDate,Amount")] ExpenseAndIncome expenseAndIncome)
 		{
-			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			ViewBag.IsLoggedIn = isLoggedIn;
+            int? idMember = HttpContext.Session.GetInt32("IdMember");
 				if (ModelState.IsValid)
 				{
 					if (string.IsNullOrEmpty(expenseAndIncome.IdTournament?.ToString()))
@@ -295,7 +292,7 @@ namespace tcsoft_pingpongclub.Controllers
 							var record = new ExpenseAndIncome
 							{
 								IdFund = expenseAndIncome.IdFund,
-								IdAccountant = expenseAndIncome.IdAccountant,
+								IdAccountant = idMember,
 								Type = expenseAndIncome.Type,
 								IdReason = expenseAndIncome.IdReason,
 								CreatedDate = expenseAndIncome.CreatedDate,
@@ -331,7 +328,7 @@ namespace tcsoft_pingpongclub.Controllers
 								var newRecord = new ExpenseAndIncome
 								{
 									IdFund = expenseAndIncome.IdFund,
-									IdAccountant = expenseAndIncome.IdAccountant,
+									IdAccountant = idMember,
 									Type = expenseAndIncome.Type,
 									IdReason = expenseAndIncome.IdReason,
 									CreatedDate = expenseAndIncome.CreatedDate,
@@ -353,7 +350,7 @@ namespace tcsoft_pingpongclub.Controllers
 							var newRecord = new ExpenseAndIncome
 							{
 								IdFund = expenseAndIncome.IdFund,
-								IdAccountant = expenseAndIncome.IdAccountant,
+								IdAccountant = idMember,
 								Type = expenseAndIncome.Type,
 								IdReason = expenseAndIncome.IdReason,
 								CreatedDate = expenseAndIncome.CreatedDate,
