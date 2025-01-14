@@ -39,17 +39,17 @@
 		align-items: center;
 	}
 
-		.tournament-image-and-description img {
-			max-width: 100%;
-			height: auto;
-			border-radius: 5px;
-		}
+	.tournament-image-and-description img {
+		max-width: 100%;
+		height: auto;
+		border-radius: 5px;
+	}
 
-		.tournament-image-and-description p {
-			margin: 5px 0;
-			text-align: center;
-			color: #555;
-		}
+	.tournament-image-and-description p {
+		margin: 5px 0;
+		text-align: center;
+		color: #555;
+	}
 
 	.alert {
 		border-radius: 5px;
@@ -69,15 +69,15 @@
 		margin-top: 20px;
 	}
 
-		.btn-container .btn {
-			padding: 10px 20px;
-			font-size: 14px;
-			border-radius: 5px;
-			text-align: center;
-			border: none;
-			min-width: 140px;
-			transition: all 0.3s ease;
-		}
+	.btn-container .btn {
+		padding: 10px 20px;
+		font-size: 14px;
+		border-radius: 5px;
+		text-align: center;
+		border: none;
+		min-width: 140px;
+		transition: all 0.3s ease;
+	}
 
 
 	.btn-secondary,
@@ -87,25 +87,25 @@
 		color: white;
 	}
 
-		.btn-secondary:hover {
-			background-color: #495057;
-		}
+	.btn-secondary:hover {
+		background-color: #495057;
+	}
 
 	.btn-success {
 		background-color: #28a745;
 	}
 
-		.btn-success:hover {
-			background-color: #218838;
-		}
+	.btn-success:hover {
+		background-color: #218838;
+	}
 
 	.btn-info {
 		background-color: #17a2b8;
 	}
 
-		.btn-info:hover {
-			background-color: #117a8b;
-		}
+	.btn-info:hover {
+		background-color: #117a8b;
+	}
 
 
 	.cuong_btn-container-row {
@@ -116,8 +116,29 @@
 		margin-top: 20px;
 	}
 
-</style>
+	.center-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
+	.center-button a {
+		text-align: center;
+		padding: 10px;
+		font-size: 13px;
+		font-weight: bold;
+		background-color: #28a745;
+		color: white;
+		text-decoration: none;
+		border-radius: 5px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		transition: background-color 0.3s ease;
+	}
+
+	.center-button a:hover {
+		background-color: #218838;
+	}
+</style>
 
 <h3>Chi Tiết Giải Đấu</h3>
 
@@ -199,34 +220,52 @@
 		@TempData["Error"]
 	</div>
 }
-
-<div class="cuong_btn-container">
-    @if (!(bool)ViewBag.IsRegistered)
-    {
-        <!-- Form đăng ký -->
-        <form method="post" asp-action="Register" asp-controller="RegTour">
-            <input type="hidden" name="idTournament" value="@Model.IdTournament" />
-            <button type="submit" class="btn btn-primary">Đăng ký</button>
-        </form>
-    }
-    else
-    {
-        <!-- Form hủy đăng ký -->
-        <form method="post" asp-action="CancelRegistration" asp-controller="RegTour">
-            <input type="hidden" name="idTournament" value="@Model.IdTournament" />
-            <button type="submit" class="btn btn-danger">Hủy đăng ký</button>
-        </form>
-    }
-</div>
-
+@if (Model.TimeEnd.HasValue && Model.TimeEnd.Value < DateTime.Now)
+{
+	<p style="color:red; font-size:20px; text-align:center; font-weight:bold">Giải đấu đã kết thúc.</p>
+	<div class="center-button">
+		<a asp-action="Winners" asp-controller="Awards" asp-route-id="@Model.IdTournament" class="btn">Giải Thưởng</a>
+	</div>
+}
+else
+{
+	@if (Model.TimeStart.HasValue && Model.TimeStart.Value >= DateTime.Now)
+	{
+		<div class="cuong_btn-container">
+			@if (!(bool)ViewBag.IsRegistered)
+			{
+				<!-- Form đăng ký -->
+				<form method="post" asp-action="Register" asp-controller="RegTour">
+					<input type="hidden" name="idTournament" value="@Model.IdTournament" />
+					<button type="submit" class="btn btn-primary">Đăng ký</button>
+				</form>
+			}
+			else
+			{
+				<!-- Form hủy đăng ký -->
+				<form method="post" asp-action="CancelRegistration" asp-controller="RegTour">
+					<input type="hidden" name="idTournament" value="@Model.IdTournament" />
+					<button type="submit" class="btn btn-danger">Hủy đăng ký</button>
+				</form>
+			}
+		</div>
+	}
+	else
+	{
+		<p style="color:red; font-size:20px; text-align:center; font-weight:bold">Đã Hết Hạn Đăng Ký Giải Đấu.</p>
+	}
+}
 <div class="cuong_btn-container-row">
+
 	<!-- Nút Quay lại -->
 	<a href="@Url.Action("Index", new { searchTerm = ViewBag.SearchTerm })" class="btn btn-secondary">Quay lại</a>
-
-	<!-- Nút Xem Lịch Thi Đấu -->
-	<a asp-action="MatchSchedule" asp-controller="RegTour" asp-route-idTournament="@Model.IdTournament" class="btn btn-success">Xem Lịch</a>
-	<a asp-action="RegisteredPlayers" asp-route-idTournament="@Model.IdTournament" class="btn btn-primary btn-sm">
-		Xem người đã đăng ký
-	</a>
+	@if (Model.TimeStart.HasValue && Model.TimeStart.Value >= DateTime.Now)
+	{
+		<!-- Nút Xem Lịch Thi Đấu -->
+		<a asp-action="MatchSchedule" asp-controller="RegTour" asp-route-idTournament="@Model.IdTournament"
+			class="btn btn-success">Xem Lịch</a>
+		<a asp-action="RegisteredPlayers" asp-route-idTournament="@Model.IdTournament" class="btn btn-primary btn-sm">
+			Xem người đã đăng ký
+		</a>
+	}
 </div>
-

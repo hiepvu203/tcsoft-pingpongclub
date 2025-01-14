@@ -26,6 +26,7 @@
     </div>
     <div class="form-group-VH">
         <input type="submit" value="Lọc" class="btn-primary-VH" />
+        <a asp-action="ExportToExcel" asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]" class="btn-primary-VH">Export to Excel</a>
     </div>
 </form>
 

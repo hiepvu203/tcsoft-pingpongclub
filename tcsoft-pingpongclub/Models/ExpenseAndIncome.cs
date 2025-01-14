@@ -1,56 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace tcsoft_pingpongclub.Models
+namespace tcsoft_pingpongclub.Models;
+
+public partial class ExpenseAndIncome
 {
-    public partial class ExpenseAndIncome
-    {
-        public int Id { get; set; }
+	[Key]
+	public int Id { get; set; }
+	[ForeignKey("Fund")]
+	public int? IdFund { get; set; }
+	[ForeignKey("Member")]
+	public int? IdParty { get; set; }
+	[ForeignKey("Member")]
+	public int? IdAccountant { get; set; }
+	[ForeignKey("Tournament")]
+	public int? IdTournament { get; set; }
+	[ForeignKey("Sponor")]
+	public int? IdSponorDetail { get; set; }
 
-        public int? IdFund { get; set; }
+	public bool? IsDone { get; set; } = false;
+	[Required(ErrorMessage = "Loại không được để trống.")]
+	public bool? Type { get; set; }
+	[Required(ErrorMessage = "Lý do không được để trống.")]
+	[ForeignKey("Reason")]
+	public int? IdReason { get; set; }
 
-        public int? IdParty { get; set; }
+	public short? DaysOverdue { get; set; } = 0;
 
-        public int? IdAccountant { get; set; }
+	public bool? Status { get; set; } = false;
+	[Required(ErrorMessage = "Thời gian không được để trống.")]
+	[DataType(DataType.Date, ErrorMessage = "Ngày phải đúng định dạng ngày.")]
+	public DateTime? CreatedDate { get; set; }
 
-        public int? IdTournament { get; set; }
+	public virtual Fund? IdFundNavigation { get; set; }
 
-        public int? IdSponorDetail { get; set; }
+	public virtual Member? IdPartyNavigation { get; set; }
 
-        public bool? IsDone { get; set; } = false;
+	public virtual Reason? IdReasonNavigation { get; set; }
 
-        public bool? Type { get; set; }
+	public virtual Tournament? IdTournamentNavigation { get; set; }
 
-        public int? IdReason { get; set; }
+	public virtual Sponor? IdSponorDetailNavigation { get; set; }
 
-        public short? DaysOverdue { get; set; } = 0;
+	[NotMapped]
+	public string? AccountantName { get; set; }
 
-        public bool? Status { get; set; } = false;
+	[NotMapped]
+	public string? SponorName { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime? CreatedDate { get; set; }
-
-        public virtual Fund? IdFundNavigation { get; set; }
-
-        public virtual Member? IdPartyNavigation { get; set; }
-
-        public virtual Reason? IdReasonNavigation { get; set; }
-
-        public virtual Tournament? IdTournamentNavigation { get; set; }
-
-        public virtual Sponor? IdSponorDetailNavigation { get; set; }
-
-        [NotMapped]
-        public string? AccountantName { get; set; }
-
-        [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Số tiền phải lớn hơn 0.")]
-        public decimal Amount { get; set; }
-
-        public virtual ICollection<Award> Awards { get; set; } = new List<Award>(); // Thêm dòng này
-
-        [NotMapped]
-        public string? SponorName { get; set; }
-    }
+	[Required(ErrorMessage = "Số tiền không được để trống.")]
+	[Range(0.01, double.MaxValue, ErrorMessage = "Số tiền phải lớn hơn 0.")]
+	public decimal Amount { get; set; }
+	
+	 public virtual ICollection<Award> Awards { get; set; } = new List<Award>();
 }

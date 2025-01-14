@@ -67,7 +67,7 @@ namespace tcsoft_pingpongclub.Controllers
 			string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 			newFileName += Path.GetExtension(member.ImageFile!.FileName);
 
-			string imageFullPath = environment.WebRootPath + "/img/" + newFileName;
+			string imageFullPath = environment.WebRootPath + "/image/" + newFileName;
 			using (var stream = System.IO.File.Create(imageFullPath))
 			{
 				member.ImageFile.CopyTo(stream);
@@ -136,7 +136,7 @@ namespace tcsoft_pingpongclub.Controllers
 					string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + Path.GetExtension(member.ImageFile.FileName);
 
 					// Xây dựng đường dẫn đầy đủ
-					string imageFullPath = Path.Combine(environment.WebRootPath, "img", newFileName);
+					string imageFullPath = Path.Combine(environment.WebRootPath, "image", newFileName);
 
 					// Lưu ảnh mới
 					using (var stream = System.IO.File.Create(imageFullPath))
@@ -147,7 +147,7 @@ namespace tcsoft_pingpongclub.Controllers
 					// Xóa ảnh cũ nếu tồn tại
 					if (!string.IsNullOrEmpty(member1.LinkAvatar))
 					{
-						string oldImgFullPath = Path.Combine(environment.WebRootPath, "img", member1.LinkAvatar);
+						string oldImgFullPath = Path.Combine(environment.WebRootPath, "image", member1.LinkAvatar);
 						if (System.IO.File.Exists(oldImgFullPath))
 						{
 							System.IO.File.Delete(oldImgFullPath);
