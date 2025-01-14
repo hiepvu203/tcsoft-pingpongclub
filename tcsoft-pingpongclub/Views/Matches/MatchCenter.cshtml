@@ -60,7 +60,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var match in ViewBag.todayMatches)
+              
+                    @if (!((IEnumerable<dynamic>)ViewBag.todayMatches).Any())
+                    {
+                        <tr>
+                            <td colspan="3" style="text-align:start;color:red; font-weight:bold;font-size:25px; text-align:center">Hôm này không có trận đấu nào</td>
+                    </tr>
+
+                }
+                else
+                {
+                    @foreach (var match in ViewBag.todayMatches)
                 {
                     <tr>
                         <td colspan="3" class="text-start font-weight-bold fs-3">@match.Date?.ToString("dd/MM/yyyy")</td>
@@ -151,6 +161,8 @@
                         }
                     }
                 }
+                }
+                
             </tbody>
         </table>
     </div>
