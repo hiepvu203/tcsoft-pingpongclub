@@ -7,6 +7,7 @@
 .ImageHomePage{
     width: 100%;
     border-radius: 0px !important;
+    height: 250px;
   }
 .TCSoftHomePage{
 display: flex;
@@ -151,4 +152,28 @@ body {
     .MainTourOnHomePage {
         margin: 10px;
     }
+}
+
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+}
+
+.slide {
+    display: none; /* Ẩn tất cả các slide */
+}
+
+.ImageHomePage {
+    width: 100%; /* Để hình ảnh tự động điều chỉnh kích thước */
+}
+
+/* Hiệu ứng fade */
+.fade {
+    animation: fade 1.5s;
+}
+
+@keyframes fade {
+    from { opacity: .4 }
+    to { opacity: 1 }
 }

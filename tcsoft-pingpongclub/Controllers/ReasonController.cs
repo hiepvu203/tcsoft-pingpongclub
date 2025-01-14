@@ -24,9 +24,11 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: Reason
 		public async Task<IActionResult> Index(int? page)
 		{
-			int pageSize = 5; 
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			int pageSize = 5;
 			int pageNumber = page ?? 1;
-		   
+
 			var reasons = await _context.Reasons
 				.Where(e => e.Status == false)
 				.ToListAsync();
@@ -40,6 +42,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: Reason/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -57,6 +61,8 @@ namespace tcsoft_pingpongclub.Controllers
 
 		public void getData()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			ViewData["Type"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Thu" }, new SelectListItem { Value = "true", Text = "Chi" } };
 			ViewData["recurringFee"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Không" }, new SelectListItem { Value = "true", Text = "Có" } };
 		}
@@ -64,6 +70,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: Reason/Create
 		public IActionResult Create()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			getData();
 			return View();
 		}
@@ -73,6 +81,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("IdReason,ReasonName,Type,Status,recurringFee")] Reason reason)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (ModelState.IsValid)
 			{
 				_context.Add(reason);
@@ -86,6 +96,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: Reason/Edit/5
 		public async Task<IActionResult> Edit(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -105,6 +117,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("IdReason,ReasonName,Type,Status,recurringFee")] Reason reason)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id != reason.IdReason)
 			{
 				return NotFound();
@@ -137,6 +151,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: Reason/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -157,6 +173,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var reason = await _context.Reasons.FindAsync(id);
 			if (reason != null)
 			{
@@ -171,6 +189,8 @@ namespace tcsoft_pingpongclub.Controllers
 
 		private bool ReasonExists(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			return _context.Reasons.Any(e => e.IdReason == id);
 		}
 	}

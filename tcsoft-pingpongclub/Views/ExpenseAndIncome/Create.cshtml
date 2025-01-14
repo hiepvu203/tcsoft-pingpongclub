@@ -14,7 +14,7 @@
 <div>
     <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
 </div>
-
+<h1>@isLoggedIn</h1>
 <form asp-action="Create" class="form-container-VH">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -23,7 +23,7 @@
         <legend>Thông tin cơ bản</legend>
         <div class="form-group-VH">
             <label for="IdAccountant" class="form-label-VH">Kế toán</label>
-             <input asp-for="IdAccountant" class="form-input-VH"  />
+             <input asp-for="IdAccountant" class="form-input-VH" />
             <span asp-validation-for="IdAccountant" class="text-danger"></span>
         </div>
 

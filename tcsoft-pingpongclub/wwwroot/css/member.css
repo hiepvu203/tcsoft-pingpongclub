@@ -41,7 +41,7 @@ body {
     }
 
 
-.table {
+.table-tung {
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -52,7 +52,7 @@ body {
     border-spacing: 0;
 }
 
-    .table th {
+    .table-tung th {
         background-color: #007bff;
         color: #fff;
         text-align: center;
@@ -60,7 +60,7 @@ body {
         font-size: 14px;
     }
 
-    .table td {
+    .table-tung td {
         padding: 12px;
         vertical-align: middle;
         font-size: 14px;
@@ -68,7 +68,7 @@ body {
         border-bottom: 1px solid #dee2e6;
     }
 
-    .table img {
+    .table-tung img {
         border-radius: 50%;
         width: 50px;
         height: 50px;
@@ -76,11 +76,11 @@ body {
         object-fit: cover;
     }
 
-    .table .name {
+    .table-tung .name {
         font-weight: bold;
     }
 
-    .table tr:hover {
+    .table-tung tr:hover {
         background-color: #f8f9fa;
     }
 
@@ -115,23 +115,23 @@ body {
             color: #fff;
         }
 
-.table td:first-child {
+.table-tung-tung td:first-child {
     display: flex;
     align-items: center;
     justify-content: start;
     text-align: left;
 }
 
-.table td:last-child {
+.table-tung td:last-child {
     white-space: nowrap;
 }
 @media (max-width: 768px) {
-    .table img {
+    .table-tung img {
         width: 40px;
         height: 40px;
     }
 
-    .table td {
+    .table-tung td {
         font-size: 12px;
     }
 

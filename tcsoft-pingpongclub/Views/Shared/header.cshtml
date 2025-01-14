@@ -3,9 +3,9 @@
     var menu = ViewBag.Menu;
 }
 
-<nav class="headerNavbar">
+<div class="headerNavbar">
     <ul class="headerNvabar">
-        <a href="./Home" class="link_home_page_img"><li class="img-logo-header"><img src="~/image/logo.png" alt="Logo"></li></a>
+        <a a asp-area="" asp-controller="Home" asp-action="Index" class="link_home_page_img"><li class="img-logo-header"><img src="~/image/logo.png" alt="Logo"></li></a>
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
 
         @if (menu != null)
@@ -44,4 +44,5 @@
             </form>
         }
     </ul>
-</nav>
+</div>
+
