@@ -22,8 +22,7 @@ namespace tcsoft_pingpongclub.Controllers
 
         // GET: Tournaments
         public async Task<IActionResult> Index()
-        {
-          
+        {        
             var tournamentsWithActualAmount = await _context.Tournaments
                 .Include(t => t.RankEndNavigation)
                 .Include(t => t.RankStartNavigation)
