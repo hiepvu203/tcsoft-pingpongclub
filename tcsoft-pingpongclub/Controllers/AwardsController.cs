@@ -56,12 +56,27 @@ namespace tcsoft_pingpongclub.Controllers
             return View(award);
         }
 
+        public async Task<IActionResult> Winners(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var awards = await _context.Awards.Include(a => a.IdPlayerNavigation).ThenInclude(p => p.IdMemberNavigation)
+                .Include(a => a.IdTournamentNavigation)
+                .Include(a => a.IdNavigation)
+                .Where(g => g.IdTournament == id)
+                .ToListAsync();
+
+            return View(awards);
+        }
         // GET: Awards/Create
         public IActionResult CreateMultiple(int Id)
         {
             ViewBag.IdTournament = Id;
             ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == Id)
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == Id && p.Type==true)
                .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
 
             return View();
@@ -86,8 +101,12 @@ namespace tcsoft_pingpongclub.Controllers
                 {
                     // Hiển thị thông báo lỗi nếu tổng tiền không bằng Amount
                     ModelState.AddModelError(string.Empty, "Tổng tiền của 3 giải thưởng không bằng số tiền của giao dịch.");
-                  
-                    ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", awards.First().Id);
+
+                    ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+                    .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == awards.First().IdTournament && p.Type == true)
+                    .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
+
+
                     ViewBag.IdTournament = awards.First().IdTournament;
                     return View(awards); // Trả lại view với lỗi
                 }
@@ -103,7 +122,9 @@ namespace tcsoft_pingpongclub.Controllers
                 return RedirectToAction(nameof(Index), new { Id = awards.First().IdTournament });
             }
 
-            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes.Where(p => p.Type == true), "Id", "Id", awards.First().Id);
+            ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == awards.First().IdTournament && p.Type == true)
+               .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
             ViewBag.IdTournament = awards.First().IdTournament;
             return View(awards);
         }
@@ -115,7 +136,7 @@ namespace tcsoft_pingpongclub.Controllers
         {
             ViewBag.IdTournament = Id;
             ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-                .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == Id)
+                 .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == Id && p.Type == true)
                 .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
             return View();
         }
@@ -135,7 +156,7 @@ namespace tcsoft_pingpongclub.Controllers
                 return RedirectToAction(nameof(Index), new { Id = award.IdTournament });
             }        
             ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-                .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+                .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament && p.Type == true)
                 .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
             ViewBag.IdTournament = award.IdTournament;
             return View(award);
@@ -164,7 +185,7 @@ namespace tcsoft_pingpongclub.Controllers
              award.IdPlayer);
 
             ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament && p.Type == true)
                .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
             ViewBag.IdTournament = award.IdTournament;
             return View(award);
@@ -209,7 +230,7 @@ namespace tcsoft_pingpongclub.Controllers
                 "IdMemberNavigation.MemberName",  // Hiển thị tên của Member từ IdMemberNavigation
                 award.IdPlayer);
             ViewData["Id"] = new SelectList(_context.ExpenseAndIncomes
-               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament)
+               .Include(p => p.IdTournamentNavigation).Where(p => p.IdTournament == award.IdTournament && p.Type == true)
                .Select(f => new { Id = f.Id, Display = f.IdTournamentNavigation.TournamentName + ": " + (f.IdTournamentNavigation.TimeStart.HasValue ? f.IdTournamentNavigation.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - Mã Hóa Đơn: " + (f.Id) }), "Id", "Display");
             ViewBag.IdTournament = award.IdTournament;
             return View(award);

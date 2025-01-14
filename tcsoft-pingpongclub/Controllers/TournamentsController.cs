@@ -21,12 +21,9 @@ namespace tcsoft_pingpongclub.Controllers
         }
 
         // GET: Tournaments
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index()
         {
-            int pageSize = 5; // Số giải đấu mỗi trang
-            var totalItems = await _context.Tournaments.CountAsync(); // Tổng số giải đấu
-            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
+          
             var tournamentsWithActualAmount = await _context.Tournaments
                 .Include(t => t.RankEndNavigation)
                 .Include(t => t.RankStartNavigation)
@@ -45,14 +42,8 @@ namespace tcsoft_pingpongclub.Controllers
                     Status = t.Status,
                     ActualAmount = (short)_context.Players.Count(p => p.IdTournament == t.IdTournament)
                 })
-                .OrderByDescending(t => t.IdTournament)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .OrderByDescending(t => t.IdTournament)                
                 .ToListAsync();
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
             return View(tournamentsWithActualAmount);
         }
 
