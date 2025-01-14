@@ -6,8 +6,9 @@ namespace tcsoft_pingpongclub.Models;
 
 public partial class Sponor
 {
+    [Key]
     public int IdSponorTour { get; set; }
-
+    [Required(ErrorMessage = "Tiền tài trợ không được để trống.")]
     public decimal Money { get; set; }
 
     public int? IdTournament { get; set; }
@@ -18,7 +19,8 @@ public partial class Sponor
 
     public string? Other { get; set; }
 
-    [DataType(DataType.Date)]
+    [Required(ErrorMessage = "Thời gian không được để trống.")]
+    [DataType(DataType.Date, ErrorMessage = "Ngày phải đúng định dạng ngày.")]
     public DateTime? CreatedDate { get; set; }
 
     public virtual NhaTaiTro? IdSponorNavigation { get; set; }

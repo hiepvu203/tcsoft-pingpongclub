@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using tcsoft_pingpongclub.Models;
 using tcsoft_pingpongclub.ViewModels;
 using X.PagedList;
@@ -120,10 +121,9 @@ namespace tcsoft_pingpongclub.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(DateTime? createdDate, bool? type, int? idFund, int? idParty, int? idReason, int?idTournament, int page = 1)
         {
-            int pageSize = 10; // Số bản ghi mỗi trang
-            int skip = (page - 1) * pageSize; // Số bản ghi cần bỏ qua
+            int pageSize = 10; 
+            int skip = (page - 1) * pageSize; 
 
-            // Tạo bộ lọc dữ liệu
             var query = _context.ExpenseAndIncomes.AsQueryable();
 
             if (createdDate.HasValue)
@@ -190,40 +190,29 @@ namespace tcsoft_pingpongclub.Controllers
             return View("Index", pagedResults);
         }
 
-        public async Task<IActionResult> Statistics(DateTime? startDate, DateTime? endDate)
+
+        private async Task<List<StatisticsViewModel>> GetStatisticsAsync(DateTime? startDate, DateTime? endDate)
         {
             if (!startDate.HasValue)
                 startDate = DateTime.Today.AddMonths(-1);
             if (!endDate.HasValue)
                 endDate = DateTime.Today;
 
-            ViewData["StartDate"] = startDate.Value.ToString("yyyy-MM-dd");
-            ViewData["EndDate"] = endDate.Value.ToString("yyyy-MM-dd");
-
-            var statistics = await _context.ExpenseAndIncomes
+            return await _context.ExpenseAndIncomes
                 .Include(e => e.IdFundNavigation)
-                .Where(e => e.CreatedDate.HasValue &&
-                            e.IsDone == true)
+                .Where(e => e.CreatedDate.HasValue && e.IsDone == true)
                 .GroupBy(e => new { e.IdFundNavigation.FundName, e.IdFundNavigation.Total })
                 .Select(g => new StatisticsViewModel
                 {
                     FundName = g.Key.FundName,
-
-                    // Số dư đầu kỳ = Tiền quỹ hiện tại + tổng số tiền đã chi - tổng số tiền đã thu trong kỳ
                     OpeningBalance = g.Key.Total +
                                      g.Where(e => e.CreatedDate >= startDate && e.CreatedDate <= endDate)
-                                      .Sum(e => e.Type == true ? e.Amount : 0) 
+                                      .Sum(e => e.Type == true ? e.Amount : 0)
                                      - g.Where(e => e.CreatedDate >= startDate && e.CreatedDate <= endDate)
                                       .Sum(e => e.Type == false ? e.Amount : 0),
-
-                    TotalIncome = g.Where(e => e.CreatedDate >= startDate &&
-                                                e.CreatedDate <= endDate &&
-                                                e.Type == false)
+                    TotalIncome = g.Where(e => e.CreatedDate >= startDate && e.CreatedDate <= endDate && e.Type == false)
                                    .Sum(e => e.Amount),
-
-                    TotalExpense = g.Where(e => e.CreatedDate >= startDate &&
-                                                 e.CreatedDate <= endDate &&
-                                                 e.Type == true)
+                    TotalExpense = g.Where(e => e.CreatedDate >= startDate && e.CreatedDate <= endDate && e.Type == true)
                                    .Sum(e => e.Amount),
                 })
                 .Select(s => new StatisticsViewModel
@@ -232,12 +221,88 @@ namespace tcsoft_pingpongclub.Controllers
                     OpeningBalance = s.OpeningBalance,
                     TotalIncome = s.TotalIncome,
                     TotalExpense = s.TotalExpense,
-                    // Số dư cuối kỳ = Số dư đầu kỳ + Thu trong kỳ - Chi trong kỳ
                     ClosingBalance = s.OpeningBalance + s.TotalIncome - s.TotalExpense
                 })
                 .ToListAsync();
+        }
+
+        public async Task<IActionResult> Statistics(DateTime? startDate, DateTime? endDate)
+        {
+            ViewData["StartDate"] = startDate?.ToString("yyyy-MM-dd") ?? DateTime.Today.AddMonths(-1).ToString("yyyy-MM-dd");
+            ViewData["EndDate"] = endDate?.ToString("yyyy-MM-dd") ?? DateTime.Today.ToString("yyyy-MM-dd");
+
+            var statistics = await GetStatisticsAsync(startDate, endDate);
             return View(statistics);
         }
+
+        public async Task<IActionResult> ExportToExcel(DateTime? startDate, DateTime? endDate)
+        {
+            // Lấy dữ liệu
+            var statistics = await GetStatisticsAsync(startDate, endDate);
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Statistics");
+
+                // Thêm tiêu đề ngày bắt đầu và ngày kết thúc
+                worksheet.Cells[1, 2].Value = "Thống kê từ ngày:";
+                worksheet.Cells[1, 3].Value = startDate?.ToString("dd/MM/yyyy") ?? DateTime.Today.AddMonths(-1).ToString("dd/MM/yyyy");
+                worksheet.Cells[2, 2].Value = "Đến ngày:";
+                worksheet.Cells[2, 3].Value = endDate?.ToString("dd/MM/yyyy") ?? DateTime.Today.ToString("dd/MM/yyyy");
+
+                // Header
+                worksheet.Cells[4, 1].Value = "Quỹ";
+                worksheet.Cells[4, 2].Value = "Số dư đầu kỳ";
+                worksheet.Cells[4, 3].Value = "Tổng thu";
+                worksheet.Cells[4, 4].Value = "Tổng chi";
+                worksheet.Cells[4, 5].Value = "Số dư cuối kỳ";
+
+                using (var range = worksheet.Cells[4, 1, 4, 5])
+                {
+                    range.Style.Font.Bold = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                }
+
+                // Data rows
+                int row = 5;
+                foreach (var stat in statistics)
+                {
+                    worksheet.Cells[row, 1].Value = stat.FundName;
+                    worksheet.Cells[row, 2].Value = stat.OpeningBalance;
+                    worksheet.Cells[row, 3].Value = stat.TotalIncome;
+                    worksheet.Cells[row, 4].Value = stat.TotalExpense;
+                    worksheet.Cells[row, 5].Value = stat.ClosingBalance;
+                    row++;
+                }
+
+                // Tổng cộng
+                worksheet.Cells[row, 1].Value = "Tổng cộng";
+                worksheet.Cells[row, 2].Formula = $"SUM(B5:B{row - 1})";
+                worksheet.Cells[row, 3].Formula = $"SUM(C5:C{row - 1})";
+                worksheet.Cells[row, 4].Formula = $"SUM(D5:D{row - 1})";
+                worksheet.Cells[row, 5].Formula = $"SUM(E5:E{row - 1})";
+                worksheet.Cells[row, 1, row, 5].Style.Font.Bold = true;
+
+                // Tạo Table
+                var tableRange = worksheet.Cells[4, 1, row, 5];
+                var table = worksheet.Tables.Add(tableRange, "StatisticsTable");
+                table.ShowHeader = true;
+                table.TableStyle = OfficeOpenXml.Table.TableStyles.Light21;
+
+                // Auto-fit columns
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                // Lưu file Excel
+                var stream = new MemoryStream();
+                package.SaveAs(stream);
+                stream.Position = 0;
+
+                var fileName = $"ThongKe_{DateTime.Now:yyyyMMdd}.xlsx";
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
+
 
         public IActionResult Create()
         {
@@ -436,19 +501,17 @@ namespace tcsoft_pingpongclub.Controllers
                                 getData();
                                 return View(expenseAndIncome);
                             }
-                            newFund.Total -= newAmount; // Trừ số tiền chi vào quỹ mới
+                            newFund.Total -= newAmount; 
                         }
                         else if (existingRecord.Type == false) 
                         {
-                            newFund.Total += newAmount; // Cộng số tiền thu vào quỹ mới
+                            newFund.Total += newAmount; 
                         }
 
-                        // Gán quỹ mới cho giao dịch
                         existingRecord.IdFundNavigation = newFund;
                     }
                     else
                     {
-                        // Nếu không thay đổi quỹ, xử lý logic chi/thu như bình thường
                         if (existingRecord.Type == true)
                         {
                             if (amountDifference > 0)
