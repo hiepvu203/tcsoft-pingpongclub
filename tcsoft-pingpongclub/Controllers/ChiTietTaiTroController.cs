@@ -22,6 +22,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: ChiTietTaiTro
 		public async Task<IActionResult> Index()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var thuctapKtktcn2024Context = await _context.Sponors
 								.Include(s => s.IdSponorNavigation)
 								.Include(s => s.IdTournamentNavigation)
@@ -48,6 +50,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: ChiTietTaiTro/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -66,6 +70,8 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 		public void getData()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			ViewData["Type"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Thu" }, new SelectListItem { Value = "true", Text = "Chi" } };
 			ViewData["IdSponor"] = new SelectList(_context.NhaTaiTros.Select(f => new { IdSponor = f.IdSponor, Display = f.NameSponer }), "IdSponor", "Display");
 			ViewData["IdTournament"] = new SelectList(_context.Tournaments.Select(f => new { IdTournament = f.IdTournament, Display = f.TournamentName + ": " + (f.TimeStart.HasValue ? f.TimeStart.Value.ToString("dd/MM/yyyy") : "Không xác định") + " - " + (f.TimeEnd.HasValue ? f.TimeEnd.Value.ToString("dd/MM/yyyy") : "Không xác định") }), "IdTournament", "Display");
@@ -74,6 +80,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: ChiTietTaiTro/Create
 		public IActionResult Create()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			getData();
 			return View();
 		}
@@ -83,6 +91,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("IdSponorTour,Money,IdTournament,Status,IdSponor,Other,CreatedDate")] Sponor sponor)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (ModelState.IsValid)
 			{
 				var newRecord = new Sponor
@@ -106,6 +116,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: ChiTietTaiTro/Edit/5
 		public async Task<IActionResult> Edit(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -125,6 +137,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("IdSponorTour,Money,IdTournament,Status,IdSponor,Other,CreatedDate")] Sponor sponor)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id != sponor.IdSponorTour)
 			{
 				return NotFound();
@@ -169,11 +183,12 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: ChiTietTaiTro/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
 			}
-
 			var sponor = await _context.Sponors
 				.Include(s => s.IdSponorNavigation)
 				.Include(s => s.IdTournamentNavigation)
@@ -182,7 +197,7 @@ namespace tcsoft_pingpongclub.Controllers
 			{
 				return NotFound();
 			}
-
+			getData();
 			return View(sponor);
 		}
 
@@ -191,18 +206,23 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var sponor = await _context.Sponors.FindAsync(id);
 			if (sponor != null)
 			{
-				_context.Sponors.Remove(sponor);
+				sponor.Status = true;
+				_context.Sponors.Update(sponor);
+				await _context.SaveChangesAsync();
 			}
 
-			await _context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));
 		}
 
 		private bool SponorExists(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			return _context.Sponors.Any(e => e.IdSponorTour == id);
 		}
 	}

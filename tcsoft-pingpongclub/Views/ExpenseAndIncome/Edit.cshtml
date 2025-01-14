@@ -1,98 +1,104 @@
 ﻿@model tcsoft_pingpongclub.Models.ExpenseAndIncome
+<link href="~/css/formcreatev2.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit"  asp-route-id="@Model.Id">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                @if (Model.IsDone == true)
-                {
-                    <label asp-for="IdFund" class="control-label">Quỹ</label>
-                    <select asp-for="IdFund" class="form-control" asp-items="ViewBag.IdFund" disabled></select>
-                    <span asp-validation-for="IdFund" class="text-danger"></span>
-                }
-                else if (Model.IsDone == false)
-                {
-                    <label asp-for="IdFund" class="control-label">Quỹ</label>
-                    <select asp-for="IdFund" class="form-control" asp-items="ViewBag.IdFund"></select>
-                    <span asp-validation-for="IdFund" class="text-danger"></span>
-                }
-            </div>
-            <div class="form-group">
-                @if (Model.Type == false && Model.IdParty != null) 
-                {
-                    <label asp-for="IdParty" class="control-label">Người nộp</label>
-                    <select asp-for="IdParty" class="form-control" asp-items="ViewBag.IdParty"disabled></select>
-                }
-            </div>
-            <div class="form-group">
-                <label asp-for="IdAccountant" class="control-label">Kế toán</label>
-                <input asp-for="IdAccountant" type="hidden" class="form-control" />
-                <select asp-for="IdAccountant" class="form-control" asp-items="ViewBag.IdAccountant" disabled></select>
-                <span asp-validation-for="IdAccountant" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Type" class="form-label">Loại</label>
-                <select asp-for="Type" asp-items="ViewBag.Type" class="form-control" disabled></select>
-            </div>
-            <div class="form-group">
-                @if (Model.Type == false && Model.IsDone == false)
-                {
-                    <label asp-for="IsDone" class="control-label">Trạng thái</label>
-                    <select asp-for="IsDone" asp-items="ViewBag.IsDone" class="form-control"></select>
-                }
-                else if (Model.Type == true || Model.IsDone == true)
-                {
-                    <label asp-for="IsDone" class="control-label">Trạng thái</label>
-                    <select asp-for="IsDone" asp-items="ViewBag.IsDone" class="form-control" disabled></select>
-                }
-            </div>
-            <div class="form-group">
-                @if (Model.IsDone == true)
-                {
-                    <label asp-for="IdReason" class="control-label">Lý do</label>
-                    <select asp-for="IdReason" class="form-control" asp-items="ViewBag.IdReason" disabled></select>
-                    <span asp-validation-for="IdReason" class="text-danger"></span>
-                }
-                else if (Model.IsDone == false)
-                {
-                    <label asp-for="IdReason" class="control-label">Lý do</label>
-                    <select asp-for="IdReason" class="form-control" asp-items="ViewBag.IdReason"></select>
-                    <span asp-validation-for="IdReason" class="text-danger"></span>
-                }
-            </div>
-            <div class="form-group">
-                <label for="CreatedDate" class="form-label">Ngày tạo</label>
-                <input asp-for="CreatedDate" class="form-input" type="date" readonly/>
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @if (Model.IsDone == true)
-                {
-                    <label asp-for="Amount" class="control-label"></label>
-                    <input asp-for="Amount" class="form-control" readonly/>
-                    <span asp-validation-for="Status" class="text-danger"></span>
-                }
-                else if (Model.IsDone == false)
-                {
-                    <label asp-for="Amount" class="control-label"></label>
-                    <input asp-for="Amount" class="form-control" />
-                    <span asp-validation-for="Status" class="text-danger"></span>
-                }
-            </div>
-            <div class="form-group">
-                @if(Model.IsDone == false){
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Index">Back to List</a>
-                }else{
-                    <a asp-action="Index">Back to List</a>
-                }
-            </div>
-        </form>
-    </div>
+<div>
+    <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
 </div>
-
+<form asp-action="Edit" asp-route-id="@Model.Id" class="form-container-VH">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            @if (Model.IsDone == true)
+            {
+                <label asp-for="IdFund" class="control-label">Quỹ</label>
+                <select asp-for="IdFund" class="form-control-VH" asp-items="ViewBag.IdFund" disabled></select>
+                <span asp-validation-for="IdFund" class="text-danger"></span>
+            }
+            else if (Model.IsDone == false)
+            {
+                <label asp-for="IdFund" class="control-label">Quỹ</label>
+                <select asp-for="IdFund" class="form-control-VH" asp-items="ViewBag.IdFund"></select>
+                <span asp-validation-for="IdFund" class="text-danger"></span>
+            }
+        </div>
+        <div class="form-group-VH">
+            @if (Model.Type == false && Model.IdParty != null)
+            {
+                <label asp-for="IdParty" class="control-label">Người nộp</label>
+                <select asp-for="IdParty" class="form-control-VH" asp-items="ViewBag.IdParty" disabled></select>
+            }
+        </div>
+    </div>
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            <label asp-for="IdAccountant" class="control-label">Kế toán</label>
+            <input asp-for="IdAccountant" type="hidden" class="form-control-VH" />
+            <select asp-for="IdAccountant" class="form-control-VH" asp-items="ViewBag.IdAccountant" disabled></select>
+            <span asp-validation-for="IdAccountant" class="text-danger"></span>
+        </div>
+        <div class="form-group-VH">
+            <label asp-for="Type" class="control-label">Loại</label>
+            <select asp-for="Type" asp-items="ViewBag.Type" class="form-control-VH" disabled></select>
+        </div>
+    </div>
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            @if (Model.Type == false && Model.IsDone == false)
+            {
+                <label asp-for="IsDone" class="control-label">Trạng thái</label>
+                <select asp-for="IsDone" asp-items="ViewBag.IsDone" class="form-control-VH"></select>
+            }
+            else if (Model.Type == true || Model.IsDone == true)
+            {
+                <label asp-for="IsDone" class="control-label">Trạng thái</label>
+                <select asp-for="IsDone" asp-items="ViewBag.IsDone" class="form-control-VH" disabled></select>
+            }
+        </div>
+        <div class="form-group-VH">
+            @if (Model.IsDone == true)
+            {
+                <label asp-for="IdReason" class="control-label">Lý do</label>
+                <select asp-for="IdReason" class="form-control-VH" asp-items="ViewBag.IdReason" disabled></select>
+                <span asp-validation-for="IdReason" class="text-danger"></span>
+            }
+            else if (Model.IsDone == false)
+            {
+                <label asp-for="IdReason" class="control-label">Lý do</label>
+                <select asp-for="IdReason" class="form-control-VH" asp-items="ViewBag.IdReason"></select>
+                <span asp-validation-for="IdReason" class="text-danger"></span>
+            }
+        </div>
+    </div>
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            <label for="CreatedDate" class="control-label">Ngày tạo</label>
+            <input asp-for="CreatedDate" class="form-input-VH" type="date" readonly />
+            <span asp-validation-for="CreatedDate" class="text-danger"></span>
+        </div>
+        <div class="form-group-VH">
+            @if (Model.IsDone == true)
+            {
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control-VH" readonly />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            }
+            else if (Model.IsDone == false)
+            {
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control-VH" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            }
+        </div>
+    </div>
+    <div class="form-group-VH">
+        @if (Model.IsDone == false)
+        {
+            <input type="submit" value="Cập nhật" class="btn btn-primary" />
+        }
+    </div>
+</form>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,4 +1,4 @@
-﻿@model tcsoft_pingpongclub.Models.Reason
+﻿@model tcsoft_pingpongclub.Models.Fund
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,25 +9,25 @@
 <div>
     <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
 </div>
-
 <form asp-action="Edit" class="form-container-VH">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="IdReason" />
+    <input type="hidden" asp-for="IdFund" />
     <div class="form-row-VH">
         <div class="form-group-VH">
-            <label asp-for="ReasonName" class="control-label">Tên lý do:</label>
-            <input asp-for="ReasonName" class="form-control-VH" />
-            <span asp-validation-for="ReasonName" class="text-danger"></span>
+            <label asp-for="FundName" class="control-label"></label>
+            <input asp-for="FundName" class="form-control-VH" />
+            <span asp-validation-for="FundName" class="text-danger"></span>
         </div>
         <div class="form-group-VH">
-            <label asp-for="Type" class="control-label">Loại:</label>
-            <select asp-for="Type" asp-items="ViewBag.Type" class="form-control-VH"></select>
+            <label asp-for="Total" class="control-label"></label>
+            <input asp-for="Total" class="form-control-VH" />
+            <span asp-validation-for="Total" class="text-danger"></span>
         </div>
     </div>
     <div class="form-row-VH">
         <div class="form-group-VH">
-            <label asp-for="recurringFee" class="control-label">Phí định kỳ:</label>
-            <select asp-for="recurringFee" asp-items="ViewBag.recurringFee" class="form-control-VH"></select>
+            <label asp-for="Status" class="control-label">Trạng thái</label>
+            <select asp-for="Status" asp-items="ViewBag.Status" class="form-control-VH"></select>
         </div>
     </div>
     <div class="form-row-VH">

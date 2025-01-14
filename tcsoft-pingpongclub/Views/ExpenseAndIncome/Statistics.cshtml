@@ -1,45 +1,63 @@
 ﻿@model IEnumerable<tcsoft_pingpongclub.ViewModels.StatisticsViewModel>
+<link href="~/css/expenseandincome.css" rel="stylesheet" />
+<link href="~/css/formcreatev2.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
 
-<h2>Thống kê thu chi</h2>
+<div>
+    <a asp-action="Index" class="back-link-VH">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+</div>
 
-<form method="get" asp-action="Statistics" class="mb-4">
-    <div class="row">
-        <div class="col-md-4">
-            <label for="month" class="form-label">Tháng:</label>
-            <input type="number" id="month" name="month" class="form-control" min="1" max="12" value="@ViewData["Month"]" placeholder="Nhập tháng (1-12)" required />
+<h2 class="text-center-VH">Thống kê thu chi</h2>
+
+<form method="get" asp-action="Statistics" class="form-container-VH">
+    <div class="form-row-VH">
+        <div class="form-group-VH" style="flex:1">
+            <label for="startDate" class="form-label-VH">Từ ngày:</label>
+            <input type="date" id="startDate" name="startDate" class="form-control-VH"
+                   value="@ViewData["StartDate"]" required />
         </div>
-        <div class="col-md-4">
-            <label for="year" class="form-label">Năm:</label>
-            <input type="number" id="year" name="year" class="form-control" min="2000" max="@DateTime.Now.Year" value="@ViewData["Year"]" placeholder="Nhập năm" required />
+        <div class="form-group-VH" style="flex:1">
+            <label for="endDate" class="form-label-VH">Đến ngày:</label>
+            <input type="date" id="endDate" name="endDate" class="form-control-VH"
+                   value="@ViewData["EndDate"]" required />
         </div>
-        <div class="col-md-4 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary">Lọc</button>
-        </div>
+    </div>
+    <div class="form-group-VH">
+        <input type="submit" value="Lọc" class="btn-primary-VH" />
     </div>
 </form>
 
-<table class="table table-bordered">
+<table class="custom-table-VH">
     <thead>
         <tr>
-            <th>Tháng</th>
-            <th>Năm</th>
             <th>Quỹ</th>
+            <th>Số dư đầu kỳ</th>
             <th>Tổng thu</th>
             <th>Tổng chi</th>
-            <th>Số dư</th>
+            <th>Số dư cuối kỳ</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var stat in Model)
         {
             <tr>
-                <td>@stat.Month</td>
-                <td>@stat.Year</td>
                 <td>@stat.FundName</td>
+                <td>@stat.OpeningBalance.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
                 <td>@stat.TotalIncome.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
                 <td>@stat.TotalExpense.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
-                <td>@stat.Balance.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                <td>@stat.ClosingBalance.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
             </tr>
         }
     </tbody>
+    <tfoot>
+        <tr class="table-info">
+            <td><strong>Tổng cộng</strong></td>
+            <td>@Model.Sum(x => x.OpeningBalance).ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+            <td>@Model.Sum(x => x.TotalIncome).ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+            <td>@Model.Sum(x => x.TotalExpense).ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+            <td>@Model.Sum(x => x.ClosingBalance).ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+        </tr>
+    </tfoot>
 </table>

@@ -1,51 +1,63 @@
 ﻿@model tcsoft_pingpongclub.Models.ExpenseAndIncome
-
 @{
     ViewData["Title"] = "Delete";
 }
+<link href="~/css/formcreatev2.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
 
-<h3>Are you sure you want to delete this?</h3>
-<div class="col-md-4">
-    <div class="form-group">
-        <label asp-for="IdFund" class="control-label">Quỹ</label>
-        <select asp-for="IdFund" class="form-control" asp-items="ViewBag.IdFund" disabled></select>
+<div>
+    <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
+</div>
+
+<h3>Bạn có chắc muốn xóa phiếu thu chi này?</h3>
+<div class="form-container-VH">
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            <label asp-for="IdFund" class="control-label">Quỹ</label>
+            <select asp-for="IdFund" class="form-control-VH" asp-items="ViewBag.IdFund" disabled></select>
+        </div>
+        <div class="form-group-VH">
+            @if (Model.Type == false)
+            {
+                <label asp-for="IdParty" class="control-label">Người nộp</label>
+                <select asp-for="IdParty" class="form-control-VH" asp-items="ViewBag.IdParty" disabled></select>
+            }
+        </div>
     </div>
-    <div class="form-group">
-        @if (Model.Type == false)
-        {
-            <label asp-for="IdParty" class="control-label">Người nộp</label>
-            <select asp-for="IdParty" class="form-control" asp-items="ViewBag.IdParty" disabled></select>
-        }
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            <label asp-for="IdAccountant" class="control-label">Kế toán</label>
+            <input asp-for="IdAccountant" type="hidden" class="form-control-VH" />
+            <select asp-for="IdAccountant" class="form-control-VH" asp-items="ViewBag.IdAccountant" disabled></select>
+        </div>
+        <div class="form-group-VH">
+            <label asp-for="Type" class="form-label-VH">Loại</label>
+            <select asp-for="Type" asp-items="ViewBag.Type" class="form-control-VH" disabled></select>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="IdAccountant" class="control-label">Kế toán</label>
-        <input asp-for="IdAccountant" type="hidden" class="form-control" />
-        <select asp-for="IdAccountant" class="form-control" asp-items="ViewBag.IdAccountant" disabled></select>
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            <label asp-for="IsDone" class="control-label">Trạng thái</label>
+            <select asp-for="IsDone" asp-items="ViewBag.IsDone" class="form-control-VH" disabled></select>
+        </div>
+        <div class="form-group-VH">
+            <label asp-for="IdReason" class="control-label">Lý do</label>
+            <select asp-for="IdReason" class="form-control-VH" asp-items="ViewBag.IdReason" disabled></select>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Type" class="form-label">Loại</label>
-        <select asp-for="Type" asp-items="ViewBag.Type" class="form-control" disabled></select>
-    </div>
-    <div class="form-group">
-        <label asp-for="IsDone" class="control-label">Trạng thái</label>
-        <select asp-for="IsDone" asp-items="ViewBag.IsDone" class="form-control" disabled></select>
-    </div>
-    <div class="form-group">
-        <label asp-for="IdReason" class="control-label">Lý do</label>
-        <select asp-for="IdReason" class="form-control" asp-items="ViewBag.IdReason" disabled></select>
-    </div>
-    <div class="form-group">
-        <label for="CreatedDate" class="form-label">Ngày tạo</label>
-        <input asp-for="CreatedDate" class="form-input" type="date" readonly />
-    </div>
-    <div class="form-group">
-        <label asp-for="Amount" class="control-label"></label>
-        <input asp-for="Amount" class="form-control" readonly/>
+    <div class="form-row-VH">
+        <div class="form-group-VH">
+            <label for="CreatedDate" class="form-label-VH">Ngày tạo</label>
+            <input asp-for="CreatedDate" class="form-input-VH" type="date" readonly />
+        </div>
+        <div class="form-group-VH">
+            <label asp-for="Amount" class="control-label"></label>
+            <input asp-for="Amount" class="form-control-VH" readonly />
+        </div>
     </div>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Xóa" class="btn btn-danger" />
     </form>
 </div>

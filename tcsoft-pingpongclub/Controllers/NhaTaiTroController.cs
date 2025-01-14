@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using tcsoft_pingpongclub.Models;
-using tcsoft_pingpongclub.Service;
-using tcsoft_pingpongclub.Filter;
+
 namespace tcsoft_pingpongclub.Controllers
 {
-	[ServiceFilter(typeof(MenuActionFilter))]
 	public class NhaTaiTroController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
@@ -26,6 +24,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: NhaTaiTro
 		public async Task<IActionResult> Index()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			return View(await _context.NhaTaiTros.Where(e => e.Status == false).ToListAsync());
 		}
 
@@ -58,6 +58,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("IdSponor,NameSponer,UrlLogo, ImageFile")] NhaTaiTro nhaTaiTro)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (ModelState.IsValid)
 			{
 				if (nhaTaiTro.ImageFile != null)
@@ -82,6 +84,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: NhaTaiTro/Edit/5
 		public async Task<IActionResult> Edit(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -100,6 +104,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("IdSponor,NameSponer,UrlLogo, ImageFile")] NhaTaiTro nhaTaiTro)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id != nhaTaiTro.IdSponor)
 			{
 				return NotFound();
@@ -161,6 +167,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: NhaTaiTro/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -176,36 +184,28 @@ namespace tcsoft_pingpongclub.Controllers
 			return View(nhaTaiTro);
 		}
 
-
 		// POST: NhaTaiTro/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var nhaTaiTro = await _context.NhaTaiTros.FindAsync(id);
 			if (nhaTaiTro != null)
 			{
-				//if (!string.IsNullOrEmpty(nhaTaiTro.UrlLogo))
-				//{
-				//    string wwwRootPath = _hostEnvironment.WebRootPath;
-				//    string path = Path.Combine(wwwRootPath + "/images/", nhaTaiTro.UrlLogo);
-				//    if (System.IO.File.Exists(path))
-				//    {
-				//        System.IO.File.Delete(path);
-				//    }
-				//}
 				nhaTaiTro.Status = true;
 				_context.Update(nhaTaiTro);
-				//_context.NhaTaiTros.Remove(nhaTaiTro);
 				await _context.SaveChangesAsync();
 			}
 
-			
 			return RedirectToAction(nameof(Index));
 		}
 
 		private bool NhaTaiTroExists(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			return _context.NhaTaiTros.Any(e => e.IdSponor == id);
 		}
 	}

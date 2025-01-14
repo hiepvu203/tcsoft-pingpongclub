@@ -9,9 +9,9 @@ public partial class Fund
 
     public string? FundName { get; set; }
 
-    public decimal? Total { get; set; }
+    public decimal Total { get; set; }
 
-    public bool? Status { get; set; }
+    public bool? Status { get; set; } = true;
 
     public virtual ICollection<ExpenseAndIncome> ExpenseAndIncomes { get; set; } = new List<ExpenseAndIncome>();
 }

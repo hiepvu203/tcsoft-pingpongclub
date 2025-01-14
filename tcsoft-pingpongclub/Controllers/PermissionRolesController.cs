@@ -23,19 +23,21 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 
 		// GET: PermissionRoles
-		public async Task<IActionResult> Index(int ? id)
+		public async Task<IActionResult> Index(int? id)
 		{
-			if (id==null)
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			if (id == null)
 			{
-			   return RedirectToAction("Index","Role");
+				return RedirectToAction("Index", "Role");
 			}
 
 			var permissionRoles = await _context.PermissionRoles
 		.Where(pr => pr.IdRole == id)
 		.Include(pr => pr.IdPermissionNavigation)
-		.Include(pr => pr.IdRoleNavigation)      
+		.Include(pr => pr.IdRoleNavigation)
 		.ToListAsync();
-			
+
 			var role = await _context.Roles.FirstOrDefaultAsync(r => r.IdRole == id);
 			ViewBag.role = role;
 			return View(permissionRoles);
@@ -45,6 +47,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: PermissionRoles/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return RedirectToAction("Index", "Role");
@@ -66,6 +70,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: PermissionRoles/Create
 		public IActionResult Create(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var role = _context.Roles.FirstOrDefault(r => r.IdRole == id);
 			if (role == null)
 			{
@@ -82,6 +88,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(int id, int permissionId)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var role = _context.Roles.FirstOrDefault(r => r.IdRole == id);
 			if (role == null)
 			{
@@ -113,6 +121,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: PermissionRoles/Edit/5
 		public async Task<IActionResult> Edit(int idRole, int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var role = _context.Roles.FirstOrDefault(r => r.IdRole == idRole);
 			if (role == null)
 			{
@@ -138,8 +148,10 @@ namespace tcsoft_pingpongclub.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id,int idRole, int permissionId, bool status)
+		public async Task<IActionResult> Edit(int id, int idRole, int permissionId, bool status)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			// Lấy thông tin Role
 			var role = await _context.Roles.FirstOrDefaultAsync(r => r.IdRole == idRole);
 			if (role == null)
@@ -191,6 +203,8 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: PermissionRoles/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return RedirectToAction("Index", "Role");
@@ -214,6 +228,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var permissionRole = await _context.PermissionRoles.FindAsync(id);
 
 			if (permissionRole != null)
@@ -231,6 +247,8 @@ namespace tcsoft_pingpongclub.Controllers
 
 		private bool PermissionRoleExists(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			return _context.PermissionRoles.Any(e => e.IdPerRo == id);
 		}
 	}

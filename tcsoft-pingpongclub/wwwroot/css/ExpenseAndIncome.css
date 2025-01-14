@@ -7,15 +7,25 @@
 }
 
 .container {
-    max-width: 1600px;
+    max-width: 100%;
     margin: auto;
-    padding: 20px;
 }
 
-/* Buttons */
-.btn-primary,
-.btn-warning,
-.btn-danger {
+.form-container-VH {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 90%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary-VH,
+.btn-warning-VH,
+.btn-danger-VH {
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
@@ -27,35 +37,36 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.btn-primary {
+.btn-primary-VH {
     color: white;
     background-color: #007bff;
 }
 
-    .btn-primary:hover {
+    .btn-primary-VH:hover {
         background-color: #0056b3;
     }
 
-.btn-warning {
+.btn-warning-VH {
     color: black;
     background-color: #ffc107;
 }
 
-    .btn-warning:hover {
+    .btn-warning-VH:hover {
+        color: black;
         background-color: #e0a800;
     }
 
-.btn-danger {
+.btn-danger-VH {
     color: white;
     background-color: #dc3545;
 }
 
-    .btn-danger:hover {
+    .btn-danger-VH:hover {
+        color: white;
         background-color: #b21f2d;
     }
 
-/* Table */
-.custom-table {
+.custom-table-VH {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -63,54 +74,49 @@
     text-align: left;
 }
 
-    .custom-table th,
-    .custom-table td {
-        border: 1px solid #ddd;
-        padding: 12px;
-    }
-
-    .custom-table th {
-        background-color: #007bff;
-        color: white;
-        font-weight: bold;
-    }
-
-    .custom-table tbody tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    .custom-table tbody tr:hover {
-        background-color: #ddd;
-    }
-
-    .main-feture {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-/* Dropdown */
-/*.dropdown-container {
-    position: relative;
-    display: inline-block;
+.custom-table-VH th,.custom-table-VH td {
+    border: 1px solid #ddd;
+    padding: 12px;
 }
 
-.dropdown-btn {
+.custom-table-VH th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.custom-table-VH tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.custom-table-VH tbody tr:hover {
+    background-color: #ddd;
+}
+
+.main-feture-VH {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dropdown-container-VH {
+    position: relative;
+    display: inline-block;
+    width: auto; 
+    cursor: pointer;
+}
+
+.dropdown-btn-VH {
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
 }
 
-    .dropdown-btn:hover {
-        background-color: #0056b3;
-    }
-
-.dropdown-content {
+.dropdown-content-VH {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -121,57 +127,11 @@
     min-width: 200px;
 }
 
-    .dropdown-content a {
-        display: block;
-        padding: 10px 15px;
-        color: #333;
-        text-decoration: none;
-        font-size: 14px;
-        background-color: white;
-        transition: background-color 0.3s ease;
-    }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-.dropdown-container:hover .dropdown-content {
-    display: block;
-}*/
-
-/* Dropdown Container */
-.dropdown-container {
-    position: relative;
-    display: inline-block;
-    width: auto; /* Ensure it only takes up as much space as it needs */
-    cursor: pointer;
-}
-
-.dropdown-btn {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    border-radius: 5px;
-    overflow: hidden;
-    min-width: 200px;
-}
-
-.dropdown-container:hover .dropdown-content {
+.dropdown-container-VH:hover .dropdown-content-VH {
     display: block;
 }
 
-.dropdown-content a {
+.dropdown-content-VH a {
     display: block;
     padding: 10px 15px;
     color: #333;
@@ -180,17 +140,16 @@
     transition: background-color 0.3s ease;
 }
 
-    .dropdown-content a:hover {
+    .dropdown-content-VH a:hover {
         background-color: #f1f1f1;
     }
 
-/* Actions Section */
-.actions {
+.actions-VH {
     display: flex;
     gap: 10px;
 }
 
-    .actions .btn-primary {
+    .actions-VH .btn-primary-VH {
         padding: 10px 20px;
         color: white;
         background-color: #007bff;
@@ -201,98 +160,58 @@
         transition: background-color 0.3s ease;
     }
 
-        .actions .btn-primary:hover {
+        .actions-VH .btn-primary-VH:hover {
             background-color: #0056b3;
         }
 
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
+.text-center-VH {
+    text-align: center;
+    margin: 5px 0;
 }
 
-.modal-content {
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    width: 50%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    animation: modalFadeIn ease 0.5s;
-    position: relative;
+/* Active page */
+.pagination li.active a {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+    cursor: default;
 }
 
-    .modal-content h2 {
-        margin-top: 0;
-        font-size: 18px;
-    }
+/* Disabled state (prev/next when unavailable) */
+.pagination li.disabled a {
+    color: #999;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
 
-.close-btn {
-    /*    float: right;
-    font-size: 20px;
-    font-weight: bold;
+/* Hover state */
+.pagination li a:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+}
+
+/* Page links */
+.pagination li a {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
     color: #333;
-    cursor: pointer;
-    background: none;
-    border: none;*/
-    position: absolute; /* Absolute positioning relative to .modal-content */
-    top: 19px; /* Adjust for desired spacing from the top */
-    right: 10px; /* Align to the right with some spacing */
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    background: none; /* No background initially */
-    border: none; /* No border */
-    width: 30px; /* Set width for better click area */
-    height: 30px; /* Set height for consistency */
-    display: flex;
-    justify-content: center; /* Center the "×" symbol */
-    align-items: center;
-    border-radius: 50%; /* Optional: make it circular */
-    transition: background-color 0.3s ease; /* Add hover effect transition */
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
 }
 
-    .close-btn:hover {
-        background-color: #f0f0f0; /* Light gray background on hover */
-        color: #000; /* Slightly darker text on hover */
-    }
-
-.form-group {
-    margin-bottom: 15px;
+/* Individual page items */
+.pagination li {
+    display: inline-block;
+    margin: 0 2px;
 }
 
-    .form-group label {
-        display: block;
-        font-size: 14px;
-        margin-bottom: 5px;
-    }
-
-    .form-group input,
-    .form-group select {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Pagination list */
+.pagination {
+    display: inline-flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
 }

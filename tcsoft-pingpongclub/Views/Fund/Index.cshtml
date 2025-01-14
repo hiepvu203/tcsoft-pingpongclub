@@ -1,11 +1,11 @@
-﻿@model IEnumerable<tcsoft_pingpongclub.Models.Reason>
-@using X.PagedList.Mvc.Core
-@using X.PagedList
+﻿@model IEnumerable<tcsoft_pingpongclub.Models.Fund>
 
 @{
     ViewData["Title"] = "Index";
 }
+
 <link href="~/css/expenseandincome.css" rel="stylesheet" />
+
 <div class="VuHiep-container">
     <div class="main-feture-VH">
         <div class="dropdown-container-VH">
@@ -28,30 +28,26 @@
         <thead>
             <tr>
                 <th>Mã</th>
-                <th>Tên lý do</th>
-                <th>Loại</th>
-                <th>Phí định kỳ</th>
-                <th>Hành động</th>
+                <th>Tên quỹ</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Hoạt động</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.IdReason)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ReasonName)</td>
-                    <td>@(item.Type == true ? "Chi" : "Thu")</td>
-                    <td>@(item.recurringFee == true ? "Có" : "Không")</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdFund)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FundName)</td>
+                    <td>@item.Total.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                    <td>@(item.Status == true ? "Hoạt động" : "Ngừng")</td>
                     <td>
-                        <a class="btn-warning-VH" asp-action="Edit" asp-route-id="@item.IdReason">Sửa</a>
-                        <a class="btn-danger-VH" asp-action="Delete" asp-route-id="@item.IdReason">Xóa</a>
+                        <a class="btn-warning-VH" asp-action="Edit" asp-route-id="@item.IdFund">Sửa</a>
+                        <a class="btn-danger-VH" asp-action="Delete" asp-route-id="@item.IdFund">Xóa</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
-    <div class="text-center-VH">
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
-    </div>
 </div>

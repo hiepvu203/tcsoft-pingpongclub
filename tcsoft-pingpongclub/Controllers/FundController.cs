@@ -1,53 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-using tcsoft_pingpongclub.Service;
-using tcsoft_pingpongclub.Filter;
 
 namespace tcsoft_pingpongclub.Controllers
 {
 	[ServiceFilter(typeof(MenuActionFilter))]
-	[ServiceFilter(typeof(AuthorizationFilter))]
-	public class RoleController : Controller
+	public class FundController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
-		private readonly AuthorizationService _authorizationService;
-		public RoleController(ThuctapKtktcn2024Context context)
+
+		public FundController(ThuctapKtktcn2024Context context)
 		{
-		
 			_context = context;
-			_authorizationService = new AuthorizationService(context);
 		}
 
-		// GET: Role
-		[ServiceFilter(typeof(AuthorizationFilter))]
+		// GET: Fund
 		public async Task<IActionResult> Index()
 		{
-			
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			// Lấy IdRole từ Session
-			int? idRole = HttpContext.Session.GetInt32("IdRole");
-
-			if (idRole == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
-
-			var roles = await _context.Roles.ToListAsync();
-			return View(roles);
-
+			return View(await _context.Funds.ToListAsync());
 		}
 
-
-		// GET: Role/Details/5
-
+		// GET: Fund/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
@@ -57,17 +37,24 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 
-			var role = await _context.Roles
-				.FirstOrDefaultAsync(m => m.IdRole == id);
-			if (role == null)
+			var fund = await _context.Funds
+				.FirstOrDefaultAsync(m => m.IdFund == id);
+			if (fund == null)
 			{
 				return NotFound();
 			}
 
-			return View(role);
+			return View(fund);
 		}
 
-		// GET: Role/Create
+		public void getData()
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			ViewData["Status"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Ngừng" }, new SelectListItem { Value = "true", Text = "Hoạt động" } };
+		}
+
+		// GET: Fund/Create
 		public IActionResult Create()
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
@@ -75,25 +62,23 @@ namespace tcsoft_pingpongclub.Controllers
 			return View();
 		}
 
-		// POST: Role/Create
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		// POST: Fund/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("IdRole,NameRole,Status")] Role role)
+		public async Task<IActionResult> Create([Bind("IdFund,FundName,Total,Status")] Fund fund)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
 			if (ModelState.IsValid)
 			{
-				_context.Add(role);
+				_context.Add(fund);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
 			}
-			return View(role);
+			return View(fund);
 		}
 
-		// GET: Role/Edit/5
+		// GET: Fund/Edit/5
 		public async Task<IActionResult> Edit(int? id)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
@@ -103,24 +88,25 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 
-			var role = await _context.Roles.FindAsync(id);
-			if (role == null)
+			var fund = await _context.Funds.FindAsync(id);
+			if (fund == null)
 			{
 				return NotFound();
 			}
-			return View(role);
+			getData();
+			return View(fund);
 		}
 
-		// POST: Role/Edit/5
+		// POST: Fund/Edit/5
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("IdRole,NameRole,Status")] Role role)
+		public async Task<IActionResult> Edit(int id, [Bind("IdFund,FundName,Total,Status")] Fund fund)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			if (id != role.IdRole)
+			if (id != fund.IdFund)
 			{
 				return NotFound();
 			}
@@ -129,12 +115,12 @@ namespace tcsoft_pingpongclub.Controllers
 			{
 				try
 				{
-					_context.Update(role);
+					_context.Update(fund);
 					await _context.SaveChangesAsync();
 				}
 				catch (DbUpdateConcurrencyException)
 				{
-					if (!RoleExists(role.IdRole))
+					if (!FundExists(fund.IdFund))
 					{
 						return NotFound();
 					}
@@ -145,10 +131,11 @@ namespace tcsoft_pingpongclub.Controllers
 				}
 				return RedirectToAction(nameof(Index));
 			}
-			return View(role);
+			getData();
+			return View(fund);
 		}
 
-		// GET: Role/Delete/5
+		// GET: Fund/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
@@ -158,38 +145,39 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 
-			var role = await _context.Roles
-				.FirstOrDefaultAsync(m => m.IdRole == id);
-			if (role == null)
+			var fund = await _context.Funds
+				.FirstOrDefaultAsync(m => m.IdFund == id);
+			if (fund == null)
 			{
 				return NotFound();
 			}
 
-			return View(role);
+			return View(fund);
 		}
 
-		// POST: Role/Delete/5
+		// POST: Fund/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			var role = await _context.Roles.FindAsync(id);
-			if (role != null)
+			var fund = await _context.Funds.FindAsync(id);
+			if (fund != null)
 			{
-				_context.Roles.Remove(role);
+				fund.Status = true;
+				_context.Funds.Update(fund);
+				await _context.SaveChangesAsync();
 			}
-
-			await _context.SaveChangesAsync();
+			
 			return RedirectToAction(nameof(Index));
 		}
 
-		private bool RoleExists(int id)
+		private bool FundExists(int id)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			return _context.Roles.Any(e => e.IdRole == id);
+			return _context.Funds.Any(e => e.IdFund == id);
 		}
 	}
 }

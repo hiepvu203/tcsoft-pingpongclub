@@ -6,24 +6,25 @@
 
 
 <link href="~/css/expenseandincome.css" rel="stylesheet" />
-<div class="container">
-    <div class="main-feture">
-        <div class="dropdown-container">
-            <button class="dropdown-btn">Options</button>
-            <div class="dropdown-content">
+<div class="VuHiep-container">
+    <div class="main-feture-VH">
+        <div class="dropdown-container-VH">
+            <button class="dropdown-btn-VH">Options</button>
+            <div class="dropdown-content-VH">
                 <a asp-area="" asp-controller="ExpenseAndIncome" asp-action="Index">Tài chính</a>
                 <a asp-area="" asp-controller="NhaTaiTro" asp-action="Index">Nhà tài trợ</a>
-                <a asp-area="" asp-controller="Reason" asp-action="Index">Lý do</a>
                 <a asp-area="" asp-controller="ChiTietTaiTro" asp-action="Index">Chi tiết tài trợ</a>
+                <a asp-area="" asp-controller="Reason" asp-action="Index">Lý do</a>
+                <a asp-area="" asp-controller="Fund" asp-action="Index">Qũy</a>
             </div>
         </div>
 
-        <div class="actions">
-            <a class="btn-primary" asp-action="Create">Thêm mới</a>
+        <div class="actions-VH">
+            <a class="btn-primary-VH" asp-action="Create">Thêm mới</a>
         </div>
     </div>
 
-    <table class="custom-table">
+    <table class="custom-table-VH">
         <thead>
             <tr>
                 <th>Mã</th>
@@ -50,8 +51,8 @@
                     </td>
                     <td>
 
-                        <a class="btn-warning" asp-action="Edit" asp-route-id="@item.IdSponor">Sửa</a>
-                        <a class="btn-danger" asp-action="Delete" asp-route-id="@item.IdSponor">Xóa</a>
+                        <a class="btn-warning-VH" asp-action="Edit" asp-route-id="@item.IdSponor">Sửa</a>
+                        <a class="btn-danger-VH" asp-action="Delete" asp-route-id="@item.IdSponor">Xóa</a>
                     </td>
                 </tr>
             }

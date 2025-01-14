@@ -132,15 +132,13 @@
     border-radius: 30px;
     background-color: rgb(65, 65, 65);
     color: rgb(206, 206, 206);
-/* <<<<<<< HEAD */
     border: none;
     padding-right: 10px;
     width: max-content;
     padding-left: 10px;
     padding: 10px;
-/* 
-=======
->>>>>>> origin/TranHuyHoang */
+    font-weight: 800;
+
 }
 
     #SignInButtonHomePage a:hover,

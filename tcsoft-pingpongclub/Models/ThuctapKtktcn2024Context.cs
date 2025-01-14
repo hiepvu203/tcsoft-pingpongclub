@@ -371,6 +371,7 @@ public partial class ThuctapKtktcn2024Context : DbContext
             entity.Property(e => e.ReasonName).HasColumnName("reasonName");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.recurringFee).HasColumnName("recurringFee");
         });
 
         modelBuilder.Entity<Role>(entity =>

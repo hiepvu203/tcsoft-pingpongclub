@@ -29,15 +29,17 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 
 		public IEnumerable<object> getRank(int id)
-		 {
-		 var RankTour = _context.Players.Where(p => p.IdTournament == id)
-									.Select(player => new
-									{
-										Id = player.IdPlayer,
-										UrlAvatar = _context.Members.Where(m => m.IdMember == player.IdMember).Select(m => m.LinkAvatar).FirstOrDefault() ?? String.Empty,
-										NamePlayer = _context.Members.Where(m => m.IdMember == player.IdMember).Select(m => m.MemberName).FirstOrDefault() ?? String.Empty,
-										CountMatch = _context.Matches.Where(match => match.IdMemberWin == player.IdPlayer).Count()
-									}).OrderByDescending(m => m.CountMatch);
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			var RankTour = _context.Players.Where(p => p.IdTournament == id)
+									   .Select(player => new
+									   {
+										   Id = player.IdPlayer,
+										   UrlAvatar = _context.Members.Where(m => m.IdMember == player.IdMember).Select(m => m.LinkAvatar).FirstOrDefault() ?? String.Empty,
+										   NamePlayer = _context.Members.Where(m => m.IdMember == player.IdMember).Select(m => m.MemberName).FirstOrDefault() ?? String.Empty,
+										   CountMatch = _context.Matches.Where(match => match.IdMemberWin == player.IdPlayer).Count()
+									   }).OrderByDescending(m => m.CountMatch);
 			return RankTour;
 		}
 
@@ -45,6 +47,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[Route("Matches/{id}")]
 		public async Task<IActionResult> Index(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var RankTour = getRank(id);
 			string NameTour = await _context.Tournaments.Where(m => m.IdTournament == id).Select(m => m.TournamentName).FirstOrDefaultAsync();
 			var Match = _context.Matches.Where(m => m.IdTournament == id)
@@ -61,21 +65,21 @@ namespace tcsoft_pingpongclub.Controllers
 				 .Where(k => k.IdMember == m.IdMember)
 				 .Select(k => k.MemberName)
 				 .FirstOrDefault())
-			 .FirstOrDefault()??string.Empty,
+			 .FirstOrDefault() ?? string.Empty,
 		 urlPlayer1 = _context.Players
 			 .Where(m => m.IdPlayer == p.IdMemberOne)
 			 .Select(m => _context.Members
 				 .Where(k => k.IdMember == m.IdMember)
 				 .Select(k => k.LinkAvatar)
 				 .FirstOrDefault())
-			 .FirstOrDefault()??string.Empty,
+			 .FirstOrDefault() ?? string.Empty,
 		 urlPlayer2 = _context.Players
 			 .Where(m => m.IdPlayer == p.IdMemberTwo)
 			 .Select(m => _context.Members
 				 .Where(k => k.IdMember == m.IdMember)
 				 .Select(k => k.LinkAvatar)
 				 .FirstOrDefault())
-			 .FirstOrDefault()??string.Empty, 
+			 .FirstOrDefault() ?? string.Empty,
 
 		 PlayerName2 = _context.Players
 			 .Where(m => m.IdPlayer == p.IdMemberTwo)
@@ -84,7 +88,7 @@ namespace tcsoft_pingpongclub.Controllers
 				 .Select(k => k.MemberName)
 				 .FirstOrDefault())
 			 .FirstOrDefault() ?? string.Empty,
-		 TimeStart =(DateTime) p.TimeStart,
+		 TimeStart = (DateTime)p.TimeStart,
 		 IdGroupstage = p.IdGroupstage,
 		 Points1 = _context.Sets
 	.Where(set => set.IdMatch == p.IdMatch && set.IdWinner == p.IdMemberOne)
@@ -95,16 +99,17 @@ namespace tcsoft_pingpongclub.Controllers
 		 ListSet = _context.Sets.Where(set => set.IdMatch == p.IdMatch).ToList()
 	 });
 
-	if(!Match.Any())
-		  {
+			if (!Match.Any())
+			{
 				var Player = _context.Players.Where(k => k.IdTournament == id).Select(m => m.IdPlayer);
 				int CountPlay = Player.Count();
-				var players  = Player.ToList();
+				var players = Player.ToList();
 				List<Match> matches = new List<Match>();
-				for (int i = 0; i < CountPlay - 1; i++){
-					for(int j = i + 1; j < CountPlay; j++)
+				for (int i = 0; i < CountPlay - 1; i++)
+				{
+					for (int j = i + 1; j < CountPlay; j++)
 					{
-				 
+
 						var newMatch = new Match()
 						{
 							IdMemberOne = players[i],
@@ -112,27 +117,27 @@ namespace tcsoft_pingpongclub.Controllers
 							IdTournament = id,
 							Status = true
 						};
-					   matches.Add(newMatch);
+						matches.Add(newMatch);
 					}
 				}
-			   _context.Matches.AddRange(matches);
-						await _context.SaveChangesAsync();
+				_context.Matches.AddRange(matches);
+				await _context.SaveChangesAsync();
 			}
 			ViewBag.Id = id;
 			ViewBag.NameTour = NameTour;
 			ViewBag.RankTour = RankTour;
 			return View(await Match.ToListAsync());
 		}
-		public IEnumerable<object> getMatch(int id ,DateTime startDate,DateTime endDate)
+		public IEnumerable<object> getMatch(int id, DateTime startDate, DateTime endDate)
 		{
 			var groupedMatches = _context.Matches
-	.Where(m => m.IdTournament == id && 
+	.Where(m => m.IdTournament == id &&
 			   (m.TimeStart.Value.Date >= startDate.Date && m.TimeStart.Value.Date <= endDate.Date))
 	.GroupBy(m => m.TimeStart.Value.Date)
 	.Select(group => new
 	{
 		Date = group.Key,
-		Matches = group.Select(p => new 
+		Matches = group.Select(p => new
 		{
 			IdMatch = p.IdMatch,
 			IdPlayer1 = (int)p.IdMemberOne,
@@ -176,25 +181,25 @@ namespace tcsoft_pingpongclub.Controllers
 			Points2 = _context.Sets
 				.Where(set => set.IdMatch == p.IdMatch && set.IdWinner == p.IdMemberTwo)
 				.Count(),
-			 ListSet = _context.Sets.Where(set => set.IdMatch == p.IdMatch).ToList()
+			ListSet = _context.Sets.Where(set => set.IdMatch == p.IdMatch).ToList()
 		}).ToList()
 	}).ToList();
 			return groupedMatches;
 		}
 		[Route("Matches/MatchClient/{id}")]
-		public async Task<IActionResult> MatchClient(int id,DateTime TimeSearch)
-		{ 
+		public async Task<IActionResult> MatchClient(int id, DateTime TimeSearch)
+		{
 			DateTime timeEnd = new DateTime(2100, 1, 1);
-				DateTime timeStart = new DateTime(2000, 1, 1);
-				DateTime timeNow = DateTime.Now;
-				DateTime yesterday = DateTime.Now.AddDays(-1);
-				DateTime tomorrow = DateTime.Now.AddDays(1);
-			var Tour = await _context.Tournaments.Where(m => m.IdTournament == id).FirstOrDefaultAsync();      
+			DateTime timeStart = new DateTime(2000, 1, 1);
+			DateTime timeNow = DateTime.Now;
+			DateTime yesterday = DateTime.Now.AddDays(-1);
+			DateTime tomorrow = DateTime.Now.AddDays(1);
+			var Tour = await _context.Tournaments.Where(m => m.IdTournament == id).FirstOrDefaultAsync();
 			var RankTour = getRank(id);
 			if (TimeSearch == default(DateTime))
 			{
 				ViewBag.futureMatches = getMatch(id, tomorrow, timeEnd);
-				ViewBag.resultMatches = getMatch(id, timeStart, yesterday); 
+				ViewBag.resultMatches = getMatch(id, timeStart, yesterday);
 				ViewBag.todayMatches = getMatch(id, timeNow, timeNow);
 				ViewBag.ResultSearch = null;
 
@@ -204,18 +209,20 @@ namespace tcsoft_pingpongclub.Controllers
 				ViewBag.ResultSearch = getMatch(id, TimeSearch, TimeSearch);
 			}
 			ViewBag.TimeSearch = TimeSearch;
-			  ViewBag.Id = id;
-				ViewBag.Tour = Tour;
+			ViewBag.Id = id;
+			ViewBag.Tour = Tour;
 			ViewBag.RankTour = RankTour;
 
-		   
+
 			return View();
 		}
 		[Route("Matches/MatchCenter")]
 		public async Task<IActionResult> MatchCenter(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			DateTime timeNow = DateTime.Now;
-		   
+
 			var Match = await _context.Matches.Where(m => m.IdMatch == id)
 								.Select(m => new
 								{
@@ -228,14 +235,14 @@ namespace tcsoft_pingpongclub.Controllers
 											 .Select(mem => mem.MemberName)
 											 .FirstOrDefault())
 										 .FirstOrDefault() ?? string.Empty,
-									 urlPlayer1 = _context.Players
+									urlPlayer1 = _context.Players
 										 .Where(p => p.IdPlayer == m.IdMemberOne)
 										 .Select(p => _context.Members
 											 .Where(mem => mem.IdMember == p.IdMember)
 											 .Select(mem => mem.LinkAvatar)
 											 .FirstOrDefault())
 										 .FirstOrDefault() ?? string.Empty,
-									 urlPlayer2 = _context.Players
+									urlPlayer2 = _context.Players
 										 .Where(p => p.IdPlayer == m.IdMemberTwo)
 										 .Select(p => _context.Members
 											 .Where(mem => mem.IdMember == p.IdMember)
@@ -251,11 +258,11 @@ namespace tcsoft_pingpongclub.Controllers
 										 .FirstOrDefault() ?? string.Empty,
 									TimeStart = m.TimeStart,
 									Points1 = _context.Sets
-												.Where(set => set.IdMatch == m.IdMatch && set.IdWinner ==m.IdMemberOne).Count(),
+												.Where(set => set.IdMatch == m.IdMatch && set.IdWinner == m.IdMemberOne).Count(),
 									Points2 = _context.Sets
 								.Where(set => set.IdMatch == m.IdMatch && set.IdWinner == m.IdMemberTwo)
 								.Count(),
-								ListSet = _context.Sets.Where(set => set.IdMatch == m.IdMatch).ToList()
+									ListSet = _context.Sets.Where(set => set.IdMatch == m.IdMatch).ToList()
 								}).FirstOrDefaultAsync();
 			ViewBag.Match = Match;
 			ViewBag.todayMatches = getMatch(Match.IdTour, timeNow, timeNow);
@@ -263,6 +270,8 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 		public async Task<IActionResult> Edit(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
@@ -279,10 +288,10 @@ namespace tcsoft_pingpongclub.Controllers
 				return NotFound();
 			}
 			ViewData["IdGroupstage"] = new SelectList(_context.Groupstages, "IdGroupstage", "IdGroupstage", match.IdGroupstage);
-		   // ViewData["namePlayer1"] = namePlayer1.MemberName;
+			// ViewData["namePlayer1"] = namePlayer1.MemberName;
 			ViewBag.playerName1 = Player1.MemberName;
 			ViewBag.playerName2 = Player2.MemberName;
-			 ViewBag.urlPlayer1 = Player1.LinkAvatar;
+			ViewBag.urlPlayer1 = Player1.LinkAvatar;
 			ViewBag.urlPlayer2 = Player2.LinkAvatar;
 			ViewBag.Id = match.IdTournament;
 			ViewBag.nameTour = nameTour.TournamentName;
@@ -298,6 +307,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, DateTime timeStart)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var match = await _context.Matches.FindAsync(id);
 			if (match == null)
 			{
@@ -330,11 +341,13 @@ namespace tcsoft_pingpongclub.Controllers
 
 		public async Task<IActionResult> EditSet(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
 			}
-			
+
 			var match = await _context.Matches.FindAsync(id);
 			var nameTour = await _context.Tournaments.FindAsync(match.IdTournament);
 			var idPlayer1 = await _context.Players.FindAsync(match.IdMemberOne);
@@ -343,7 +356,7 @@ namespace tcsoft_pingpongclub.Controllers
 			var Player2 = await _context.Members.FindAsync(idPlayer2.IdMember);
 			var sets = await _context.Sets.Where(set => set.IdMatch == match.IdMatch).ToListAsync();
 			List<String> SetPoints = new List<string>();
-			if(match.TimeStart == null)
+			if (match.TimeStart == null)
 			{
 				return RedirectToAction("Edit", "Matches", new { id = id });
 			}
@@ -351,7 +364,7 @@ namespace tcsoft_pingpongclub.Controllers
 			ViewBag.nameTour = "";
 			if (!sets.Any())
 			{
-			   for(int i = 1; i < 4; i++)
+				for (int i = 1; i < 4; i++)
 				{
 					var set = new Set()
 					{
@@ -367,13 +380,13 @@ namespace tcsoft_pingpongclub.Controllers
 			}
 			else
 			{
-				foreach(var set in sets)
+				foreach (var set in sets)
 				{
 					SetPoints.Add(set.Ratio);
 				}
 			}
 			ViewBag.SetPoints = SetPoints;
-		   // ViewData["namePlayer1"] = namePlayer1.MemberName;
+			// ViewData["namePlayer1"] = namePlayer1.MemberName;
 			ViewBag.playerName1 = Player1.MemberName;
 			ViewBag.playerName2 = Player2.MemberName;
 			ViewBag.urlPlayer1 = Player1.LinkAvatar;
@@ -388,137 +401,140 @@ namespace tcsoft_pingpongclub.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditSet( int id,  int point1,  int point2, int point3, int point4,  int point5,  int point6)
+		public async Task<IActionResult> EditSet(int id, int point1, int point2, int point3, int point4, int point5, int point6)
 		{
-		  
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 
-				var match = await _context.Matches.FirstOrDefaultAsync(m => m.IdMatch == id);
-				var mem1 = _context.Members
-									.Where(p => p.IdMember == _context.Players
-									.Where(p => p.IdPlayer == match.IdMemberOne).Select(p => p.IdMember).FirstOrDefault())
-									.FirstOrDefault();
-				var mem2 = _context.Members
-									.Where(p => p.IdMember == _context.Players.Where(p => p.IdPlayer == match.IdMemberTwo).Select(p => p.IdMember).FirstOrDefault()).FirstOrDefault();
+			var match = await _context.Matches.FirstOrDefaultAsync(m => m.IdMatch == id);
+			var mem1 = _context.Members
+								.Where(p => p.IdMember == _context.Players
+								.Where(p => p.IdPlayer == match.IdMemberOne).Select(p => p.IdMember).FirstOrDefault())
+								.FirstOrDefault();
+			var mem2 = _context.Members
+								.Where(p => p.IdMember == _context.Players.Where(p => p.IdPlayer == match.IdMemberTwo).Select(p => p.IdMember).FirstOrDefault()).FirstOrDefault();
 
-				int checkScore = Math.Abs((int)mem1.Score - (int)mem2.Score);
-				var ScoreCal = _context.ScoreCals.Where(m => m.PtsMin <= checkScore && m.PtsMax >= checkScore).FirstOrDefault();
-				var LevelMem1 = _context.Levels.Where(l => l.IdLevel == mem1.IdLevel).Select(l => l.LevelName).FirstOrDefault();
-				var LevelMem2 = _context.Levels.Where(l => l.IdLevel == mem2.IdLevel).Select(l => l.LevelName).FirstOrDefault();
-				var sets = await _context.Sets.Where(set => set.IdMatch == id).ToListAsync();
-				if (!sets.Any())
+			int checkScore = Math.Abs((int)mem1.Score - (int)mem2.Score);
+			var ScoreCal = _context.ScoreCals.Where(m => m.PtsMin <= checkScore && m.PtsMax >= checkScore).FirstOrDefault();
+			var LevelMem1 = _context.Levels.Where(l => l.IdLevel == mem1.IdLevel).Select(l => l.LevelName).FirstOrDefault();
+			var LevelMem2 = _context.Levels.Where(l => l.IdLevel == mem2.IdLevel).Select(l => l.LevelName).FirstOrDefault();
+			var sets = await _context.Sets.Where(set => set.IdMatch == id).ToListAsync();
+			if (!sets.Any())
+			{
+				return NotFound();
+			}
+
+			if (match == null)
+			{
+				return NotFound();
+			}
+			var ratio1 = $"{point1} - {point2}";
+			var ratio2 = $"{point3} - {point4}";
+			var ratio3 = $"{point5} - {point6}";
+			int ratioMatch1 = 0;
+			int ratioMatch2 = 0;
+
+
+			var set1 = sets.FirstOrDefault(s => s.SetName == "1");
+			if (set1 != null)
+			{
+				set1.Ratio = ratio1;
+				if (point1 > point2 && point1 >= 21)
 				{
-					return NotFound();
+					set1.IdWinner = (int)match.IdMemberOne;
+					ratioMatch1++;
+				}
+				else if (point1 < point2 && point2 >= 21)
+				{
+					set1.IdWinner = (int)match.IdMemberTwo;
+					ratioMatch2++;
 				}
 
-				if (match == null)
+				_context.Entry(set1).State = EntityState.Modified;
+			}
+
+			var set2 = sets.FirstOrDefault(s => s.SetName == "2");
+			if (set2 != null)
+			{
+				set2.Ratio = ratio2;
+				if (point3 > point4 && point3 >= 21)
 				{
-					return NotFound();
+					set2.IdWinner = (int)match.IdMemberOne;
+					ratioMatch1++;
 				}
-				var ratio1 = $"{point1} - {point2}";
-				var ratio2 = $"{point3} - {point4}";
-				var ratio3 = $"{point5} - {point6}";
-				int ratioMatch1 = 0;
-				int ratioMatch2 = 0;
-
-
-				var set1 = sets.FirstOrDefault(s => s.SetName == "1");
-				if (set1 != null)
+				else if (point3 < point4 && point4 >= 21)
 				{
-					set1.Ratio = ratio1;
-					if (point1 > point2 && point1 >= 21)
-					{
-						set1.IdWinner = (int)match.IdMemberOne;
-						ratioMatch1++;
-					}
-					else if (point1 < point2 && point2 >= 21)
-					{
-						set1.IdWinner = (int)match.IdMemberTwo;
-						ratioMatch2++;
-					}
-
-					_context.Entry(set1).State = EntityState.Modified;
+					set2.IdWinner = (int)match.IdMemberTwo;
+					ratioMatch2++;
 				}
+				_context.Entry(set2).State = EntityState.Modified;
+			}
 
-				var set2 = sets.FirstOrDefault(s => s.SetName == "2");
-				if (set2 != null)
+			var set3 = sets.FirstOrDefault(s => s.SetName == "3");
+			if (set3 != null)
+			{
+				set3.Ratio = ratio3;
+				if (point5 > point6 && point5 >= 21)
 				{
-					set2.Ratio = ratio2;
-					if (point3 > point4 && point3 >= 21)
-					{
-						set2.IdWinner = (int)match.IdMemberOne;
-						ratioMatch1++;
-					}
-					else if (point3 < point4 && point4 >= 21)
-					{
-						set2.IdWinner = (int)match.IdMemberTwo;
-						ratioMatch2++;
-					}
-					_context.Entry(set2).State = EntityState.Modified;
+					set3.IdWinner = (int)match.IdMemberOne;
+					ratioMatch1++;
 				}
-
-				var set3 = sets.FirstOrDefault(s => s.SetName == "3");
-				if (set3 != null)
+				else if (point5 < point6 && point6 >= 21)
 				{
-					set3.Ratio = ratio3;
-					if (point5 > point6 && point5 >= 21)
-					{
-						set3.IdWinner = (int)match.IdMemberOne;
-						ratioMatch1++;
-					}
-					else if (point5 < point6 && point6 >= 21)
-					{
-						set3.IdWinner = (int)match.IdMemberTwo;
-						ratioMatch2++;
-					}
-					_context.Entry(set3).State = EntityState.Modified;
+					set3.IdWinner = (int)match.IdMemberTwo;
+					ratioMatch2++;
 				}
-				if (ratioMatch1 > ratioMatch2)
+				_context.Entry(set3).State = EntityState.Modified;
+			}
+			if (ratioMatch1 > ratioMatch2)
+			{
+				match.IdMemberWin = match.IdMemberOne;
+				if (String.Compare(LevelMem1, LevelMem2) >= 0)
 				{
-					match.IdMemberWin = match.IdMemberOne;
-					if (String.Compare(LevelMem1, LevelMem2) >= 0)
-					{
-						mem1.Score += ScoreCal.PtsSameRankWin;
-						mem2.Score -= ScoreCal.PtsHighRankDef;
-					}
-					else
-					{
-						mem1.Score += ScoreCal.PtsHighRankWin;
-						mem2.Score -= ScoreCal.PtsSameRankDef;
-					}
+					mem1.Score += ScoreCal.PtsSameRankWin;
+					mem2.Score -= ScoreCal.PtsHighRankDef;
 				}
 				else
 				{
-					match.IdMemberWin = match.IdMemberTwo;
-					if (String.Compare(LevelMem2, LevelMem1) >= 0)
-					{
-						mem2.Score += ScoreCal.PtsSameRankWin;
-						mem1.Score -= ScoreCal.PtsHighRankDef;
-					}
-					else
-					{
-						mem2.Score += ScoreCal.PtsHighRankWin;
-						mem1.Score -= ScoreCal.PtsSameRankDef;
-					}
+					mem1.Score += ScoreCal.PtsHighRankWin;
+					mem2.Score -= ScoreCal.PtsSameRankDef;
 				}
-				_context.Entry(match).State = EntityState.Modified;
-				_context.Entry(mem1).State = EntityState.Modified;
-				_context.Entry(mem2).State = EntityState.Modified;
-				await _context.SaveChangesAsync();
-				await _hubContext.Clients.All.SendAsync("GetRatio", id, ratio1, ratio2, ratio3);
-				var idTournament = _context.Matches
-					.Where(m => m.IdMatch == id)
-					.Select(m => m.IdTournament)
-					.FirstOrDefault();
-				return RedirectToAction("EditSet", "Matches", new { id = id });  
-		   //  return RedirectToAction("Index", "Matches", new { id = idTournament });
+			}
+			else
+			{
+				match.IdMemberWin = match.IdMemberTwo;
+				if (String.Compare(LevelMem2, LevelMem1) >= 0)
+				{
+					mem2.Score += ScoreCal.PtsSameRankWin;
+					mem1.Score -= ScoreCal.PtsHighRankDef;
+				}
+				else
+				{
+					mem2.Score += ScoreCal.PtsHighRankWin;
+					mem1.Score -= ScoreCal.PtsSameRankDef;
+				}
+			}
+			_context.Entry(match).State = EntityState.Modified;
+			_context.Entry(mem1).State = EntityState.Modified;
+			_context.Entry(mem2).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
+			await _hubContext.Clients.All.SendAsync("GetRatio", id, ratio1, ratio2, ratio3);
+			var idTournament = _context.Matches
+				.Where(m => m.IdMatch == id)
+				.Select(m => m.IdTournament)
+				.FirstOrDefault();
+			return RedirectToAction("EditSet", "Matches", new { id = id });
+			//  return RedirectToAction("Index", "Matches", new { id = idTournament });
 		}
 
 		// GET: Matches/Delete/5
-   
+
 		// POST: Matches/Delete/5
-	   
+
 		private bool MatchExists(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			return _context.Matches.Any(e => e.IdMatch == id);
 		}
 	}

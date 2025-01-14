@@ -22,6 +22,8 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 		public IActionResult Index(int pg = 1)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var members = context.Members.Include(n => n.IdLevelNavigation).ToList();
 			const int pageSize = 5;
 			if (pg < 1)
@@ -38,12 +40,16 @@ namespace tcsoft_pingpongclub.Controllers
 
 		public IActionResult Create()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			ViewBag.listRank = new SelectList(context.Levels.Select(f => new { idLevel = f.IdLevel, levelName = f.LevelName }), "idLevel", "levelName");
 			return View();
 		}
 		[HttpPost]
 		public IActionResult Create(Member member)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (member.Gender == null)
 			{
 				ModelState.AddModelError("Gender", "Vui lòng chọn giới tính");
@@ -83,6 +89,8 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 		public IActionResult Edit(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var member = context.Members.Include(n => n.IdLevelNavigation).FirstOrDefault(m => m.IdMember == id);
 			ViewBag.listRank = new SelectList(context.Levels.Select(f => new { idLevel = f.IdLevel, levelName = f.LevelName }), "idLevel", "levelName");
 			if (member == null)
@@ -104,6 +112,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[HttpPost]
 		public IActionResult Edit(int id, Member member)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var member1 = context.Members.Include(n => n.IdLevelNavigation).FirstOrDefault(m => m.IdMember == id);
 
 			if (member1 == null)
@@ -169,6 +179,8 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 		public IActionResult Delete(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var member = context.Members.Include(n => n.IdLevelNavigation).FirstOrDefault(m => m.IdMember == id);
 			member.Status = false;
 			context.SaveChanges();

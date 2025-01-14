@@ -1,8 +1,9 @@
-﻿@model tcsoft_pingpongclub.Models.NhaTaiTro
+﻿@model tcsoft_pingpongclub.Models.Fund
 
 @{
     ViewData["Title"] = "Delete";
 }
+
 <link href="~/css/formcreatev2.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
 
@@ -10,21 +11,21 @@
     <a asp-action="Index" class="back-link-VH"><i class="fa-solid fa-arrow-left"></i></a>
 </div>
 
-<h3>Bạn có chắc muốn xóa nhà tài trợ này?</h3>
+<h3>Bạn có chắc muốn xóa lý do này?</h3>
 <div class="form-container-VH">
     <div class="form-row-VH">
         <div class="form-group-VH">
-            <label for="NameSponer" class="control-label">Nhà tài trợ:</label>
-            <input asp-for="NameSponer" class="form-control-VH" readonly />
+            <label for="FundName" class="control-label">Tên quỹ:</label>
+            <input asp-for="FundName" class="form-control-VH" readonly />
         </div>
         <div class="form-group-VH">
-            <label asp-for="UrlLogo" class="control-label">Logo:</label>
-            <input asp-for="UrlLogo" class="form-control-VH" readonly />
+            <label asp-for="Total" class="control-label">Tổng tiền:</label>
+            <input asp-for="Total" class="form-control-VH" readonly />
         </div>
     </div>
 
     <form asp-action="Delete">
-        <input type="hidden" asp-for="IdSponor" />
+        <input type="hidden" asp-for="IdFund" />
         <input type="submit" value="Xóa" class="btn btn-danger" /> 
     </form>
 </div>

@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using tcsoft_pingpongclub.Models;
-using tcsoft_pingpongclub.Service;
-using tcsoft_pingpongclub.Filter;
+using X.PagedList;
+using X.PagedList.Extensions;
+
 namespace tcsoft_pingpongclub.Controllers
 {
 	[ServiceFilter(typeof(MenuActionFilter))]
-	
 	public class ReasonController : Controller
 	{
 		private readonly ThuctapKtktcn2024Context _context;
@@ -22,10 +22,20 @@ namespace tcsoft_pingpongclub.Controllers
 		}
 
 		// GET: Reason
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int? page)
 		{
-			return View(await _context.Reasons.Where(e => e.Status == false).ToListAsync());
+			int pageSize = 5; 
+			int pageNumber = page ?? 1;
+		   
+			var reasons = await _context.Reasons
+				.Where(e => e.Status == false)
+				.ToListAsync();
+
+			var paginatedList = reasons.ToPagedList(pageNumber, pageSize);
+
+			return View(paginatedList);
 		}
+
 
 		// GET: Reason/Details/5
 		public async Task<IActionResult> Details(int? id)
@@ -47,24 +57,21 @@ namespace tcsoft_pingpongclub.Controllers
 
 		public void getData()
 		{
-			ViewData["IdFund"] = new SelectList(_context.Funds.Select(f => new { IdFund = f.IdFund, Display = f.FundName }), "IdFund", "Display");
-			ViewData["IdAccountant"] = new SelectList(_context.Members.Select(f => new { IdAccountant = f.IdMember, Display = f.MemberName }), "IdAccountant", "Display");
-			ViewData["IdParty"] = new SelectList(_context.Members.Select(f => new { IdParty = f.IdMember, Display = f.MemberName }), "IdParty", "Display");
-			ViewData["IdReason"] = new SelectList(_context.Reasons.Select(f => new { IdReason = f.IdReason, Display = f.ReasonName }), "IdReason", "Display");
 			ViewData["Type"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Thu" }, new SelectListItem { Value = "true", Text = "Chi" } };
-			ViewData["IsDone"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Chưa hoàn thành" }, new SelectListItem { Value = "true", Text = "Hoàn thành" } };
+			ViewData["recurringFee"] = new List<SelectListItem> { new SelectListItem { Value = "false", Text = "Không" }, new SelectListItem { Value = "true", Text = "Có" } };
 		}
 
 		// GET: Reason/Create
 		public IActionResult Create()
 		{
+			getData();
 			return View();
 		}
 
 		// POST: Reason/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("IdReason,ReasonName,Type,Status")] Reason reason)
+		public async Task<IActionResult> Create([Bind("IdReason,ReasonName,Type,Status,recurringFee")] Reason reason)
 		{
 			if (ModelState.IsValid)
 			{
@@ -72,6 +79,7 @@ namespace tcsoft_pingpongclub.Controllers
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
 			}
+			getData();
 			return View(reason);
 		}
 
@@ -95,7 +103,7 @@ namespace tcsoft_pingpongclub.Controllers
 		// POST: Reason/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("IdReason,ReasonName,Type,Status")] Reason reason)
+		public async Task<IActionResult> Edit(int id, [Bind("IdReason,ReasonName,Type,Status,recurringFee")] Reason reason)
 		{
 			if (id != reason.IdReason)
 			{
@@ -140,7 +148,7 @@ namespace tcsoft_pingpongclub.Controllers
 			{
 				return NotFound();
 			}
-
+			getData();
 			return View(reason);
 		}
 

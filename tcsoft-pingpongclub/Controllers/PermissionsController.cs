@@ -24,101 +24,113 @@ namespace tcsoft_pingpongclub.Controllers
 		// GET: Permissions
 		public async Task<IActionResult> Index()
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			return View(await _context.Permissions.ToListAsync());
 		}
 
-        // GET: Permissions/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            // Kiểm tra id có null không
-            if (id == null)
-            {
-                return NotFound("ID không hợp lệ.");
-            }
+		// GET: Permissions/Details/5
+		public async Task<IActionResult> Details(int? id)
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			// Kiểm tra id có null không
+			if (id == null)
+			{
+				return NotFound("ID không hợp lệ.");
+			}
 
-            // Tìm quyền trong cơ sở dữ liệu
-            var permission = await _context.Permissions
-                   .Include(p => p.ParentPermission) 
-                   .FirstOrDefaultAsync(m => m.IdPermission == id);
+			// Tìm quyền trong cơ sở dữ liệu
+			var permission = await _context.Permissions
+				   .Include(p => p.ParentPermission)
+				   .FirstOrDefaultAsync(m => m.IdPermission == id);
 
-            // Kiểm tra xem quyền có tồn tại hay không
-            if (permission == null)
-            {
-                return NotFound("Quyền không tồn tại.");
-            }
+			// Kiểm tra xem quyền có tồn tại hay không
+			if (permission == null)
+			{
+				return NotFound("Quyền không tồn tại.");
+			}
 
-            // Trả về View với đối tượng permission tìm thấy
-            return View(permission);
-        }
-
-
-        // GET: Permissions/Create
-        public async Task<IActionResult> Create()
-        {
-            var lstPermission = await _context.Permissions.Where(p=>p.IdPerParent==null).ToListAsync();
-            ViewBag.Permission = lstPermission;
-            return View();
-        }
+			// Trả về View với đối tượng permission tìm thấy
+			return View(permission);
+		}
 
 
-        // POST: Permissions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		// GET: Permissions/Create
+		public async Task<IActionResult> Create()
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			var lstPermission = await _context.Permissions.Where(p => p.IdPerParent == null).ToListAsync();
+			ViewBag.Permission = lstPermission;
+			return View();
+		}
+
+
+		// POST: Permissions/Create
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
 		[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPermission,NamePermission,Url,IdPerParent,Status")] Permission permission)
-        {
-            if (ModelState.IsValid)
-            {
-                // Kiểm tra quyền cha có hợp lệ hay không
-                if (permission.IdPerParent.HasValue)
-                {
-                    var parentPermission = await _context.Permissions.FindAsync(permission.IdPerParent.Value);
-                    if (parentPermission == null)
-                    {
-                        ModelState.AddModelError("IdPerParent", "Quyền cha không hợp lệ.");
-                        return View(permission);
-                    }
-                }
+		public async Task<IActionResult> Create([Bind("IdPermission,NamePermission,Url,IdPerParent,Status")] Permission permission)
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			if (ModelState.IsValid)
+			{
+				// Kiểm tra quyền cha có hợp lệ hay không
+				if (permission.IdPerParent.HasValue)
+				{
+					var parentPermission = await _context.Permissions.FindAsync(permission.IdPerParent.Value);
+					if (parentPermission == null)
+					{
+						ModelState.AddModelError("IdPerParent", "Quyền cha không hợp lệ.");
+						return View(permission);
+					}
+				}
 
-                _context.Add(permission);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(permission);
-        }
-
-
-        // GET: Permissions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var permission = _context.Permissions
-                .FirstOrDefault(p => p.IdPermission == id);
-
-            if (permission == null)
-            {
-                return NotFound();
-            }
-
-            // Đưa danh sách quyền vào ViewBag để hiển thị trong dropdown
-            ViewBag.Permissions = _context.Permissions.Where(p => p.IdPerParent == null || p.IdPermission == permission.IdPermission).ToList();
-
-            return View(permission);
-        }
+				_context.Add(permission);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+			return View(permission);
+		}
 
 
-        // POST: Permissions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		// GET: Permissions/Edit/5
+		public async Task<IActionResult> Edit(int? id)
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			var permission = _context.Permissions
+				.FirstOrDefault(p => p.IdPermission == id);
+
+			if (permission == null)
+			{
+				return NotFound();
+			}
+
+			// Đưa danh sách quyền vào ViewBag để hiển thị trong dropdown
+			ViewBag.Permissions = _context.Permissions.Where(p => p.IdPerParent == null || p.IdPermission == permission.IdPermission).ToList();
+
+			return View(permission);
+		}
+
+
+		// POST: Permissions/Edit/5
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("IdPermission,NamePermission,Url,IdPerParent,Status")] Permission permission)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id != permission.IdPermission)
 			{
 				return NotFound();
@@ -148,22 +160,24 @@ namespace tcsoft_pingpongclub.Controllers
 				}
 				return RedirectToAction(nameof(Index));
 			}
-            ViewBag.Permissions = _context.Permissions.Where(p => p.IdPerParent == null||p.IdPermission== permission.IdPermission).ToList();
-            return View(permission);
+			ViewBag.Permissions = _context.Permissions.Where(p => p.IdPerParent == null || p.IdPermission == permission.IdPermission).ToList();
+			return View(permission);
 		}
 
 		// GET: Permissions/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			if (id == null)
 			{
 				return NotFound();
 			}
 
-            var permission = await _context.Permissions
-                   .Include(p => p.ParentPermission)
-                   .FirstOrDefaultAsync(m => m.IdPermission == id);
-            if (permission == null)
+			var permission = await _context.Permissions
+				   .Include(p => p.ParentPermission)
+				   .FirstOrDefaultAsync(m => m.IdPermission == id);
+			if (permission == null)
 			{
 				return NotFound();
 			}
@@ -176,6 +190,8 @@ namespace tcsoft_pingpongclub.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
 			var permission = await _context.Permissions.FindAsync(id);
 			if (permission != null)
 			{
