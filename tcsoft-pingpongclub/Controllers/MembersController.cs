@@ -1,192 +1,217 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using tcsoft_pingpongclub.Models;
-using tcsoft_pingpongclub.Service;
-using tcsoft_pingpongclub.Filter;
+using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace tcsoft_pingpongclub.Controllers
 {
 	[ServiceFilter(typeof(MenuActionFilter))]
-    [ServiceFilter(typeof(AuthorizationFilter))]
-    public class MembersController : Controller
+	public class MembersController : Controller
 	{
 
-		private readonly ThuctapKtktcn2024Context context;
+		private readonly ThuctapKtktcn2024Context _context;
 		private readonly IWebHostEnvironment environment;
 
 		public MembersController(ThuctapKtktcn2024Context context, IWebHostEnvironment environment)
 		{
-			this.context = context;
+			_context = context;
 			this.environment = environment;
 		}
-		public IActionResult Index(int pg = 1)
+		public ActionResult Index(int? page)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			var members = context.Members.Include(n => n.IdLevelNavigation).ToList();
-			const int pageSize = 5;
-			if (pg < 1)
-			{
-				pg = 1;
-			}
-			int recsCount = members.Count();
-			var pager = new Pager(recsCount, pg, pageSize);
-			int recSkip = (pg - 1) * pageSize;
-			var data = members.Skip(recSkip).Take(pager.PageSize).ToList();
-			this.ViewBag.Pager = pager;
-			return View(data);
+			int pageSize = 10;
+			int pageNumber = page ?? 1;
+			var members = _context.Members.Include(n => n.IdLevelNavigation).Include(n => n.IdRoleNavigation).Where(m => m.Status.Value);
+			var paginatedList = members.ToPagedList(pageNumber, pageSize);
+			return View(paginatedList);
 		}
+		public async Task<IActionResult> ResetPassword(int id)
+		{
 
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			var editMemberPass = _context.Members.Find(id);
+			var passwordHasher = new PasswordHasher<Member>();
+			string defaultPassword = "1";
+			editMemberPass.Password = passwordHasher.HashPassword(editMemberPass, defaultPassword);
+			_context.Members.Update(editMemberPass);
+			await _context.SaveChangesAsync();
+			return RedirectToAction("Index");
+		}
 		public IActionResult Create()
 		{
-			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			ViewBag.IsLoggedIn = isLoggedIn;
-			ViewBag.listRank = new SelectList(context.Levels.Select(f => new { idLevel = f.IdLevel, levelName = f.LevelName }), "idLevel", "levelName");
+			ViewData["IdLevel"] = new SelectList(_context.Levels, "IdLevel", "LevelName").Prepend(new SelectListItem { Text = "--Chọn mức rank--", Value = "" });
+			ViewData["IdRole"] = new SelectList(_context.Roles, "IdRole", "NameRole").Prepend(new SelectListItem { Text = "--Chọn chức vụ--", Value = "" });
 			return View();
 		}
 		[HttpPost]
-		public IActionResult Create(Member member)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(Member member, string Password)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			if (member.Gender == null)
+			var isEmailExist = await _context.Members.AnyAsync(m => m.Emaill == member.Emaill);
+			var isUsernameExist = await _context.Members.AnyAsync(m => m.Username == member.Username);
+			var score = _context.Levels.Find(member.IdLevel);
+			if (isEmailExist)
 			{
-				ModelState.AddModelError("Gender", "Vui lòng chọn giới tính");
-			}
-			if (member.ImageFile == null)
-			{
-				ModelState.AddModelError("ImageFile", "Vui lòng chọn ảnh");
-			}
-			if (!ModelState.IsValid)
-			{
-				return View(member);
+				ModelState.AddModelError("Email", "Email đã tồn tại trong hệ thống.");
 			}
 
-
-			string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-			newFileName += Path.GetExtension(member.ImageFile!.FileName);
-
-			string imageFullPath = environment.WebRootPath + "/image/" + newFileName;
-			using (var stream = System.IO.File.Create(imageFullPath))
+			if (isUsernameExist)
 			{
-				member.ImageFile.CopyTo(stream);
+				ModelState.AddModelError("Username", "Tên người dùng đã tồn tại trong hệ thống.");
 			}
-			Member member1 = new Member()
-			{
-				MemberName = member.MemberName,
-				Address = member.Address,
-				Phone = member.Phone,
-				Emaill = member.Emaill,
-				Gender = member.Gender,
-				LinkAvatar = newFileName,
-				IdLevel = member.IdLevel,
-				Username = member.Username,
-			};
-			context.Members.Add(member1);
-			context.SaveChanges();
-			return RedirectToAction("Index", "Members");
-		}
-		public IActionResult Edit(int id)
-		{
-			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			ViewBag.IsLoggedIn = isLoggedIn;
-			var member = context.Members.Include(n => n.IdLevelNavigation).FirstOrDefault(m => m.IdMember == id);
-			ViewBag.listRank = new SelectList(context.Levels.Select(f => new { idLevel = f.IdLevel, levelName = f.LevelName }), "idLevel", "levelName");
-			if (member == null)
-			{
-				return RedirectToAction("Index", "Members");
-			}
-			var member1 = new Member()
-			{
-				MemberName = member.MemberName,
-				Address = member.Address,
-				Phone = member.Phone,
-				Emaill = member.Emaill,
-				Gender = member.Gender,
-				IdLevel = member.IdLevel,
-			};
-			ViewData["MemberImg"] = member.LinkAvatar;
-			return View(member1);
-		}
-		[HttpPost]
-		public IActionResult Edit(int id, Member member)
-		{
-			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
-			ViewBag.IsLoggedIn = isLoggedIn;
-			var member1 = context.Members.Include(n => n.IdLevelNavigation).FirstOrDefault(m => m.IdMember == id);
-
-			if (member1 == null)
-			{
-				return RedirectToAction("Index", "Members");
-			}
-
-			if (!ModelState.IsValid)
-			{
-				ViewData["MemberImg"] = member1.LinkAvatar;
-				return View(member);
-			}
-
-			// Kiểm tra nếu có ảnh mới được tải lên
 			if (member.ImageFile != null)
 			{
-				try
+				string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+									 Path.GetExtension(member.ImageFile.FileName);
+
+				string imageFolderPath = Path.Combine(environment.WebRootPath, "image");
+
+				string imageFullPath = Path.Combine(imageFolderPath, newFileName);
+				member.LinkAvatar = "/image/" + newFileName;
+				using (var stream = System.IO.File.Create(imageFullPath))
 				{
-					// Tạo tên file mới
-					string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + Path.GetExtension(member.ImageFile.FileName);
-
-					// Xây dựng đường dẫn đầy đủ
-					string imageFullPath = Path.Combine(environment.WebRootPath, "image", newFileName);
-
-					// Lưu ảnh mới
-					using (var stream = System.IO.File.Create(imageFullPath))
-					{
-						member.ImageFile.CopyTo(stream);
-					}
-
-					// Xóa ảnh cũ nếu tồn tại
-					if (!string.IsNullOrEmpty(member1.LinkAvatar))
-					{
-						string oldImgFullPath = Path.Combine(environment.WebRootPath, "image", member1.LinkAvatar);
-						if (System.IO.File.Exists(oldImgFullPath))
-						{
-							System.IO.File.Delete(oldImgFullPath);
-						}
-					}
-
-					// Cập nhật thông tin ảnh
-					member1.LinkAvatar = newFileName;
-				}
-				catch (Exception ex)
-				{
-					ModelState.AddModelError("", "Có lỗi xảy ra khi xử lý ảnh: " + ex.Message);
-					ViewData["MemberImg"] = member1.LinkAvatar;
-					return View(member);
+					await member.ImageFile.CopyToAsync(stream);
 				}
 			}
+			else
+			{
+				ModelState.AddModelError("ImageFile", "Vui lòng chọn ảnh đại diện !");
+			}
+			if (ModelState.IsValid)
+			{
+				var passwordHasher = new PasswordHasher<Member>();
+				member.Password = passwordHasher.HashPassword(member, Password);
+				member.Status = true;
+				_context.Add(member);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
 
-			// Cập nhật thông tin thành viên
-			member1.MemberName = member.MemberName;
-			member1.Address = member.Address;
-			member1.Phone = member.Phone;
-			member1.Gender = member.Gender;
-			member1.IdLevel = member.IdLevel;
-
-			// Lưu thay đổi
-			context.SaveChanges();
-
-			return RedirectToAction("Index", "Members");
+			ViewData["IdLevel"] = new SelectList(_context.Levels, "IdLevel", "LevelName").Prepend(new SelectListItem { Text = "--Chọn mức rank--", Value = "" });
+			ViewData["IdRole"] = new SelectList(_context.Roles, "IdRole", "NameRole").Prepend(new SelectListItem { Text = "--Chọn chức vụ--", Value = "" });
+			return View(member);
 		}
-		public IActionResult Delete(int id)
+
+		// GET: Members/Edit/5
+		public async Task<IActionResult> Edit(int? id)
 		{
 			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
 			ViewBag.IsLoggedIn = isLoggedIn;
-			var member = context.Members.Include(n => n.IdLevelNavigation).FirstOrDefault(m => m.IdMember == id);
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			var member = await _context.Members.FindAsync(id);
+			if (member == null)
+			{
+				return NotFound();
+			}
+			ViewData["IdLevel"] = new SelectList(_context.Levels, "IdLevel", "LevelName", member.IdLevel).Prepend(new SelectListItem { Text = "--Chọn mức rank--", Value = "" });
+			ViewData["IdRole"] = new SelectList(_context.Roles, "IdRole", "NameRole", member.IdRole).Prepend(new SelectListItem { Text = "--Chọn chức vụ--", Value = "" });
+			return View(member);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, IFormFile? ImageFile, string MemberName, string Address, string Phone, string Emaill, bool Gender, int IdLevel, int IdRole)
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			var editmember = _context.Members.Find(id);
+
+			if (editmember == null)
+			{
+				return NotFound();
+			}
+
+			if (ImageFile != null)
+			{
+				string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + Path.GetExtension(ImageFile.FileName);
+				string imageFullPath = Path.Combine(environment.WebRootPath, "image", newFileName);
+				using (var stream = System.IO.File.Create(imageFullPath))
+				{
+					await ImageFile.CopyToAsync(stream);
+				}
+				if (!string.IsNullOrEmpty(editmember.LinkAvatar))
+				{
+					string oldImgFullPath = Path.Combine(environment.WebRootPath, editmember.LinkAvatar.TrimStart('/'));
+					if (System.IO.File.Exists(oldImgFullPath))
+					{
+						System.IO.File.Delete(oldImgFullPath);
+					}
+				}
+				editmember.LinkAvatar = "/image/" + newFileName;
+			}
+			if (ModelState.IsValid)
+			{
+				editmember.MemberName = MemberName;
+				editmember.Address = Address;
+				editmember.Phone = Phone;
+				editmember.Emaill = Emaill;
+				editmember.Gender = Gender;
+				editmember.IdLevel = IdLevel;
+				editmember.IdRole = IdRole;
+				_context.Update(editmember);
+				await _context.SaveChangesAsync();
+
+				return RedirectToAction(nameof(Index));
+			}
+			ViewData["IdLevel"] = new SelectList(_context.Levels, "IdLevel", "LevelName", editmember.IdLevel).Prepend(new SelectListItem { Text = "--Chọn mức rank--", Value = "" });
+			ViewData["IdRole"] = new SelectList(_context.Roles, "IdRole", "NameRole", editmember.IdRole).Prepend(new SelectListItem { Text = "--Chọn chức vụ--", Value = "" });
+			return View(editmember);
+		}
+		public async Task<IActionResult> Delete(int? id)
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			var member = await _context.Members
+				.Include(m => m.IdLevelNavigation)
+				.Include(m => m.IdRoleNavigation)
+				.FirstOrDefaultAsync(m => m.IdMember == id);
+			if (member == null)
+			{
+				return NotFound();
+			}
+
+			return View(member);
+		}
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			var member = _context.Members.Find(id);
 			member.Status = false;
-			context.SaveChanges();
-			return RedirectToAction("Index", "Members");
+			_context.Members.Update(member);
+			await _context.SaveChangesAsync();
+			return RedirectToAction(nameof(Index));
 		}
 
+		private bool MemberExists(int id)
+		{
+			var isLoggedIn = HttpContext.Session.GetInt32("IdMember") != null;
+			ViewBag.IsLoggedIn = isLoggedIn;
+			return _context.Members.Any(e => e.IdMember == id);
+		}
 	}
-
 }

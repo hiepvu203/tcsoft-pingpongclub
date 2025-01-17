@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     position: relative;
-   
+
     /* Needed for submenu positioning */
 }
 
@@ -207,3 +207,109 @@
 /* ======= */
 
 /* >>>>>>> origin/TranHuyHoang */
+
+@media (min-width : 1440px) and (max-width: 1680px) {
+    .headerNavbar {
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+        height: 100px;
+        color: black;
+        display: flex;
+        text-align: center;
+        position: sticky;
+        top: 0px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+       
+    }
+}
+
+
+@media(min-width : 1024px ) and (max-width : 1260px) {
+    .headerNavbar {
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+        height: 100px;
+        color: black;
+        display: flex;
+        text-align: center;
+        position: sticky;
+        top: 0px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        height: 300px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        /* 4 cột */
+        gap: 10px;
+    }
+
+    .headerNvabar {
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+        height: 180px;
+        color: black;
+        display: grid;
+        text-align: center;
+        position: sticky;
+        top: 0px;
+        grid-template-columns: repeat(4, 1fr);
+        /* 4 cột */
+        gap: 10px;
+      
+    }
+}
+
+@media(min-width : 768px)  and (max-width : 800px){
+    .headerNavbar {
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+        height: 180px;
+        color: black;
+        display: flex;
+        text-align: center;
+        position: sticky;
+        top: 0px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        /* 4 cột */
+        gap: 10px;
+        height: 340px;
+    }
+
+    .headerNvabar {
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+        height: 180px;
+        color: black;
+        display: flex;
+        text-align: center;
+        position: sticky;
+        top: 0px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        /* 4 cột */
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .headerNvabar a {
+        width: 130%;
+        color: black;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        font-weight: 700;
+        border-radius: 5%;
+    }
+    .formLogout{
+        width: 100px;
+    }
+}

@@ -1,213 +1,236 @@
-﻿
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
-    color: #343a40;
-
+﻿.avatar-member {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
 }
-
-.container {
-    margin-top: 20px;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: #fff;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: all 0.3s;
-    text-decoration: none;
-}
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #004085;
-    }
-
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: #fff;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: all 0.3s;
-    text-decoration: none;
-}
-
-    .btn-danger:hover {
-        background-color: #bd2130;
-        border-color: #a71d2a;
-    }
-
-
-.table-tung {
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-    .table-tung th {
-        background-color: #007bff;
-        color: #fff;
-        text-align: center;
-        padding: 12px;
-        font-size: 14px;
-    }
-
-    .table-tung td {
-        padding: 12px;
-        vertical-align: middle;
-        font-size: 14px;
-        text-align: center;
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    .table-tung img {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
-        object-fit: cover;
-    }
-
-    .table-tung .name {
-        font-weight: bold;
-    }
-
-    .table-tung tr:hover {
-        background-color: #f8f9fa;
-    }
-
-.pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-
-    .pagination .page-item {
-        list-style-type: none;
-    }
-
-        .pagination .page-item .page-link {
-            color: #007bff;
-            border: 1px solid #dee2e6;
-            padding: 8px 12px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #007bff;
-            color: #fff;
-            border-color: #007bff;
-        }
-
-        .pagination .page-item .page-link:hover {
-            background-color: #0056b3;
-            color: #fff;
-        }
-
-.table-tung-tung td:first-child {
-    display: flex;
-    align-items: center;
-    justify-content: start;
+.btn-addmember {
+    margin-bottom: 10px;
     text-align: left;
 }
 
-.table-tung td:last-child {
-    white-space: nowrap;
-}
-@media (max-width: 768px) {
-    .table-tung img {
-        width: 40px;
-        height: 40px;
-    }
-
-    .table-tung td {
-        font-size: 12px;
-    }
-
-    .btn {
-        font-size: 12px;
-        padding: 5px 10px;
-    }
-
-    .pagination {
-        flex-wrap: wrap;
-    }
-
-        .pagination .page-item .page-link {
-            padding: 6px 10px;
-            font-size: 12px;
-        }
-}
-
-form {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
-
-    form h2 {
-        color: #343a40;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    form label {
-        font-weight: bold;
-        color: #495057;
-    }
-
-    form .form-control {
-        border: 1px solid #ced4da;
+    .btn-addmember a {
+        text-decoration: none;
+        background-color: #007bff;
+        color: white;
+        padding: 8px 20px;
         border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-addmember a:hover {
+            background-color: #0056b3;
+        }
+
+/* Định dạng bảng danh sách thành viên */
+.member-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: left;
+}
+
+    .member-list th, .member-list td {
         padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .member-list th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .member-list tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .member-list tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+/* Định dạng liên kết chỉnh sửa và xóa */
+.member-list a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+    .member-list a:hover {
+        color: #0056b3;
+    }
+/* Định dạng container chính */
+.form-create-edit {
+    width: 50%;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Tiêu đề chỉnh sửa */
+.title-edit h4 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Đường kẻ ngang */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    margin-bottom: 20px;
+}
+
+/* Định dạng các nhóm form */
+.form-group {
+    margin-bottom: 15px;
+}
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
         font-size: 14px;
     }
 
-        form .form-control:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: #007bff;
+            outline: none;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
-    form .btn {
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 5px;
-    }
+/* Định dạng nút */
+.button-group {
+    display: flex;
+    justify-content: space-between; /* Tạo khoảng cách đều giữa các nút */
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px; /* Khoảng cách giữa các nút */
+}
 
-    form .btn-primary {
+    .button-group .btn-savemember input[type="submit"],
+    .button-group .btn-resetpassword a,
+    .button-group .btn-backtolist a {
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+        padding: 5px 20px;
+        color: white;
         background-color: #007bff;
-        border-color: #007bff;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
     }
 
-        form .btn-primary:hover {
+        .button-group .btn-savemember input[type="submit"]:hover,
+        .button-group .btn-resetpassword a:hover,
+        .button-group .btn-backtolist a:hover {
             background-color: #0056b3;
-            border-color: #004085;
         }
 
-    form .btn-outline-primary {
-        color: #007bff;
-        border-color: #007bff;
+    /* Định dạng liên kết */
+    .button-group .btn-resetpassword a,
+    .button-group .btn-backtolist a {
+        padding: 5px 20px;
+        color: white;
+        background-color: #6c757d;
     }
 
-        form .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: #fff;
+        .button-group .btn-resetpassword a:hover {
+            background-color: #5a6268;
         }
 
-    form .row {
-        margin-bottom: 15px;
+        .button-group .btn-backtolist a:hover {
+            background-color: #343a40;
+        }
+
+/* Định dạng lỗi */
+.text-danger {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Responsive thiết bị nhỏ */
+@media (max-width: 768px) {
+    .form-create-edit {
+        width: 90%;
     }
+
+    .button-group {
+        flex-direction: column; /* Nút xếp chồng nhau trên màn hình nhỏ */
+        align-items: stretch;
+    }
+}
+.text-center-TT {
+    text-align: center; /* Căn giữa toàn bộ phân trang */
+    margin-top: 20px; /* Tạo khoảng cách phía trên */
+    margin-bottom: 20px; /* Tạo khoảng cách phía dưới */
+    font-family: Arial, sans-serif; /* Chọn font dễ đọc */
+}
+
+    .text-center-TT .pagination {
+        display: inline-flex; /* Hiển thị các nút phân trang theo hàng ngang */
+        list-style: none; /* Loại bỏ kiểu danh sách */
+        padding: 0; /* Xóa padding mặc định */
+        margin: 0; /* Xóa margin mặc định */
+        gap: 8px; /* Khoảng cách giữa các nút */
+    }
+
+        .text-center-TT .pagination li {
+            display: inline-block; /* Hiển thị mỗi nút như một khối */
+        }
+
+            .text-center-TT .pagination li a,
+            .text-center-TT .pagination li span {
+                display: block; /* Đảm bảo kích thước nút đầy đủ */
+                padding: 10px 15px; /* Khoảng cách bên trong nút */
+                font-size: 14px; /* Kích thước chữ vừa phải */
+                color: #007bff; /* Màu chữ mặc định (xanh dương) */
+                text-decoration: none; /* Loại bỏ gạch chân */
+                border: 1px solid #ddd; /* Viền nút */
+                border-radius: 5px; /* Bo góc nút */
+                background-color: #f9f9f9; /* Màu nền mặc định */
+                transition: all 0.3s ease; /* Hiệu ứng chuyển đổi khi hover */
+            }
+
+                .text-center-TT .pagination li a:hover {
+                    background-color: #007bff; /* Màu nền khi hover */
+                    color: white; /* Màu chữ khi hover */
+                    border-color: #007bff; /* Màu viền khi hover */
+                    transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+                }
+
+            .text-center-TT .pagination li.active span {
+                background-color: #007bff; /* Màu nền cho trang hiện tại */
+                color: white; /* Màu chữ cho trang hiện tại */
+                border-color: #007bff; /* Viền cùng màu với nền */
+                font-weight: bold; /* Chữ đậm hơn cho nút active */
+                pointer-events: none; /* Vô hiệu hóa click cho nút active */
+            }
+
+            .text-center-TT .pagination li.disabled span {
+                background-color: #e9ecef; /* Màu nền nút bị vô hiệu hóa */
+                color: #6c757d; /* Màu chữ nút bị vô hiệu hóa */
+                border-color: #ddd; /* Viền nhạt hơn */
+                pointer-events: none; /* Không cho click vào nút này */
+            }

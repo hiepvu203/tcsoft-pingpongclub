@@ -21,12 +21,15 @@
             <h1>Giải Đấu Mới Nhất</h1>
 
             <div class="tournaments-container">
-                @if (Model != null && Model is IEnumerable<tcsoft_pingpongclub.Models.Tournament> tournaments && tournaments.Any())
+                @if (Model != null && Model is IEnumerable<tcsoft_pingpongclub.Models.Tournament> tournaments &&
+                tournaments.Any())
                 {
                     foreach (var tournament in tournaments)
-                    {
+                    { 
+                        <a href="@Url.Action("MatchClient", "Matches", new { idTournament = tournament.IdTournament })"
+                                    class="linkHomePageToViewMatch">
                         <div class="MainTourOnHomePage">
-                            <img src="@tournament.UrlImage" alt="Tour Image">
+                            <img src="@tournament.UrlImage" alt="Tour Image" />
                             <div class="content">
                                 <h2>@tournament.TournamentName</h2>
                                 <p>Thời gian bắt đầu: @(tournament.TimeStart?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa xác định")
@@ -36,6 +39,7 @@
                                 <p>Thông tin: @tournament.Infor</p>
                             </div>
                         </div>
+                        </a>
                     }
                 }
                 else
@@ -46,4 +50,3 @@
         </div>
     </div>
 </div>
-

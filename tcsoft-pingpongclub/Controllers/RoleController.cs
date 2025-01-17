@@ -16,6 +16,7 @@ namespace tcsoft_pingpongclub.Controllers
 	[ServiceFilter(typeof(AuthorizationFilter))]
 	public class RoleController : Controller
 	{
+		
 		private readonly ThuctapKtktcn2024Context _context;
 		private readonly AuthorizationService _authorizationService;
 		public RoleController(ThuctapKtktcn2024Context context)
