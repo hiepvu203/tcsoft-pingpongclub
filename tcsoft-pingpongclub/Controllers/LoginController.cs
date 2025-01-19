@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -10,204 +11,190 @@ using tcsoft_pingpongclub.Models;
 
 namespace tcsoft_pingpongclub.Controllers
 {
-	public class LoginController : Controller
-	{
-		private readonly ThuctapKtktcn2024Context _context;
-		public LoginController()
-		{
-			_context = new ThuctapKtktcn2024Context();
-		}
-		[HttpGet]
-		public IActionResult Index()
-		{
-			if (HttpContext.Session.GetInt32("IdMember") != null)
-				return RedirectToAction("Index", "Home");
-			return View();
-		}
-		[HttpPost]
-		public IActionResult Index(string username, string password)
-		{
-			var user = _context.Members.FirstOrDefault(m => m.Username == username);
-			if (user != null)
-			{
-				var passwordHasher = new PasswordHasher<Member>();
-				var result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
-				if (result == PasswordVerificationResult.Success)
-				{
-					HttpContext.Session.SetInt32("IdMember", user.IdMember);
-					HttpContext.Session.SetInt32("IdRole", user.IdRole ?? 0);
-					return RedirectToAction("Index", "Home");
-				}
-			}
-			
-			ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng!";
-			return View();
-		}
-		public IActionResult AccessDenied()
-		{
-			return View();
-		}
-		public IActionResult Identify()
-		{
-			return View();
-		}
+    public class LoginController : Controller
+    {
+        private readonly ThuctapKtktcn2024Context _context;
+        private readonly IMemoryCache _memoryCache;
+        public LoginController(IMemoryCache memoryCache)
+        {
+            _memoryCache = memoryCache;
+            _context = new ThuctapKtktcn2024Context();
+        }
+        [HttpGet]
+        public IActionResult Index()
+        {
+            if (HttpContext.Session.GetInt32("IdMember") != null)
+                return RedirectToAction("Index", "Home");
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Index(string username, string password)
+        {
+            var user = _context.Members
+    .FromSqlRaw("SELECT * FROM Member WHERE Username LIKE {0}", username)
+    .FirstOrDefault();
 
-		[HttpPost]
-		public IActionResult Identify(string email)
-		{
-			if (string.IsNullOrEmpty(email))
-			{
-				ViewBag.Error = "Email không được để trống!";
-				return View();
-			}
-			var member = _context.Members.FirstOrDefault(m => m.Emaill == email);
-			if (member == null)
-			{
-				ViewBag.Error = "Không tìm thấy tài khoản với email này!";
-				return View();
-			}
-			Guid code = Guid.NewGuid();
-			if (!string.IsNullOrEmpty(HttpContext.Session.GetString("verificationCode_" + email)))
-			{
-				HttpContext.Session.Remove("verificationCode_" + email);
-			}
-		   
-			HttpContext.Session.SetString("verificationCode_" + email, code.ToString());
-			try
-			{
-				
-				sendEmail(email, code.ToString());
-				ViewBag.Message = $"Mã xác minh đã được gửi đến {email}!";
-			
-			}
-			catch (Exception ex)
-			{
-				ViewBag.Error = $"Lỗi khi gửi email: {ex.Message}";
-				return View();
-			}
-			return RedirectToAction("VerifyCode", "Login", new { Email = email });
+            if (user != null)
+            {
+                var passwordHasher = new PasswordHasher<Member>();
+                var result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
+                if (result == PasswordVerificationResult.Success)
+                {
+                    HttpContext.Session.SetInt32("IdMember", user.IdMember);
+                    HttpContext.Session.SetInt32("IdRole", user.IdRole ?? 0);
+                    return RedirectToAction("Index", "Home");
+                }
+            }
 
-		}
+            ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng!";
+            return View();
+        }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+        public IActionResult Identify()
+        {
+            return View();
+        }
 
-		private void sendEmail(string email, string code)
-		{
-			try
-			{
-				string fromEmail = "t6983967@gmail.com";
-				string password = "proj rbvr ursf wmow";
-				MailMessage mailMessage = new MailMessage
-				{
-					From = new MailAddress(fromEmail),
-					Subject = "Mã xác minh tài khoản",
-					Body = $"Mã xác minh của bạn là: {code}.",
-					IsBodyHtml = false
-				};
-				mailMessage.To.Add(email);
+        [HttpPost]
+        public IActionResult Identify(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                ViewBag.Error = "Email không được để trống!";
+                return View();
+            }
 
-				using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
-				{
-					smtpClient.Credentials = new NetworkCredential(fromEmail, password);
-					smtpClient.EnableSsl = true;
+            var member = _context.Members
+    .FromSqlRaw("SELECT * FROM Member WHERE Emaill Like {0}", email)
+    .FirstOrDefault();
 
-					smtpClient.Send(mailMessage);
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new Exception($"Lỗi khi gửi email: {ex.Message}");
-			}
-		}
-		public IActionResult VerifyCode(string email)
-		{
-			ViewBag.email = email;
-			return View();
-		}
+            if (member == null)
+            {
+                ViewBag.Error = "Không tìm thấy tài khoản với email này!";
+                return View();
+            }
 
-		[HttpPost]
-		public IActionResult VerifyCode(string email, string enteredCode)
-		{
-			if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
-			{
-				ViewBag.Error = "Email không hợp lệ!";
-				return View();
-			}
+            // Tạo mã xác nhận
+            Guid code = Guid.NewGuid();
+            string cacheKey = $"verificationCode_{email}";
+            _memoryCache.Set(cacheKey, code.ToString(), new MemoryCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5) // Thời gian tồn tại 5 phút
+            });
 
-			string sessionCode = HttpContext.Session.GetString("verificationCode_" + email);
+            // Tạo link xác nhận
+            string confirmationLink = Url.Action("ConfirmEmail", "Login", new { email, code }, Request.Scheme);
 
-			if (string.IsNullOrEmpty(sessionCode))
-			{
-				ViewBag.Error = "Mã xác minh đã hết hạn hoặc không tồn tại!";
-				return View();
-			}
+            try
+            {
+                // Gửi email chứa link xác nhận
+                sendEmail(email, confirmationLink);
+                ViewBag.Message = $"Link xác minh đã được gửi đến {email}!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Lỗi khi gửi email: {ex.Message}";
+                return View();
+            }
 
-			if (enteredCode == sessionCode)
-			{
-				var member = _context.Members.FirstOrDefault(m => m.Emaill == email);
-				if (member != null)
-				{
-					HttpContext.Session.SetInt32("member_" + email, member.IdMember);
-					return RedirectToAction("ResetPassword", "Login", new { email = email });
-				}
-				else
-				{
-					ViewBag.Error = "Không tìm thấy thành viên với email này!";
-					return View();
-				}
-			}
-			else
-			{
-				ViewBag.Error = "Mã xác minh không chính xác!";
-				return View();
-			}
-		}
+            return View();
+        }
 
-		public IActionResult ResetPassword(string email)
-		{
-			if (string.IsNullOrEmpty(email))
-			{
-				ViewBag.Error = "Email không hợp lệ!";
-				return View();
-			}
-			return View();
-		}
+        private void sendEmail(string email, string confirmationLink)
+        {
+            try
+            {
+                string fromEmail = "t6983967@gmail.com";
+                string password = "proj rbvr ursf wmow";
 
-		[HttpPost]
-		public async Task<IActionResult> ResetPassword(string email, string newPassword)
-		{
-			if (string.IsNullOrEmpty(newPassword))
-			{
-				ViewBag.Error = "Mật khẩu mới không được để trống!";
-				return View();
-			}
-			
-			int? id = HttpContext.Session.GetInt32("member_" + email);
-			if (id == null)
-			{
-					ViewBag.Error = "Không tìm thấy ID trong phiên làm việc.";
-				return NotFound();
-			}
-			var member = await _context.Members.FirstOrDefaultAsync(m => m.IdMember == id);
-			if (member == null)
-			{
-				return NotFound();
-			}
+                MailMessage mailMessage = new MailMessage
+                {
+                    From = new MailAddress(fromEmail),
+                    Subject = "Xác minh tài khoản",
+                    Body = $"Vui lòng nhấp vào liên kết sau để xác minh tài khoản của bạn: <a href='{confirmationLink}'>Xác minh tài khoản</a>",
+                    IsBodyHtml = true
+                };
+                mailMessage.To.Add(email);
 
-			var passwordHasher = new PasswordHasher<Member>();
-			member.Password = passwordHasher.HashPassword(member, newPassword).ToString();
-			await _context.SaveChangesAsync();
+                using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtpClient.Credentials = new NetworkCredential(fromEmail, password);
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Send(mailMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi khi gửi email: {ex.Message}");
+            }
+        }
 
-			HttpContext.Session.Remove("member_" + email);
-			HttpContext.Session.Remove("verificationCode_" + email);
+        [HttpGet]
+        public IActionResult ConfirmEmail(string email, string code)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Email hoặc mã xác nhận không hợp lệ!");
+            }
 
-			ViewBag.Message = "Mật khẩu đã được đặt lại thành công!";
-			return RedirectToAction("Index", "Login"); 
-		}
+            string cacheKey = $"verificationCode_{email}";
+            if (!_memoryCache.TryGetValue(cacheKey, out string cachedCode))
+            {
+                return BadRequest("Mã xác nhận đã hết hạn hoặc không tồn tại!");
+            }
 
-		private bool IsValidEmail(string email)
-		{
-			return new EmailAddressAttribute().IsValid(email);
-		}
+            // Kiểm tra mã xác nhận
+            if (code != cachedCode)
+            {
+                return BadRequest("Mã xác nhận không chính xác!");
+            }
 
 
-	}
+
+            return RedirectToAction("ResetPassword", "Login", new { email });
+        }
+
+        public IActionResult ResetPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                ViewBag.Error = "Email không hợp lệ!";
+                return View();
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string email, string newPassword)
+        {
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                ViewBag.Error = "Mật khẩu mới không được để trống!";
+                return View();
+            }
+
+            var member = await _context.Members.FirstOrDefaultAsync(m => m.Emaill == email);
+            if (member == null)
+            {
+                return NotFound("Không tìm thấy tài khoản với email này!");
+            }
+
+            var passwordHasher = new PasswordHasher<Member>();
+            member.Password = passwordHasher.HashPassword(member, newPassword).ToString();
+            await _context.SaveChangesAsync();
+            string cacheKey = $"verificationCode_{email}";
+            _memoryCache.Remove(cacheKey);
+            ViewBag.Message = "Mật khẩu đã được đặt lại thành công!";
+            return RedirectToAction("Index", "Login");
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            return new EmailAddressAttribute().IsValid(email);
+        }
+
+    }
 }
